@@ -43,7 +43,7 @@ export const actions: Actions = {
 		}
 
 		const sessionToken = auth.generateSessionToken();
-		const session = await auth.createSession(sessionToken, existingUser.id);
+		const session = await auth.createSession(sessionToken, existingUser.id, db);
 		auth.setSessionTokenCookie(event, sessionToken, session.expiresAt);
 
 		return redirect(302, '/demo/lucia');
@@ -68,7 +68,7 @@ export const actions: Actions = {
 			await db.insert(table.user).values({ id: userId, username, passwordHash });
 
 			const sessionToken = auth.generateSessionToken();
-			const session = await auth.createSession(sessionToken, userId);
+			const session = await auth.createSession(sessionToken, userId, db);
 			auth.setSessionTokenCookie(event, sessionToken, session.expiresAt);
 		} catch {
 			return fail(500, { message: 'An error has occurred' });
