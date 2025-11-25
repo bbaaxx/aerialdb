@@ -14,7 +14,7 @@ import { encodeBase64, decodeBase64 } from '@oslojs/encoding';
 export async function hashPassword(password: string): Promise<string> {
 	const salt = randomBytes(16);
 	const hash = scrypt(password, salt, {
-		N: 16384, // CPU/memory cost (2^14)
+		N: 4096, // CPU/memory cost (2^12) - reduced for Cloudflare Workers
 		r: 8, // Block size
 		p: 1, // Parallelization
 		dkLen: 32 // Derived key length
@@ -36,7 +36,7 @@ export async function verifyPassword(hash: string, password: string): Promise<bo
 	const expectedHash = decodeBase64(hashB64);
 
 	const actualHash = scrypt(password, salt, {
-		N: 16384,
+		N: 4096, // Must match hashPassword parameters
 		r: 8,
 		p: 1,
 		dkLen: 32
