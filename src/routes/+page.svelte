@@ -89,15 +89,45 @@
 	<!-- Header -->
 	<header class="border-b border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900">
 		<div class="mx-auto max-w-7xl px-4 py-4 sm:py-6 sm:px-6 lg:px-8">
-			<h1 class="text-2xl sm:text-3xl font-bold text-zinc-900 dark:text-zinc-100">
-				AerialDB
-			</h1>
-			<p class="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
-				{displayedMoves.length} aerial moves
-				{#if isSearching}
-					<span class="ml-2 text-blue-600 dark:text-blue-400">Searching...</span>
-				{/if}
-			</p>
+			<div class="flex items-center justify-between">
+				<div>
+					<h1 class="text-2xl sm:text-3xl font-bold text-zinc-900 dark:text-zinc-100">
+						AerialDB
+					</h1>
+					<p class="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
+						{displayedMoves.length} aerial moves
+						{#if isSearching}
+							<span class="ml-2 text-blue-600 dark:text-blue-400">Searching...</span>
+						{/if}
+					</p>
+				</div>
+
+				<!-- Auth Section -->
+				<div class="flex items-center gap-3">
+					{#if data.user}
+						<div class="flex items-center gap-3">
+							<span class="text-sm text-zinc-700 dark:text-zinc-300">
+								Welcome, <span class="font-medium">{data.user.username}</span>
+							</span>
+							<form method="POST" action="/auth/logout">
+								<button
+									type="submit"
+									class="rounded-lg bg-zinc-100 px-4 py-2 text-sm font-medium text-zinc-900 transition hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-100 dark:hover:bg-zinc-700"
+								>
+									Sign Out
+								</button>
+							</form>
+						</div>
+					{:else}
+						<a
+							href="/auth/login"
+							class="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-700"
+						>
+							Sign In
+						</a>
+					{/if}
+				</div>
+			</div>
 		</div>
 	</header>
 

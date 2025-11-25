@@ -4,6 +4,17 @@ import { createClient } from '@libsql/client';
 import * as schema from './schema';
 import type { RequestEvent } from '@sveltejs/kit';
 
+// Cloudflare types (stub for development)
+interface D1Database {
+	prepare(query: string): any;
+	exec(query: string): Promise<any>;
+}
+
+interface R2Bucket {
+	get(key: string): Promise<any>;
+	put(key: string, value: any): Promise<any>;
+}
+
 // Type for Cloudflare platform
 type CloudflarePlatform = {
 	env: {
@@ -53,3 +64,6 @@ export function getDb(event?: RequestEvent) {
 // Export default db for backwards compatibility (local dev only)
 // Note: In Cloudflare, you must use getDb(event) instead
 export const db = localDb!;
+
+// Export Database type
+export type Database = ReturnType<typeof getDb>;
