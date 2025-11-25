@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-	import type { ActionData } from './$types';
+	import type { ActionData, PageData } from './$types';
 
-	let { form }: { form: ActionData } = $props();
+	let { form, data }: { form: ActionData; data: PageData } = $props();
 
 	let username = $state(form?.username || '');
 	let password = $state('');
@@ -59,6 +59,9 @@
 					};
 				}}
 			>
+				{#if data.redirectTo}
+					<input type="hidden" name="redirectTo" value={data.redirectTo} />
+				{/if}
 				<!-- Error Message -->
 				{#if form?.message}
 					<div class="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">

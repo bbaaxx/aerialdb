@@ -7,11 +7,14 @@ import * as table from '$lib/server/db/schema';
 import type { Actions, PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async (event) => {
-	// If user is already logged in, redirect to home
+	// If user is already logged in, redirect to home or the specified redirect URL
 	if (event.locals.user) {
-		return redirect(302, '/');
+		const redirectTo = event.url.searchParams.get('redirectTo');
+		return redirect(302, redirectTo || '/');
 	}
-	return {};
+
+	const redirectTo = event.url.searchParams.get('redirectTo');
+	return { redirectTo };
 };
 
 export const actions: Actions = {
@@ -19,6 +22,7 @@ export const actions: Actions = {
 		const formData = await event.request.formData();
 		const username = formData.get('username');
 		const password = formData.get('password');
+		const redirectTo = formData.get('redirectTo') as string | null;
 
 		if (!validateUsername(username)) {
 			return fail(400, {
@@ -60,8 +64,8 @@ export const actions: Actions = {
 		const session = await auth.createSession(sessionToken, existingUser.id, db);
 		auth.setSessionTokenCookie(event, sessionToken, session.expiresAt);
 
-		// Redirect to home page on successful login
-		return redirect(302, '/');
+		// Redirect to the specified URL or home page on successful login
+		return redirect(302, redirectTo || '/');
 	}
 };
 
