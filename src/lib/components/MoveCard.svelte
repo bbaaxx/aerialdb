@@ -18,7 +18,7 @@
 
 <a
 	href="/moves/{move.id}"
-	class="group block overflow-hidden rounded-lg border border-zinc-200 bg-white shadow-sm transition hover:shadow-md dark:border-zinc-800 dark:bg-zinc-900"
+	class="group block overflow-hidden rounded-lg border border-zinc-200 bg-white shadow-sm transition-all hover:shadow-md active:scale-[0.98] dark:border-zinc-800 dark:bg-zinc-900"
 >
 	<!-- Image -->
 	<div class="relative aspect-video overflow-hidden bg-zinc-100 dark:bg-zinc-800">
@@ -49,27 +49,27 @@
 		{/if}
 	</div>
 
-	<!-- Content -->
-	<div class="p-4">
+	<!-- Content (Mobile-Optimized Spacing) -->
+	<div class="p-3 sm:p-4">
 		<div class="mb-2 flex items-start justify-between gap-2">
-			<h3 class="font-semibold text-zinc-900 dark:text-zinc-100 group-hover:text-blue-600">
+			<h3 class="text-sm sm:text-base font-semibold text-zinc-900 dark:text-zinc-100 group-hover:text-blue-600 leading-tight">
 				{move.name}
 			</h3>
 			<span
-				class="shrink-0 rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-800 dark:bg-blue-900 dark:text-blue-200"
+				class="shrink-0 rounded-full bg-blue-100 px-2 py-0.5 text-[10px] sm:text-xs font-medium text-blue-800 dark:bg-blue-900 dark:text-blue-200"
 			>
 				{move.category.name}
 			</span>
 		</div>
 
 		{#if move.description}
-			<p class="line-clamp-2 text-sm text-zinc-600 dark:text-zinc-400">
+			<p class="line-clamp-2 text-xs sm:text-sm text-zinc-600 dark:text-zinc-400">
 				{move.description}
 			</p>
 		{/if}
 
 		{#if move.contributorName}
-			<p class="mt-2 text-xs text-zinc-500 dark:text-zinc-500">
+			<p class="mt-2 text-[10px] sm:text-xs text-zinc-500 dark:text-zinc-500">
 				by {move.contributorName}
 			</p>
 		{/if}

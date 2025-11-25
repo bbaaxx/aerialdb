@@ -21,14 +21,14 @@
 </svelte:head>
 
 <div class="min-h-screen bg-zinc-50 dark:bg-zinc-950">
-	<!-- Header -->
-	<header class="border-b border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900">
-		<div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+	<!-- Header (Mobile-Optimized Back Button) -->
+	<header class="sticky top-0 z-10 border-b border-zinc-200 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/80 dark:border-zinc-800 dark:bg-zinc-900/95 dark:supports-[backdrop-filter]:bg-zinc-900/80">
+		<div class="mx-auto max-w-7xl px-4 py-4 sm:py-6 sm:px-6 lg:px-8">
 			<a
 				href="/"
-				class="inline-flex items-center text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400"
+				class="inline-flex items-center gap-2 rounded-lg px-3 py-2 text-base font-medium text-blue-600 transition-all active:scale-95 hover:bg-blue-50 dark:text-blue-400 dark:hover:bg-blue-950"
 			>
-				<svg class="mr-1 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+				<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 					<path
 						stroke-linecap="round"
 						stroke-linejoin="round"
@@ -36,21 +36,21 @@
 						d="M15 19l-7-7 7-7"
 					></path>
 				</svg>
-				Back to directory
+				Back
 			</a>
 		</div>
 	</header>
 
 	<!-- Main Content -->
-	<main class="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
-		<!-- Move Header -->
-		<div class="mb-8">
-			<div class="mb-4 flex items-start justify-between gap-4">
-				<h1 class="text-3xl font-bold text-zinc-900 dark:text-zinc-100">
+	<main class="mx-auto max-w-4xl px-4 py-6 sm:py-8 sm:px-6 lg:px-8">
+		<!-- Move Header (Mobile-Optimized) -->
+		<div class="mb-6 sm:mb-8">
+			<div class="mb-3 sm:mb-4 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
+				<h1 class="text-2xl sm:text-3xl font-bold text-zinc-900 dark:text-zinc-100 leading-tight">
 					{data.move.name}
 				</h1>
 				<span
-					class="shrink-0 rounded-full bg-blue-100 px-3 py-1 text-sm font-medium text-blue-800 dark:bg-blue-900 dark:text-blue-200"
+					class="self-start shrink-0 rounded-full bg-blue-100 px-3 py-1 text-sm font-medium text-blue-800 dark:bg-blue-900 dark:text-blue-200"
 				>
 					{data.move.category.name}
 				</span>
@@ -58,13 +58,13 @@
 
 			{#if data.move.contributorName}
 				<p class="text-sm text-zinc-600 dark:text-zinc-400">
-					Original contributor: <span class="font-medium">{data.move.contributorName}</span>
+					Contributor: <span class="font-medium">{data.move.contributorName}</span>
 				</p>
 			{/if}
 		</div>
 
 		<!-- Media Section -->
-		<div class="mb-8 space-y-6">
+		<div class="mb-6 sm:mb-8 space-y-4 sm:space-y-6">
 			<!-- Video -->
 			{#if youtubeId}
 				<div class="overflow-hidden rounded-lg">
@@ -131,13 +131,13 @@
 			{/if}
 		</div>
 
-		<!-- Admin Actions -->
-		<div class="mt-6">
+		<!-- Admin Actions (Touch-Optimized) -->
+		<div class="mt-6 sm:mt-8">
 			<a
 				href="/admin/moves/{data.move.id}/edit"
-				class="inline-flex items-center gap-2 text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400"
+				class="inline-flex items-center gap-2 rounded-lg px-4 py-3 text-base font-medium text-blue-600 transition-all active:scale-95 hover:bg-blue-50 dark:text-blue-400 dark:hover:bg-blue-950"
 			>
-				<svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+				<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 					<path
 						stroke-linecap="round"
 						stroke-linejoin="round"

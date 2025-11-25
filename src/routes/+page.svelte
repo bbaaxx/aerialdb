@@ -88,8 +88,8 @@
 <div class="min-h-screen bg-zinc-50 dark:bg-zinc-950">
 	<!-- Header -->
 	<header class="border-b border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900">
-		<div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-			<h1 class="text-3xl font-bold text-zinc-900 dark:text-zinc-100">
+		<div class="mx-auto max-w-7xl px-4 py-4 sm:py-6 sm:px-6 lg:px-8">
+			<h1 class="text-2xl sm:text-3xl font-bold text-zinc-900 dark:text-zinc-100">
 				AerialDB
 			</h1>
 			<p class="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
@@ -101,10 +101,11 @@
 		</div>
 	</header>
 
-	<!-- Main Content -->
-	<main class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-		<!-- Search and Filter -->
-		<div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center">
+	<!-- Sticky Search Bar (Mobile Optimized) -->
+	<div class="sticky top-0 z-10 border-b border-zinc-200 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/80 dark:border-zinc-800 dark:bg-zinc-900/95 dark:supports-[backdrop-filter]:bg-zinc-900/80">
+		<div class="mx-auto max-w-7xl px-4 py-3 sm:px-6 lg:px-8">
+			<!-- Search and Filter -->
+			<div class="flex flex-col gap-3 sm:flex-row sm:items-center">
 			<!-- Search Bar -->
 			<div class="flex-1">
 				<div class="relative">
@@ -134,8 +135,8 @@
 						type="text"
 						name="q"
 						bind:value={searchQuery}
-						placeholder="Search moves or categories (min 3 chars)..."
-						class="block w-full rounded-lg border border-zinc-300 bg-white py-2.5 pl-10 pr-3 text-sm placeholder-zinc-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder-zinc-400"
+						placeholder="Search moves..."
+						class="block w-full rounded-lg border border-zinc-300 bg-white py-3 pl-10 pr-3 text-base placeholder-zinc-500 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder-zinc-400"
 					/>
 				</div>
 			</div>
@@ -144,7 +145,7 @@
 			<select
 				name="category"
 				bind:value={selectedCategory}
-				class="block w-full rounded-lg border border-zinc-300 bg-white px-3 py-2.5 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 sm:w-48"
+				class="block w-full rounded-lg border border-zinc-300 bg-white px-3 py-3 text-base focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 sm:w-48"
 			>
 				<option value="">All Categories</option>
 				{#each data.categories as category}
@@ -152,15 +153,16 @@
 				{/each}
 			</select>
 
-			<!-- View Toggle -->
+			<!-- View Toggle (Touch-Optimized) -->
 			<div class="flex items-center gap-1 rounded-lg border border-zinc-300 bg-white p-1 dark:border-zinc-700 dark:bg-zinc-900">
 				<button
 					type="button"
 					onclick={() => toggleView('grid')}
-					class="rounded p-2 transition-colors {viewMode === 'grid'
+					class="rounded p-3 transition-all active:scale-95 {viewMode === 'grid'
 						? 'bg-zinc-100 text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100'
 						: 'text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200'}"
 					title="Grid view"
+					aria-label="Grid view"
 				>
 					<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 						<path
@@ -174,10 +176,11 @@
 				<button
 					type="button"
 					onclick={() => toggleView('table')}
-					class="rounded p-2 transition-colors {viewMode === 'table'
+					class="rounded p-3 transition-all active:scale-95 {viewMode === 'table'
 						? 'bg-zinc-100 text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100'
 						: 'text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200'}"
 					title="Table view"
+					aria-label="Table view"
 				>
 					<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 						<path
@@ -189,12 +192,17 @@
 					</svg>
 				</button>
 			</div>
+			</div>
 		</div>
+	</div>
+
+	<!-- Main Content -->
+	<main class="mx-auto max-w-7xl px-4 py-6 sm:py-8 sm:px-6 lg:px-8">
 
 		<!-- Results Count -->
 		{#if searchQuery || selectedCategory}
 			<div class="mb-4 flex items-center justify-between">
-				<p class="text-sm text-zinc-600 dark:text-zinc-400">
+				<p class="text-sm sm:text-base text-zinc-600 dark:text-zinc-400">
 					Found {displayedMoves.length} move{displayedMoves.length !== 1 ? 's' : ''}
 				</p>
 				<button
@@ -204,7 +212,7 @@
 						selectedCategory = '';
 						displayedMoves = data.moves;
 					}}
-					class="text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400"
+					class="rounded-lg px-3 py-2 text-sm font-medium text-blue-600 transition-all active:scale-95 hover:bg-blue-50 dark:text-blue-400 dark:hover:bg-blue-950"
 				>
 					Clear filters
 				</button>
@@ -214,8 +222,8 @@
 		<!-- Moves Display -->
 		{#if displayedMoves.length > 0}
 			{#if viewMode === 'grid'}
-				<!-- Grid View -->
-				<div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+				<!-- Grid View (Mobile-Optimized: 2 columns on mobile) -->
+				<div class="grid grid-cols-2 gap-3 sm:gap-6 lg:grid-cols-3">
 					{#each displayedMoves as move}
 						<MoveCard {move} />
 					{/each}
