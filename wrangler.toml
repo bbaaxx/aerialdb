@@ -1,0 +1,23 @@
+name = "aerialdb"
+compatibility_date = "2024-11-21"
+
+# Pages-specific configuration
+pages_build_output_dir = ".svelte-kit/cloudflare"
+
+# D1 Database binding
+# After creating your D1 database, replace the database_id with your actual ID
+# Create with: wrangler d1 create aerialdb-production
+[[d1_databases]]
+binding = "DB"
+database_name = "aerialdb-production"
+database_id = "694fa60c-9e1d-404d-aa49-26365e7365bf"  # Replace after creating D1 database
+
+# R2 Bucket binding for image storage
+# Create with: wrangler r2 bucket create aerialdb-images
+[[r2_buckets]]
+binding = "IMAGES"
+bucket_name = "aerialdb-images"
+
+# Environment variables (optional - add via Cloudflare dashboard for secrets)
+# [vars]
+# SESSION_SECRET = "your-secret-here"

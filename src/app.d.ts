@@ -2,14 +2,24 @@
 // for information about these interfaces
 declare global {
 	namespace App {
+		// interface Error {}
 		interface Locals {
 			user: import('$lib/server/auth').SessionValidationResult['user'];
 			session: import('$lib/server/auth').SessionValidationResult['session'];
 		}
-	} // interface Error {}
-	// interface Locals {}
-} // interface PageData {}
-// interface PageState {}
+		// interface PageData {}
+		// interface PageState {}
+		interface Platform {
+			env: {
+				DB: D1Database;
+				IMAGES: R2Bucket;
+			};
+			context: {
+				waitUntil(promise: Promise<any>): void;
+			};
+			caches: CacheStorage & { default: Cache };
+		}
+	}
+}
 
-// interface Platform {}
 export {};

@@ -28,3 +28,7 @@ src/lib/paraglide
 
 # SQLite
 *.db
+
+# Uploads
+/static/uploads/*
+!/static/uploads/.gitkeep
