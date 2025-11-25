@@ -4,7 +4,7 @@ import { join } from 'path';
 import { db } from './index.js';
 import { categories, moves, user } from './schema.js';
 import { parseToonFormat, extractCategories } from '$lib/utils/toon-parser.js';
-import { hash } from '@node-rs/argon2';
+import { hashPassword } from '../password.js';
 import { encodeBase32LowerCaseNoPadding } from '@oslojs/encoding';
 
 // Simple ID generator
@@ -25,12 +25,7 @@ export async function seedDatabase() {
 	// 1. Create default admin user
 	console.log('👤 Creating default admin user...');
 	const adminUserId = generateId(10);
-	const passwordHash = await hash('admin123', {
-		memoryCost: 19456,
-		timeCost: 2,
-		outputLen: 32,
-		parallelism: 1
-	});
+	const passwordHash = await hashPassword('admin123');
 
 	await db.insert(user).values({
 		id: adminUserId,

@@ -2,7 +2,7 @@ import 'dotenv/config';
 import { readFileSync } from 'fs';
 import { createClient } from '@libsql/client';
 import { drizzle } from 'drizzle-orm/libsql';
-import { hash } from '@node-rs/argon2';
+import { hashPassword } from '../src/lib/server/password.js';
 import { encodeBase32LowerCaseNoPadding } from '@oslojs/encoding';
 import { parseToonFormat, extractCategories } from '../src/lib/utils/toon-parser.js';
 
@@ -72,12 +72,7 @@ async function initDatabase() {
 	// 2. Create default admin user
 	console.log('👤 Creating default admin user...');
 	const adminUserId = generateId(10);
-	const passwordHash = await hash('admin123', {
-		memoryCost: 19456,
-		timeCost: 2,
-		outputLen: 32,
-		parallelism: 1
-	});
+	const passwordHash = await hashPassword('admin123');
 
 	await client.execute({
 		sql: 'INSERT INTO user (id, username, password_hash, age) VALUES (?, ?, ?, ?)',

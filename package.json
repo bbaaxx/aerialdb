@@ -65,6 +65,6 @@
 		"wrangler": "^4.50.0"
 	},
 	"dependencies": {
-		"@node-rs/argon2": "^2.0.2"
+		"@noble/hashes": "^2.0.1"
 	}
 }

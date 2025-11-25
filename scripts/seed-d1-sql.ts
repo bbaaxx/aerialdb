@@ -7,7 +7,7 @@
 import { readFileSync } from 'fs';
 import { join } from 'path';
 import { parseToonFormat, extractCategories } from '../src/lib/utils/toon-parser.js';
-import { hash } from '@node-rs/argon2';
+import { hashPassword } from '../src/lib/server/password.js';
 import { encodeBase32LowerCaseNoPadding } from '@oslojs/encoding';
 
 // Simple ID generator
@@ -33,12 +33,7 @@ async function generateD1SQL() {
 	// 1. Create admin user
 	console.error('👤 Generating admin user...');
 	const adminUserId = generateId(10);
-	const passwordHash = await hash('admin123', {
-		memoryCost: 19456,
-		timeCost: 2,
-		outputLen: 32,
-		parallelism: 1
-	});
+	const passwordHash = await hashPassword('admin123');
 
 	output.push('-- Admin User');
 	output.push('-- Username: admin, Password: admin123 (CHANGE THIS IN PRODUCTION!)');

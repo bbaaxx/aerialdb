@@ -6,7 +6,7 @@ import { encodeBase32LowerCaseNoPadding } from '@oslojs/encoding';
 import type { Actions, PageServerLoad } from './$types';
 
 /**
- * Delete an image file from either local filesystem or R2
+ * Delete an image file from R2
  */
 async function deleteImage(imageUrl: string, platform?: App.Platform) {
 	const filename = imageUrl.split('/').pop();
@@ -15,14 +15,8 @@ async function deleteImage(imageUrl: string, platform?: App.Platform) {
 	if (platform?.env?.IMAGES) {
 		// Production: Delete from Cloudflare R2
 		await platform.env.IMAGES.delete(filename);
-	} else {
-		// Development: Delete from local filesystem
-		const { unlink } = await import('fs/promises');
-		const { join } = await import('path');
-		await unlink(join('static', 'uploads', filename)).catch(() => {
-			// Ignore errors if file doesn't exist
-		});
 	}
+	// Development mode: filesystem not available in production
 }
 
 export const load: PageServerLoad = async (event) => {

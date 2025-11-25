@@ -39,14 +39,8 @@ export const POST: RequestHandler = async ({ request, platform }) => {
 		// Note: You'll need to configure R2 public access or use a custom domain
 		// For now, we'll use a placeholder that you'll configure
 		return json({ url: `/uploads/${filename}` });
-	} else {
-		// Development: Save to local filesystem
-		const { writeFile } = await import('fs/promises');
-		const { join } = await import('path');
-
-		const buffer = Buffer.from(await file.arrayBuffer());
-		await writeFile(join('static', 'uploads', filename), buffer);
-
-		return json({ url: `/uploads/${filename}` });
 	}
+
+	// Development mode: filesystem not available in production
+	return json({ error: 'Upload not configured - R2 bucket required' }, { status: 500 });
 };
