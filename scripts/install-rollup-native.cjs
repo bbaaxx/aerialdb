@@ -9,7 +9,8 @@ const { execSync } = require('child_process');
 const nativeDependencies = [
   '@rollup/rollup-linux-x64-gnu',
   'lightningcss-linux-x64-gnu',
-  '@tailwindcss/oxide-linux-x64-gnu'
+  '@tailwindcss/oxide-linux-x64-gnu',
+  '@libsql/linux-x64-gnu'
 ];
 
 function installNativeBinary(packageName, requirePath) {
