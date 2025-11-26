@@ -13,6 +13,7 @@ declare global {
 			env: {
 				DB: D1Database;
 				IMAGES: R2Bucket;
+				PUBLIC_R2_URL?: string;
 			};
 			context: {
 				waitUntil(promise: Promise<any>): void;

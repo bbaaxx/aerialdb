@@ -36,9 +36,18 @@ export const POST: RequestHandler = async ({ request, platform }) => {
 		});
 
 		// Return R2 public URL
-		// Note: You'll need to configure R2 public access or use a custom domain
-		// For now, we'll use a placeholder that you'll configure
-		return json({ url: `/uploads/${filename}` });
+		// Use PUBLIC_R2_URL from environment variables (configured in Cloudflare Pages)
+		// This should be your R2 public bucket URL (e.g., https://pub-xxxxx.r2.dev)
+		// or your custom domain (e.g., https://images.yourdomain.com)
+		const publicUrl = platform.env.PUBLIC_R2_URL || '';
+
+		if (!publicUrl) {
+			return json({
+				error: 'R2 public URL not configured. Please set PUBLIC_R2_URL environment variable.'
+			}, { status: 500 });
+		}
+
+		return json({ url: `${publicUrl}/${filename}` });
 	}
 
 	// Development mode: filesystem not available in production
