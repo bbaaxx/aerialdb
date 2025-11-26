@@ -20,8 +20,8 @@ function installNativeBinary(packageName, requirePath) {
   } catch (error) {
     console.log(`Installing ${packageName}...`);
     try {
-      // Use --force to install even on non-Linux platforms (needed for CI/CD)
-      execSync(`npm install --no-save --force ${packageName}`, {
+      // Install and save to optionalDependencies to prevent npm from removing it
+      execSync(`npm install --force --save-optional ${packageName}`, {
         stdio: 'inherit'
       });
       console.log(`✓ Successfully installed ${packageName}`);

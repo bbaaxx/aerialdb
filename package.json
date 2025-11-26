@@ -67,5 +67,9 @@
 	},
 	"dependencies": {
 		"@noble/hashes": "^2.0.1"
+	},
+	"optionalDependencies": {
+		"@rollup/rollup-linux-x64-gnu": "^4.29.1",
+		"lightningcss-linux-x64-gnu": "^1.28.4"
 	}
 }
