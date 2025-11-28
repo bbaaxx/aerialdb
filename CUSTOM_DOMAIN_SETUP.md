@@ -1,0 +1,159 @@
+# Custom Domain Setup Guide
+
+This guide will help you set up:
+- **Main site:** `aerialdb.codetitlan.org`
+- **Images:** `images.aerialdb.codetitlan.org`
+
+## Prerequisites
+
+- You own `codetitlan.org`
+- Domain DNS is managed by Cloudflare (if not, we'll need to add it)
+
+---
+
+## Part 1: Verify Domain is on Cloudflare
+
+1. Go to https://dash.cloudflare.com/
+2. Check if `codetitlan.org` appears in your domains list
+3. If **YES** → Skip to Part 2
+4. If **NO** → Follow these steps:
+   - Click **Add a Site**
+   - Enter `codetitlan.org`
+   - Choose the Free plan
+   - Update your domain's nameservers at your registrar to Cloudflare's nameservers
+   - Wait for DNS propagation (can take up to 24 hours)
+
+---
+
+## Part 2: Add Main Site Custom Domain to Cloudflare Pages
+
+1. Go to https://dash.cloudflare.com/
+2. Navigate to **Workers & Pages**
+3. Click on your **aerialdb** project
+4. Go to **Custom domains** tab
+5. Click **Set up a custom domain**
+6. Enter: `aerialdb.codetitlan.org`
+7. Click **Continue**
+8. Cloudflare will automatically create the DNS records (since your domain is on Cloudflare)
+9. Wait for SSL certificate to provision (usually 1-2 minutes)
+10. You'll see a green checkmark when it's ready
+
+---
+
+## Part 3: Add Images Custom Domain to R2 Bucket
+
+1. In the Cloudflare Dashboard, go to **R2**
+2. Click on **aerialdb-images** bucket
+3. Go to **Settings**
+4. Find **Custom Domains** section
+5. Click **Connect Domain**
+6. Enter: `images.aerialdb.codetitlan.org`
+7. Click **Continue**
+8. Cloudflare will automatically create the DNS records
+9. Wait for SSL certificate to provision (usually 1-2 minutes)
+
+---
+
+## Part 4: Update Environment Variable
+
+After the custom domain is set up (green checkmark appears):
+
+1. Go to **Workers & Pages** → **aerialdb** project
+2. Navigate to **Settings** → **Environment variables**
+3. Find the **PUBLIC_R2_URL** variable in Production
+4. Click **Edit**
+5. Change value from:
+   ```
+   https://pub-63292280827b4ceab8392c974299dbd8.r2.dev
+   ```
+   To:
+   ```
+   https://images.aerialdb.codetitlan.org
+   ```
+6. Click **Save**
+7. Also update in **Preview** environment if you added it there
+
+---
+
+## Part 5: Migrate Database Image URLs
+
+Once the custom domain is working, run this migration to update all existing image URLs:
+
+```bash
+# Create migration file
+cat > scripts/migrate-to-custom-domain.sql << 'EOF'
+-- Migrate image URLs from r2.dev to custom domain
+UPDATE moves
+SET image_url = REPLACE(
+  image_url,
+  'https://pub-63292280827b4ceab8392c974299dbd8.r2.dev/',
+  'https://images.aerialdb.codetitlan.org/'
+)
+WHERE image_url LIKE 'https://pub-63292280827b4ceab8392c974299dbd8.r2.dev/%';
+
+-- Verify the update
+SELECT id, name, image_url
+FROM moves
+WHERE image_url IS NOT NULL
+LIMIT 10;
+EOF
+
+# Run migration on production
+npx wrangler d1 execute aerialdb-production --remote --file=./scripts/migrate-to-custom-domain.sql
+```
+
+---
+
+## Part 6: Deploy and Test
+
+```bash
+# Build and deploy
+npm run build
+npx wrangler pages deploy .svelte-kit/cloudflare --project-name=aerialdb
+
+# Or push to trigger automatic deployment
+git add .
+git commit -m "docs: add custom domain setup guide"
+git push origin main
+```
+
+---
+
+## Verification Checklist
+
+After setup, verify these URLs work:
+
+- [ ] Main site loads: `https://aerialdb.codetitlan.org`
+- [ ] Images load: `https://images.aerialdb.codetitlan.org/d4c5a925-31ea-4ab5-af08-e21dea742fd8.jpeg`
+- [ ] Move page shows image: `https://aerialdb.codetitlan.org/moves/55b8cbdaa487789b9d687001dc7e3d23`
+- [ ] Both URLs show valid SSL certificate (green padlock)
+
+---
+
+## Troubleshooting
+
+### DNS Not Propagating
+- Wait up to 24 hours for DNS propagation
+- Check DNS with: `dig aerialdb.codetitlan.org`
+- Verify CNAME records point to your Pages/R2 endpoints
+
+### SSL Certificate Not Provisioning
+- Ensure domain is proxied through Cloudflare (orange cloud icon)
+- Check that DNS records are correct
+- Wait a few more minutes - SSL can take up to 15 minutes
+
+### Images Still Not Loading
+- Clear browser cache
+- Verify PUBLIC_R2_URL is set correctly
+- Check that migration ran successfully
+- Verify R2 custom domain is connected and has green checkmark
+
+---
+
+## Benefits of Custom Domain
+
+✅ **Unlimited bandwidth** - No rate limiting
+✅ **Better performance** - Cloudflare's global CDN
+✅ **Professional URLs** - Branded domain
+✅ **Advanced features** - WAF, caching, bot management
+✅ **Better SEO** - Consistent domain authority
