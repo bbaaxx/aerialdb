@@ -8,7 +8,7 @@ export const load: PageServerLoad = async (event) => {
 	const db = getDb(event);
 	const { params } = event;
 
-	const [move] = await db
+	const [moveRaw] = await db
 		.select({
 			id: moves.id,
 			name: moves.name,
@@ -18,19 +18,32 @@ export const load: PageServerLoad = async (event) => {
 			contributorName: moves.contributorName,
 			createdAt: moves.createdAt,
 			updatedAt: moves.updatedAt,
-			category: {
-				id: categories.id,
-				name: categories.name
-			}
+			categoryId: categories.id,
+			categoryName: categories.name
 		})
 		.from(moves)
 		.innerJoin(categories, eq(moves.categoryId, categories.id))
 		.where(eq(moves.id, params.id))
 		.limit(1);
 
-	if (!move) {
+	if (!moveRaw) {
 		throw error(404, 'Move not found');
 	}
+
+	const move = {
+		id: moveRaw.id,
+		name: moveRaw.name,
+		description: moveRaw.description,
+		imageUrl: moveRaw.imageUrl,
+		videoUrl: moveRaw.videoUrl,
+		contributorName: moveRaw.contributorName,
+		createdAt: moveRaw.createdAt,
+		updatedAt: moveRaw.updatedAt,
+		category: {
+			id: moveRaw.categoryId,
+			name: moveRaw.categoryName
+		}
+	};
 
 	return { move };
 };

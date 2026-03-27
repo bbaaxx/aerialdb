@@ -48,7 +48,11 @@ export function getDb(event?: RequestEvent) {
 	// Check if we're in Cloudflare environment
 	const platform = event?.platform as CloudflarePlatform | undefined;
 
-	if (platform?.env?.DB) {
+	// In some development environments, platform.env.DB may exist but not be fully functional.
+	// We prioritize the local database if DATABASE_URL is set and we're not explicitly in production.
+	const isProduction = process.env.NODE_ENV === 'production';
+
+	if (platform?.env?.DB && isProduction) {
 		// Production: Use Cloudflare D1
 		return drizzleD1(platform.env.DB, { schema });
 	}

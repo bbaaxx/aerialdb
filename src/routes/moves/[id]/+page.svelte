@@ -25,7 +25,7 @@
 	<header class="sticky top-0 z-10 border-b border-zinc-200 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/80 dark:border-zinc-800 dark:bg-zinc-900/95 dark:supports-[backdrop-filter]:bg-zinc-900/80">
 		<div class="mx-auto max-w-7xl px-4 py-4 sm:py-6 sm:px-6 lg:px-8">
 			<a
-				href="/"
+				href="/moves"
 				class="inline-flex items-center gap-2 rounded-lg px-3 py-2 text-base font-medium text-blue-600 transition-all active:scale-95 hover:bg-blue-50 dark:text-blue-400 dark:hover:bg-blue-950"
 			>
 				<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -1,362 +1,238 @@
 <script lang="ts">
-	import MoveCard from '$lib/components/MoveCard.svelte';
-	import type { PageData } from './$types';
 	import { onMount } from 'svelte';
 
-	let { data }: { data: PageData } = $props();
+	let scrolled = $state(false);
 
-	let searchQuery = $state(data.searchQuery);
-	let selectedCategory = $state(data.categoryFilter);
-	let viewMode = $state<'grid' | 'table'>('grid');
-	let displayedMoves = $state(data.moves);
-	let isSearching = $state(false);
-	let searchTimeout: ReturnType<typeof setTimeout> | null = null;
-
-	// Load view preference from localStorage
 	onMount(() => {
-		const savedView = localStorage.getItem('aerialdb-view');
-		if (savedView === 'table' || savedView === 'grid') {
-			viewMode = savedView;
-		}
-	});
-
-	function toggleView(mode: 'grid' | 'table') {
-		viewMode = mode;
-		localStorage.setItem('aerialdb-view', mode);
-	}
-
-	// Debounced search function
-	async function performSearch() {
-		// Don't search if query is less than 3 characters
-		if (!searchQuery || searchQuery.length < 3) {
-			displayedMoves = data.moves;
-			isSearching = false;
-			return;
-		}
-
-		isSearching = true;
-
-		try {
-			const params = new URLSearchParams();
-			params.set('q', searchQuery);
-			if (selectedCategory) {
-				params.set('category', selectedCategory);
-			}
-
-			const response = await fetch(`/api/search?${params.toString()}`);
-			const result = await response.json();
-			displayedMoves = result.moves;
-		} catch (error) {
-			console.error('Search error:', error);
-		} finally {
-			isSearching = false;
-		}
-	}
-
-	// Watch for search query and category changes
-	$effect(() => {
-		// Clear existing timeout
-		if (searchTimeout) {
-			clearTimeout(searchTimeout);
-		}
-
-		// If query is empty or less than 3 chars AND no category filter
-		if ((!searchQuery || searchQuery.length < 3) && !selectedCategory) {
-			displayedMoves = data.moves;
-			return;
-		}
-
-		// If there's a category filter but no valid search query
-		if ((!searchQuery || searchQuery.length < 3) && selectedCategory) {
-			// Filter by category only
-			displayedMoves = data.moves.filter(move => move.category.id === selectedCategory);
-			return;
-		}
-
-		// Debounce: wait 300ms after user stops typing for search
-		searchTimeout = setTimeout(() => {
-			performSearch();
-		}, 300);
+		const handleScroll = () => {
+			scrolled = window.scrollY > 20;
+		};
+		window.addEventListener('scroll', handleScroll);
+		return () => window.removeEventListener('scroll', handleScroll);
 	});
 </script>
 
 <svelte:head>
-	<title>AerialDB - Aerial Moves Directory</title>
-	<meta name="description" content="Browse and search aerial acrobatics moves" />
+	<title>Tasking - Multi-Agent Scalability & Intelligence</title>
+	<meta name="description" content="Tasking: The next generation of multi-agent scalability and intelligence." />
 </svelte:head>
 
-<div class="min-h-screen bg-zinc-50 dark:bg-zinc-950">
-	<!-- Header -->
-	<header class="border-b border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900">
-		<div class="mx-auto max-w-7xl px-4 py-4 sm:py-6 sm:px-6 lg:px-8">
-			<div class="flex items-center justify-between">
-				<div>
-					<h1 class="text-2xl sm:text-3xl font-bold text-zinc-900 dark:text-zinc-100">
-						AerialDB
-					</h1>
-					<p class="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
-						{displayedMoves.length} aerial moves
-						{#if isSearching}
-							<span class="ml-2 text-blue-600 dark:text-blue-400">Searching...</span>
-						{/if}
+<div class="min-h-screen bg-zinc-950 text-zinc-50 font-sans selection:bg-orange-500/30 selection:text-orange-200">
+	<!-- Navbar -->
+	<nav
+		class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b {scrolled ? 'bg-zinc-950/80 backdrop-blur-md border-zinc-800 py-3' : 'bg-transparent border-transparent py-5'}"
+	>
+		<div class="max-w-7xl mx-auto px-6 flex items-center justify-between">
+			<div class="flex items-center gap-2">
+				<div class="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center font-bold text-zinc-950 text-xl">T</div>
+				<span class="text-xl font-bold tracking-tight">Tasking</span>
+			</div>
+
+			<div class="hidden md:flex items-center gap-8 text-sm font-medium text-zinc-400">
+				<a href="#" class="hover:text-white transition-colors">Home</a>
+				<a href="#features" class="hover:text-white transition-colors">Feature</a>
+				<a href="#" class="hover:text-white transition-colors">Support</a>
+				<a href="#contact" class="hover:text-white transition-colors">Contact</a>
+			</div>
+
+			<button class="bg-orange-500 hover:bg-orange-600 text-zinc-950 px-5 py-2 rounded-full text-sm font-bold transition-all active:scale-95">
+				Try it out
+			</button>
+		</div>
+	</nav>
+
+	<!-- Hero Section -->
+	<section class="relative pt-32 pb-20 md:pt-48 md:pb-32 overflow-hidden">
+		<!-- Background glow -->
+		<div class="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-orange-500/10 blur-[120px] rounded-full pointer-events-none -z-10"></div>
+
+		<div class="max-w-7xl mx-auto px-6 text-center">
+			<div class="inline-flex items-center gap-2 bg-zinc-900 border border-zinc-800 rounded-full px-4 py-1.5 text-xs font-medium text-orange-400 mb-8">
+				<span class="relative flex h-2 w-2">
+					<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
+					<span class="relative inline-flex rounded-full h-2 w-2 bg-orange-500"></span>
+				</span>
+				New: Multi-Agent v2.0 is live
+			</div>
+
+			<h1 class="text-5xl md:text-8xl font-black tracking-tighter mb-8 leading-[0.9]">
+				TASKING
+			</h1>
+
+			<p class="max-w-2xl mx-auto text-zinc-400 text-lg md:text-xl mb-12 leading-relaxed">
+				Empower your workflow with the next generation of multi-agent scalability and intelligence. Seamlessly coordinate complex tasks across distributed systems.
+			</p>
+
+			<div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+				<button class="w-full sm:w-auto bg-orange-500 hover:bg-orange-600 text-zinc-950 px-8 py-4 rounded-full font-bold text-lg transition-all active:scale-95">
+					Try it out
+				</button>
+				<button class="w-full sm:w-auto bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 px-8 py-4 rounded-full font-bold text-lg transition-all active:scale-95">
+					Learn More
+				</button>
+			</div>
+		</div>
+	</section>
+
+	<!-- Features Section -->
+	<section id="features" class="py-24 bg-zinc-900/30">
+		<div class="max-w-7xl mx-auto px-6">
+			<div class="mb-16 text-center">
+				<h2 class="text-3xl md:text-5xl font-bold mb-4 tracking-tight">Built for modern scale</h2>
+				<p class="text-zinc-400 max-w-xl mx-auto">Everything you need to orchestrate complex agentic workflows in one unified platform.</p>
+			</div>
+
+			<div class="grid md:grid-cols-3 gap-8">
+				<!-- Multi-Agent -->
+				<div class="bg-zinc-900 border border-zinc-800 p-8 rounded-2xl hover:border-orange-500/50 transition-colors group">
+					<div class="w-12 h-12 bg-orange-500/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-orange-500 transition-colors">
+						<svg class="w-6 h-6 text-orange-500 group-hover:text-zinc-950 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+						</svg>
+					</div>
+					<h3 class="text-xl font-bold mb-3">Multi-Agent</h3>
+					<p class="text-zinc-400 text-sm leading-relaxed">
+						Advanced coordination protocols allowing dozens of specialized agents to collaborate on complex objectives with minimal overhead.
 					</p>
 				</div>
 
-				<!-- Auth Section -->
-				<div class="flex items-center gap-3">
-					{#if data.user}
-						<div class="flex items-center gap-3">
-							<span class="text-sm text-zinc-700 dark:text-zinc-300">
-								Welcome, <span class="font-medium">{data.user.username}</span>
-							</span>
-							<form method="POST" action="/auth/logout">
-								<button
-									type="submit"
-									class="rounded-lg bg-zinc-100 px-4 py-2 text-sm font-medium text-zinc-900 transition hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-100 dark:hover:bg-zinc-700"
-								>
-									Sign Out
-								</button>
-							</form>
+				<!-- Scalability -->
+				<div class="bg-zinc-900 border border-zinc-800 p-8 rounded-2xl hover:border-orange-500/50 transition-colors group">
+					<div class="w-12 h-12 bg-orange-500/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-orange-500 transition-colors">
+						<svg class="w-6 h-6 text-orange-500 group-hover:text-zinc-950 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+						</svg>
+					</div>
+					<h3 class="text-xl font-bold mb-3">Scalability</h3>
+					<p class="text-zinc-400 text-sm leading-relaxed">
+						Horizontal scaling designed to handle millions of operations per second without compromising on latency or data consistency.
+					</p>
+				</div>
+
+				<!-- Intelligent -->
+				<div class="bg-zinc-900 border border-zinc-800 p-8 rounded-2xl hover:border-orange-500/50 transition-colors group">
+					<div class="w-12 h-12 bg-orange-500/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-orange-500 transition-colors">
+						<svg class="w-6 h-6 text-orange-500 group-hover:text-zinc-950 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+						</svg>
+					</div>
+					<h3 class="text-xl font-bold mb-3">Intelligent</h3>
+					<p class="text-zinc-400 text-sm leading-relaxed">
+						Self-optimizing routines that learn from previous execution paths to increase efficiency and accuracy over time.
+					</p>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Contact Section -->
+	<section id="contact" class="py-24">
+		<div class="max-w-7xl mx-auto px-6">
+			<div class="bg-zinc-900 rounded-[2rem] overflow-hidden border border-zinc-800 flex flex-col lg:flex-row">
+				<div class="p-12 lg:w-1/2 flex flex-col justify-center">
+					<h2 class="text-4xl font-bold mb-6 tracking-tight">Ready to transform your productivity?</h2>
+					<p class="text-zinc-400 mb-10 text-lg">Contact our sales team or start your free trial today. We're here to help you scale your agentic operations.</p>
+
+					<div class="space-y-6 mb-10">
+						<div class="flex items-center gap-4">
+							<div class="w-10 h-10 bg-zinc-800 rounded-full flex items-center justify-center text-orange-500">
+								<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+								</svg>
+							</div>
+							<span class="text-zinc-300">hello@tasking.ai</span>
 						</div>
-					{:else}
-						<a
-							href="/auth/login"
-							class="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-700"
-						>
-							Sign In
-						</a>
-					{/if}
+						<div class="flex items-center gap-4">
+							<div class="w-10 h-10 bg-zinc-800 rounded-full flex items-center justify-center text-orange-500">
+								<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+								</svg>
+							</div>
+							<span class="text-zinc-300">San Francisco, CA</span>
+						</div>
+					</div>
+
+					<button class="w-fit bg-orange-500 hover:bg-orange-600 text-zinc-950 px-8 py-4 rounded-full font-bold transition-all active:scale-95">
+						Contact Us
+					</button>
+				</div>
+
+				<div class="lg:w-1/2 bg-zinc-800 relative min-h-[400px]">
+					<!-- Abstract decorative shapes instead of image -->
+					<div class="absolute inset-0 flex items-center justify-center overflow-hidden">
+						<div class="w-64 h-64 bg-orange-500/20 rounded-full blur-3xl animate-pulse"></div>
+						<div class="absolute w-48 h-48 border border-zinc-700 rounded-full -rotate-12 translate-x-20"></div>
+						<div class="absolute w-72 h-72 border border-zinc-700 rounded-full rotate-45 -translate-y-20"></div>
+					</div>
 				</div>
 			</div>
 		</div>
-	</header>
+	</section>
 
-	<!-- Sticky Search Bar (Mobile Optimized) -->
-	<div class="sticky top-0 z-10 border-b border-zinc-200 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/80 dark:border-zinc-800 dark:bg-zinc-900/95 dark:supports-[backdrop-filter]:bg-zinc-900/80">
-		<div class="mx-auto max-w-7xl px-4 py-3 sm:px-6 lg:px-8">
-			<!-- Search and Filter -->
-			<div class="flex flex-col gap-3 sm:flex-row sm:items-center">
-			<!-- Search Bar -->
-			<div class="flex-1">
-				<div class="relative">
-					<div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-						{#if isSearching}
-							<svg class="h-5 w-5 animate-spin text-blue-600" fill="none" viewBox="0 0 24 24">
-								<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-								<path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-							</svg>
-						{:else}
-							<svg
-								class="h-5 w-5 text-zinc-400"
-								fill="none"
-								stroke="currentColor"
-								viewBox="0 0 24 24"
-							>
-								<path
-									stroke-linecap="round"
-									stroke-linejoin="round"
-									stroke-width="2"
-									d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-								></path>
-							</svg>
-						{/if}
+	<!-- Footer -->
+	<footer class="bg-zinc-950 border-t border-zinc-900 pt-20 pb-10">
+		<div class="max-w-7xl mx-auto px-6">
+			<div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-10 mb-20">
+				<div class="col-span-2">
+					<div class="flex items-center gap-2 mb-6">
+						<div class="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center font-bold text-zinc-950 text-xl">T</div>
+						<span class="text-xl font-bold tracking-tight">Tasking</span>
 					</div>
-					<input
-						type="text"
-						name="q"
-						bind:value={searchQuery}
-						placeholder="Search moves..."
-						class="block w-full rounded-lg border border-zinc-300 bg-white py-3 pl-10 pr-3 text-base placeholder-zinc-500 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder-zinc-400"
-					/>
+					<p class="text-zinc-500 text-sm max-w-xs leading-relaxed">
+						The next generation of multi-agent scalability and intelligence. Build, scale, and optimize your agentic workflows with ease.
+					</p>
+				</div>
+
+				<div>
+					<h4 class="font-bold text-zinc-100 mb-6">Product</h4>
+					<ul class="space-y-4 text-sm text-zinc-500">
+						<li><a href="#" class="hover:text-orange-500 transition-colors">Features</a></li>
+						<li><a href="#" class="hover:text-orange-500 transition-colors">Pricing</a></li>
+						<li><a href="#" class="hover:text-orange-500 transition-colors">Changelog</a></li>
+						<li><a href="#" class="hover:text-orange-500 transition-colors">Integrations</a></li>
+					</ul>
+				</div>
+
+				<div>
+					<h4 class="font-bold text-zinc-100 mb-6">Company</h4>
+					<ul class="space-y-4 text-sm text-zinc-500">
+						<li><a href="#" class="hover:text-orange-500 transition-colors">About Us</a></li>
+						<li><a href="#" class="hover:text-orange-500 transition-colors">Careers</a></li>
+						<li><a href="#" class="hover:text-orange-500 transition-colors">Blog</a></li>
+						<li><a href="#" class="hover:text-orange-500 transition-colors">Media Kit</a></li>
+					</ul>
+				</div>
+
+				<div>
+					<h4 class="font-bold text-zinc-100 mb-6">Resources</h4>
+					<ul class="space-y-4 text-sm text-zinc-500">
+						<li><a href="#" class="hover:text-orange-500 transition-colors">Documentation</a></li>
+						<li><a href="#" class="hover:text-orange-500 transition-colors">Community</a></li>
+						<li><a href="#" class="hover:text-orange-500 transition-colors">Help Center</a></li>
+						<li><a href="#" class="hover:text-orange-500 transition-colors">API Status</a></li>
+					</ul>
+				</div>
+
+				<div>
+					<h4 class="font-bold text-zinc-100 mb-6">Social</h4>
+					<ul class="space-y-4 text-sm text-zinc-500">
+						<li><a href="#" class="hover:text-orange-500 transition-colors">Twitter</a></li>
+						<li><a href="#" class="hover:text-orange-500 transition-colors">LinkedIn</a></li>
+						<li><a href="#" class="hover:text-orange-500 transition-colors">GitHub</a></li>
+						<li><a href="#" class="hover:text-orange-500 transition-colors">Discord</a></li>
+					</ul>
 				</div>
 			</div>
 
-			<!-- Category Filter -->
-			<select
-				name="category"
-				bind:value={selectedCategory}
-				class="block w-full rounded-lg border border-zinc-300 bg-white px-3 py-3 text-base focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 sm:w-48"
-			>
-				<option value="">All Categories</option>
-				{#each data.categories as category}
-					<option value={category.id}>{category.name}</option>
-				{/each}
-			</select>
-
-			<!-- View Toggle (Touch-Optimized) -->
-			<div class="flex items-center gap-1 rounded-lg border border-zinc-300 bg-white p-1 dark:border-zinc-700 dark:bg-zinc-900">
-				<button
-					type="button"
-					onclick={() => toggleView('grid')}
-					class="rounded p-3 transition-all active:scale-95 {viewMode === 'grid'
-						? 'bg-zinc-100 text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100'
-						: 'text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200'}"
-					title="Grid view"
-					aria-label="Grid view"
-				>
-					<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-						<path
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							stroke-width="2"
-							d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"
-						></path>
-					</svg>
-				</button>
-				<button
-					type="button"
-					onclick={() => toggleView('table')}
-					class="rounded p-3 transition-all active:scale-95 {viewMode === 'table'
-						? 'bg-zinc-100 text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100'
-						: 'text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200'}"
-					title="Table view"
-					aria-label="Table view"
-				>
-					<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-						<path
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							stroke-width="2"
-							d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"
-						></path>
-					</svg>
-				</button>
-			</div>
+			<div class="flex flex-col md:flex-row items-center justify-between gap-6 pt-10 border-t border-zinc-900 text-xs text-zinc-600">
+				<p>© 2024 Tasking AI Inc. All rights reserved.</p>
+				<div class="flex items-center gap-8">
+					<a href="#" class="hover:text-zinc-400 transition-colors">Privacy Policy</a>
+					<a href="#" class="hover:text-zinc-400 transition-colors">Terms of Service</a>
+					<a href="#" class="hover:text-zinc-400 transition-colors">Cookie Policy</a>
+				</div>
 			</div>
 		</div>
-	</div>
-
-	<!-- Main Content -->
-	<main class="mx-auto max-w-7xl px-4 py-6 sm:py-8 sm:px-6 lg:px-8">
-
-		<!-- Results Count -->
-		{#if searchQuery || selectedCategory}
-			<div class="mb-4 flex items-center justify-between">
-				<p class="text-sm sm:text-base text-zinc-600 dark:text-zinc-400">
-					Found {displayedMoves.length} move{displayedMoves.length !== 1 ? 's' : ''}
-				</p>
-				<button
-					type="button"
-					onclick={() => {
-						searchQuery = '';
-						selectedCategory = '';
-						displayedMoves = data.moves;
-					}}
-					class="rounded-lg px-3 py-2 text-sm font-medium text-blue-600 transition-all active:scale-95 hover:bg-blue-50 dark:text-blue-400 dark:hover:bg-blue-950"
-				>
-					Clear filters
-				</button>
-			</div>
-		{/if}
-
-		<!-- Moves Display -->
-		{#if displayedMoves.length > 0}
-			{#if viewMode === 'grid'}
-				<!-- Grid View (Mobile-Optimized: 2 columns on mobile) -->
-				<div class="grid grid-cols-2 gap-3 sm:gap-6 lg:grid-cols-3">
-					{#each displayedMoves as move}
-						<MoveCard {move} />
-					{/each}
-				</div>
-			{:else}
-				<!-- Table View -->
-				<div class="overflow-hidden rounded-lg border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
-					<div class="overflow-x-auto">
-						<table class="w-full">
-							<thead class="border-b border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-800">
-								<tr>
-									<th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-zinc-700 dark:text-zinc-300">
-										Name
-									</th>
-									<th class="hidden px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-zinc-700 dark:text-zinc-300 md:table-cell">
-										Category
-									</th>
-									<th class="hidden px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider text-zinc-700 dark:text-zinc-300 lg:table-cell">
-										Media
-									</th>
-									<th class="hidden px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-zinc-700 dark:text-zinc-300 xl:table-cell">
-										Contributor
-									</th>
-									<th class="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wider text-zinc-700 dark:text-zinc-300">
-										Actions
-									</th>
-								</tr>
-							</thead>
-							<tbody class="divide-y divide-zinc-200 dark:divide-zinc-800">
-								{#each displayedMoves as move}
-									<tr class="transition-colors hover:bg-zinc-50 dark:hover:bg-zinc-800">
-										<td class="px-4 py-3">
-											<a
-												href="/moves/{move.id}"
-												class="font-medium text-zinc-900 hover:text-blue-600 dark:text-zinc-100 dark:hover:text-blue-400"
-											>
-												{move.name}
-											</a>
-											<div class="mt-1 text-xs text-zinc-500 dark:text-zinc-400 md:hidden">
-												{move.category.name}
-											</div>
-										</td>
-										<td class="hidden px-4 py-3 text-sm text-zinc-600 dark:text-zinc-400 md:table-cell">
-											<span class="inline-flex items-center rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-800 dark:bg-blue-950 dark:text-blue-300">
-												{move.category.name}
-											</span>
-										</td>
-										<td class="hidden px-4 py-3 text-center lg:table-cell">
-											<div class="flex items-center justify-center gap-2">
-												{#if move.imageUrl}
-													<span class="text-lg" title="Has image">📷</span>
-												{/if}
-												{#if move.videoUrl}
-													<span class="text-lg" title="Has video">🎥</span>
-												{/if}
-												{#if move.description}
-													<span class="text-lg" title="Has description">📝</span>
-												{/if}
-												{#if !move.imageUrl && !move.videoUrl && !move.description}
-													<span class="text-zinc-400 dark:text-zinc-600">—</span>
-												{/if}
-											</div>
-										</td>
-										<td class="hidden px-4 py-3 text-sm text-zinc-600 dark:text-zinc-400 xl:table-cell">
-											{move.contributorName || '—'}
-										</td>
-										<td class="px-4 py-3 text-right">
-											<a
-												href="/moves/{move.id}"
-												class="text-sm font-medium text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
-											>
-												View
-											</a>
-										</td>
-									</tr>
-								{/each}
-							</tbody>
-						</table>
-					</div>
-				</div>
-			{/if}
-		{:else}
-			<div class="py-12 text-center">
-				<svg
-					class="mx-auto h-12 w-12 text-zinc-400"
-					fill="none"
-					stroke="currentColor"
-					viewBox="0 0 24 24"
-				>
-					<path
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						stroke-width="2"
-						d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-					></path>
-				</svg>
-				<h3 class="mt-2 text-sm font-medium text-zinc-900 dark:text-zinc-100">
-					No moves found
-				</h3>
-				<p class="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
-					Try adjusting your search or filter.
-				</p>
-			</div>
-		{/if}
-	</main>
+	</footer>
 </div>
