@@ -21,12 +21,7 @@ export const GET: RequestHandler = async (event) => {
 
 	// Search in move name OR category name
 	const searchPattern = `%${query}%`;
-	conditions.push(
-		or(
-			like(moves.name, searchPattern),
-			like(categories.name, searchPattern)
-		)
-	);
+	conditions.push(or(like(moves.name, searchPattern), like(categories.name, searchPattern)));
 
 	// Add category filter if specified
 	if (categoryFilter) {
@@ -34,7 +29,7 @@ export const GET: RequestHandler = async (event) => {
 	}
 
 	// Fetch moves with category info
-	const movesData = await db
+	const movesDataRaw = await db
 		.select({
 			id: moves.id,
 			name: moves.name,
@@ -42,15 +37,26 @@ export const GET: RequestHandler = async (event) => {
 			imageUrl: moves.imageUrl,
 			videoUrl: moves.videoUrl,
 			contributorName: moves.contributorName,
-			category: {
-				id: categories.id,
-				name: categories.name
-			}
+			categoryId: categories.id,
+			categoryName: categories.name
 		})
 		.from(moves)
 		.innerJoin(categories, eq(moves.categoryId, categories.id))
 		.where(conditions.length > 0 ? or(...conditions) : undefined)
 		.orderBy(moves.name);
+
+	const movesData = movesDataRaw.map((move) => ({
+		id: move.id,
+		name: move.name,
+		description: move.description,
+		imageUrl: move.imageUrl,
+		videoUrl: move.videoUrl,
+		contributorName: move.contributorName,
+		category: {
+			id: move.categoryId,
+			name: move.categoryName
+		}
+	}));
 
 	return json({ moves: movesData });
 };

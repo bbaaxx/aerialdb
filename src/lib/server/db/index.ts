@@ -48,7 +48,9 @@ export function getDb(event?: RequestEvent) {
 	// Check if we're in Cloudflare environment
 	const platform = event?.platform as CloudflarePlatform | undefined;
 
-	if (platform?.env?.DB) {
+	const isProduction = process.env.NODE_ENV === 'production';
+
+	if (platform?.env?.DB && isProduction) {
 		// Production: Use Cloudflare D1
 		return drizzleD1(platform.env.DB, { schema });
 	}
