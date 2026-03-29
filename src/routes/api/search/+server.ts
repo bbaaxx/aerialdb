@@ -18,7 +18,7 @@ export const GET: RequestHandler = async (event) => {
 	}
 
 	// Build search conditions - search both move name AND category name
-	let conditions = [];
+	const conditions = [];
 
 	// Search in move name OR category name
 	const searchPattern = `%${query}%`;

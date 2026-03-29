@@ -13,7 +13,7 @@ export const load: PageServerLoad = async (event) => {
 	const levelFilter = url.searchParams.get('level') || '';
 
 	// Build query conditions
-	let conditions = [];
+	const conditions = [];
 
 	if (searchQuery) {
 		conditions.push(like(moves.name, `%${searchQuery}%`));

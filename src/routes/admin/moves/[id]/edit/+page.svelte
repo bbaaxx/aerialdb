@@ -3,12 +3,10 @@
 
 	let { data, form }: { data: PageData; form: ActionData } = $props();
 
-	// svelte-ignore state_referenced_locally — intentional: editable local copy of server data
 	let imagePreview = $state<string | null>(data.move.imageUrl || null);
 	let removeImage = $state(false);
 	let showDeleteConfirm = $state(false);
 	let categoryMode = $state<'existing' | 'new'>('existing');
-	// svelte-ignore state_referenced_locally — intentional: editable local copy of server data
 	let selectedCategory = $state(data.move.categoryId);
 
 	function handleImageChange(event: Event) {
@@ -141,7 +139,7 @@
 					class="w-full rounded-lg border border-zinc-300 px-3 py-2 text-zinc-900 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
 				>
 					<option value="">Select a category</option>
-					{#each data.categories as category}
+					{#each data.categories as category (category.id)}
 						<option value={category.id}>
 							{category.name}
 						</option>

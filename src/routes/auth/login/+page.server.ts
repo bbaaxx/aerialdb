@@ -1,4 +1,4 @@
-import { hashPassword, verifyPassword } from '$lib/server/password';
+import { verifyPassword } from '$lib/server/password';
 import { fail, redirect } from '@sveltejs/kit';
 import { eq } from 'drizzle-orm';
 import * as auth from '$lib/server/auth';

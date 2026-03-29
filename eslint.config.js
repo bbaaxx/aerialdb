@@ -25,9 +25,11 @@ export default defineConfig(
 			globals: { ...globals.browser, ...globals.node }
 		},
 		rules: {
-			// typescript-eslint strongly recommend that you do not use the no-undef lint rule on TypeScript projects.
+			// typescript-eslint strongly recommend that you do not use the no-def lint rule on TypeScript projects.
 			// see: https://typescript-eslint.io/troubleshooting/faqs/eslint/#i-get-errors-from-the-no-undef-rule-about-global-variables-not-being-defined-even-though-there-are-no-typescript-errors
-			'no-undef': 'off'
+			'no-undef': 'off',
+			// Disable no-explicit-any - intentional debt for dual DB client setup (D1 | libsql)
+			'@typescript-eslint/no-explicit-any': 'off'
 		}
 	},
 	{
@@ -44,7 +46,10 @@ export default defineConfig(
 			// Disable svelte/no-navigation-without-resolve - it conflicts with
 			// standard SvelteKit <a href> navigation patterns. Using href="/path"
 			// is the correct way to navigate internally in SvelteKit.
-			'svelte/no-navigation-without-resolve': 'off'
+			'svelte/no-navigation-without-resolve': 'off',
+			// Disable svelte/prefer-svelte-reactivity - SvelteURLSearchParams/SvelteSet
+			// do not exist in Svelte 5.43. Standard URLSearchParams/Set work fine.
+			'svelte/prefer-svelte-reactivity': 'off'
 		}
 	}
 );

@@ -4,7 +4,6 @@
 
 	let { form }: { form: ActionData } = $props();
 
-	// svelte-ignore state_referenced_locally — intentional: editable local copy of form data
 	let username = $state(form?.username || '');
 	let password = $state('');
 	let confirmPassword = $state('');

@@ -2,7 +2,7 @@ import type { RequestEvent } from '@sveltejs/kit';
 import { eq } from 'drizzle-orm';
 import { sha256 } from '@oslojs/crypto/sha2';
 import { encodeBase64url, encodeHexLowerCase } from '@oslojs/encoding';
-import { getDb, type Database } from '$lib/server/db';
+import { type Database } from '$lib/server/db';
 import { type SessionWithUser } from '$lib/server/db/types';
 import * as table from '$lib/server/db/schema';
 

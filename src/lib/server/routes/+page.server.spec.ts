@@ -84,7 +84,6 @@ describe('+page.server', () => {
 				from: vi.fn().mockReturnThis(),
 				innerJoin: vi.fn().mockReturnThis(),
 				where: vi.fn().mockImplementation(function (this: any) {
-					const self = this;
 					// Return a thenable that resolves to the next result
 					const thenable = {
 						then: (resolve: any) => {
@@ -100,7 +99,6 @@ describe('+page.server', () => {
 					return thenable;
 				}),
 				orderBy: vi.fn().mockImplementation(function (this: any) {
-					const self = this;
 					// Return a thenable
 					const thenable = {
 						then: (resolve: any) => {

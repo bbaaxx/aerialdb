@@ -86,7 +86,7 @@
 					class="w-full rounded-lg border border-zinc-300 px-3 py-2 text-zinc-900 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
 				>
 					<option value="">Select a category</option>
-					{#each data.categories as category}
+					{#each data.categories as category (category.id)}
 						<option value={category.id}>{category.name}</option>
 					{/each}
 					<option value="__new__">+ Create New Category</option>

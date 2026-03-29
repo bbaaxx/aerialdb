@@ -100,7 +100,7 @@
 				class="w-full rounded-lg border border-zinc-300 px-4 py-2 text-sm text-zinc-900 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
 			>
 				<option value="all">All Categories</option>
-				{#each data.categories as category}
+				{#each data.categories as category (category.id)}
 					<option value={category.id}>{category.name}</option>
 				{/each}
 			</select>
@@ -164,7 +164,7 @@
 					</tr>
 				</thead>
 				<tbody class="divide-y divide-zinc-200 dark:divide-zinc-800">
-					{#each filteredMoves as move}
+					{#each filteredMoves as move (move.id)}
 						<tr class="transition-colors hover:bg-zinc-50 dark:hover:bg-zinc-800">
 							<td class="px-4 py-3">
 								<a

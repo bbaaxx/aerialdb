@@ -29,11 +29,9 @@ import * as dbModule from '$lib/server/db';
 describe('api/search/+server', () => {
 	describe('GET', () => {
 		let mockDb: any;
-		let results: any[] = [];
 
 		beforeEach(() => {
 			vi.clearAllMocks();
-			results = [];
 		});
 
 		const mockMoves = [
@@ -85,7 +83,6 @@ describe('api/search/+server', () => {
 				from: vi.fn().mockReturnThis(),
 				innerJoin: vi.fn().mockReturnThis(),
 				where: vi.fn().mockImplementation(function (this: any) {
-					const self = this;
 					// Return a thenable that resolves to the result
 					const thenable = {
 						then: (resolve: any) => {
@@ -100,7 +97,6 @@ describe('api/search/+server', () => {
 		}
 
 		function setupMockDb(result: any[]) {
-			results = result;
 			// Create a query builder that db.select({...}) returns
 			const queryBuilder = createQueryBuilderMock(result);
 

@@ -11,7 +11,6 @@ export const load: PageServerLoad = async (event) => {
 
 	// Type assertion needed: getDb() returns a union type (D1 | libsql)
 	// that breaks .select({fields}) overload resolution
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	const [moveRaw] = (await (db as any)
 		.select({
 			id: moves.id,
