@@ -5,14 +5,6 @@
 			"type": "remote",
 			"url": "https://mcp.svelte.dev/mcp"
 		},
-		"stitch": {
-			"type": "remote",
-			"url": "https://stitch.googleapis.com/mcp",
-			"enabled": true,
-			"headers": {
-				"X-Goog-Api-Key": "AQ.Ab8RN6IzIzI83HH1_U0MNLWb6RnpWiP8fLN4nESlcza3HWPbnQ"
-			}
-		},
 		"cloudflare": {
 			"type": "remote",
 			"url": "https://docs.mcp.cloudflare.com/mcp",

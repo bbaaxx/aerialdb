@@ -13,15 +13,15 @@ import { z } from 'zod';
 import { tool } from '@opencode-ai/plugin';
 
 export const MyCustomTool = tool(
-  z.object({
-    query: z.string().describe('Search query'),
-    limit: z.number().default(10).describe('Results limit')
-  }),
-  async (args, context) => {
-    const { query, limit } = args;
-    // Implementation logic
-    return { success: true, data: [] };
-  }
+	z.object({
+		query: z.string().describe('Search query'),
+		limit: z.number().default(10).describe('Results limit')
+	}),
+	async (args, context) => {
+		const { query, limit } = args;
+		// Implementation logic
+		return { success: true, data: [] };
+	}
 ).describe('Search your database');
 ```
 
@@ -31,12 +31,12 @@ You can leverage Bun's shell API (`$`) to run commands in any language.
 
 ```typescript
 export const PythonCalculatorTool = tool(
-  z.object({ expression: z.string() }),
-  async (args, context) => {
-    const { $ } = context;
-    const result = await $`python3 -c 'print(eval("${args.expression}"))'`;
-    return { result: result.stdout };
-  }
+	z.object({ expression: z.string() }),
+	async (args, context) => {
+		const { $ } = context;
+		const result = await $`python3 -c 'print(eval("${args.expression}"))'`;
+		return { result: result.stdout };
+	}
 ).describe('Calculate mathematical expressions');
 ```
 
@@ -46,8 +46,8 @@ To register tools in your plugin:
 
 ```typescript
 export const MyPlugin = async (context) => {
-  return {
-    tool: [MyCustomTool, PythonCalculatorTool]
-  };
+	return {
+		tool: [MyCustomTool, PythonCalculatorTool]
+	};
 };
 ```

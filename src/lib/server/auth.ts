@@ -3,6 +3,7 @@ import { eq } from 'drizzle-orm';
 import { sha256 } from '@oslojs/crypto/sha2';
 import { encodeBase64url, encodeHexLowerCase } from '@oslojs/encoding';
 import { getDb, type Database } from '$lib/server/db';
+import { type SessionWithUser } from '$lib/server/db/types';
 import * as table from '$lib/server/db/schema';
 
 const DAY_IN_MS = 1000 * 60 * 60 * 24;
@@ -28,7 +29,9 @@ export async function createSession(token: string, userId: string, db: Database)
 
 export async function validateSessionToken(token: string, db: Database) {
 	const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
-	const [result] = await db
+	// Type assertion needed: getDb() returns a union type (D1 | libsql)
+	// that breaks .select({fields}) overload resolution
+	const [result] = (await (db as any)
 		.select({
 			// Adjust user table here to tweak returned data
 			user: { id: table.user.id, username: table.user.username },
@@ -36,7 +39,7 @@ export async function validateSessionToken(token: string, db: Database) {
 		})
 		.from(table.session)
 		.innerJoin(table.user, eq(table.session.userId, table.user.id))
-		.where(eq(table.session.id, sessionId));
+		.where(eq(table.session.id, sessionId))) as unknown as [SessionWithUser | undefined];
 
 	if (!result) {
 		return { session: null, user: null };

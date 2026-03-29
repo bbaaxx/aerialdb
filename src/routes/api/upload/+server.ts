@@ -42,9 +42,12 @@ export const POST: RequestHandler = async ({ request, platform }) => {
 		const publicUrl = platform.env.PUBLIC_R2_URL || '';
 
 		if (!publicUrl) {
-			return json({
-				error: 'R2 public URL not configured. Please set PUBLIC_R2_URL environment variable.'
-			}, { status: 500 });
+			return json(
+				{
+					error: 'R2 public URL not configured. Please set PUBLIC_R2_URL environment variable.'
+				},
+				{ status: 500 }
+			);
 		}
 
 		return json({ url: `${publicUrl}/${filename}` });

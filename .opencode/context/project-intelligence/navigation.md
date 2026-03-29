@@ -1,4 +1,4 @@
-<!-- Context: project-intelligence/nav | Priority: high | Version: 2.0 | Updated: 2026-03-27 -->
+<!-- Context: project-intelligence/nav | Priority: high | Version: 3.0 | Updated: 2026-03-28 -->
 
 # Project Intelligence — AerialDB
 
@@ -13,18 +13,28 @@ project-intelligence/
 ├── business-domain.md         # Business context and problem statement
 ├── business-tech-bridge.md    # Business → technical mapping
 ├── decisions-log.md           # Major decisions with rationale
-└── living-notes.md            # Active issues, debt, open questions
+├── living-notes.md            # Active issues, debt, open questions
+├── concepts/
+│   └── sveltekit-setup.md    # SvelteKit + Svelte 5 patterns
+└── lookup/
+    ├── commands.md           # NPM scripts reference
+    ├── database-schema.md    # User/session tables
+    └── dependencies.md        # Key packages
 ```
 
 ## Quick Routes
 
-| What You Need              | File                      | Priority |
-| -------------------------- | ------------------------- | -------- |
-| Tech stack & code patterns | `technical-domain.md`     | critical |
-| Business context & users   | `business-domain.md`      | high     |
-| Business-to-tech mapping   | `business-tech-bridge.md` | high     |
-| Decision history           | `decisions-log.md`        | medium   |
-| Current issues             | `living-notes.md`         | medium   |
+| What You Need              | File                          | Priority |
+| -------------------------- | ----------------------------- | -------- |
+| Tech stack & code patterns | `technical-domain.md`         | critical |
+| Business context & users   | `business-domain.md`          | high     |
+| Business-to-tech mapping   | `business-tech-bridge.md`     | high     |
+| **NPM commands**           | `lookup/commands.md`          | high     |
+| **Database schema**        | `lookup/database-schema.md`   | high     |
+| SvelteKit setup            | `concepts/sveltekit-setup.md` | high     |
+| Decision history           | `decisions-log.md`            | medium   |
+| Current issues             | `living-notes.md`             | medium   |
+| **Dependencies**           | `lookup/dependencies.md`      | medium   |
 
 ## Project Summary
 
@@ -34,16 +44,35 @@ project-intelligence/
 - **Auth**: Custom session-based (SHA-256 + Scrypt)
 - **i18n**: Paraglide JS (en + es)
 
-## Usage
+## By Category
 
-**New Agent/Developer**:
+### concepts/
 
-1. Start with this file (`navigation.md`)
-2. Read `technical-domain.md` for code patterns
-3. Read `business-domain.md` for domain context
+What and why — project-specific architecture decisions.
 
-**Quick Reference**:
+| File                 | Priority | Summary                                       |
+| -------------------- | -------- | --------------------------------------------- |
+| `sveltekit-setup.md` | high     | SvelteKit routing, hooks, server/client split |
 
-- Code patterns → `technical-domain.md`
-- Business focus → `business-domain.md`
-- Decision context → `decisions-log.md`
+### lookup/
+
+Quick reference — commands, schema, dependencies.
+
+| File                 | Priority | Summary                               |
+| -------------------- | -------- | ------------------------------------- |
+| `commands.md`        | high     | All npm scripts (dev, test, db, lint) |
+| `database-schema.md` | high     | User + session tables (Drizzle ORM)   |
+| `dependencies.md`    | medium   | Key packages by category              |
+
+## Loading Strategy
+
+| Priority     | Load          | When                                      |
+| ------------ | ------------- | ----------------------------------------- |
+| **critical** | Always        | This navigation file, technical-domain.md |
+| **high**     | On task match | Commands, schema, SvelteKit setup         |
+| **medium**   | On demand     | Dependencies, decisions, issues           |
+
+## Related Context
+
+- **Cloudflare deployment** → `../../development/infrastructure/navigation.md`
+- **Core standards** → `../../core/standards/navigation.md`

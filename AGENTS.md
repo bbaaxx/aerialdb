@@ -65,10 +65,10 @@ npm run db:init           # Initialize DB from scripts/init-db.ts
 
 Vitest is split into two projects (see `vite.config.ts`):
 
-| Project | Includes | Environment |
-|---------|----------|-------------|
-| `client` | `src/**/*.svelte.{test,spec}.{js,ts}` | Chromium (headless Playwright) |
-| `server` | `src/**/*.{test,spec}.{js,ts}` (non-svelte) | Node |
+| Project  | Includes                                    | Environment                    |
+| -------- | ------------------------------------------- | ------------------------------ |
+| `client` | `src/**/*.svelte.{test,spec}.{js,ts}`       | Chromium (headless Playwright) |
+| `server` | `src/**/*.{test,spec}.{js,ts}` (non-svelte) | Node                           |
 
 Run a specific project: `npm run test:unit -- --run --project=server`
 
@@ -138,23 +138,23 @@ Always use Svelte 5 runes — no Svelte 4 stores, no `$:` reactive statements.
 
 ```svelte
 <script lang="ts">
-  // Props
-  interface Props {
-    move: { id: number; name: string };
-    onSelect?: (id: number) => void;
-  }
-  let { move, onSelect }: Props = $props();
+	// Props
+	interface Props {
+		move: { id: number; name: string };
+		onSelect?: (id: number) => void;
+	}
+	let { move, onSelect }: Props = $props();
 
-  // State
-  let count = $state(0);
+	// State
+	let count = $state(0);
 
-  // Derived
-  let doubled = $derived(count * 2);
+	// Derived
+	let doubled = $derived(count * 2);
 
-  // Effects
-  $effect(() => {
-    console.log(count);
-  });
+	// Effects
+	$effect(() => {
+		console.log(count);
+	});
 </script>
 ```
 
@@ -218,14 +218,14 @@ if (!move) throw error(404, 'Move not found');
 
 TailwindCSS v4 — no CSS modules, no `<style>` blocks except for non-Tailwind cases.
 
-| Element | Classes |
-|---------|---------|
-| Primary button | `rounded-lg bg-blue-600 px-6 py-2.5 text-white hover:bg-blue-700` |
-| Secondary button | `rounded-lg border border-zinc-300 px-6 py-2.5 hover:bg-zinc-50` |
-| Input | `rounded-lg border px-3 py-2 focus:ring-2 focus:ring-blue-500` |
-| Card | `rounded-lg border shadow-sm hover:shadow-md` |
-| Background | `bg-zinc-50 dark:bg-zinc-950` |
-| Border | `border-zinc-200 dark:border-zinc-800` |
+| Element          | Classes                                                           |
+| ---------------- | ----------------------------------------------------------------- |
+| Primary button   | `rounded-lg bg-blue-600 px-6 py-2.5 text-white hover:bg-blue-700` |
+| Secondary button | `rounded-lg border border-zinc-300 px-6 py-2.5 hover:bg-zinc-50`  |
+| Input            | `rounded-lg border px-3 py-2 focus:ring-2 focus:ring-blue-500`    |
+| Card             | `rounded-lg border shadow-sm hover:shadow-md`                     |
+| Background       | `bg-zinc-50 dark:bg-zinc-950`                                     |
+| Border           | `border-zinc-200 dark:border-zinc-800`                            |
 
 - Mobile-first responsive design; use `sm:`, `lg:`, `xl:` breakpoints
 - Full dark mode via `dark:` variants on every element that has a background or border

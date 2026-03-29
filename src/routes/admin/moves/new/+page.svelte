@@ -43,13 +43,17 @@
 	</div>
 
 	{#if form?.error}
-		<div class="mb-6 rounded-lg border border-red-200 bg-red-50 p-4 dark:border-red-900 dark:bg-red-950">
+		<div
+			class="mb-6 rounded-lg border border-red-200 bg-red-50 p-4 dark:border-red-900 dark:bg-red-950"
+		>
 			<p class="text-sm text-red-800 dark:text-red-200">{form.error}</p>
 		</div>
 	{/if}
 
 	<form method="POST" enctype="multipart/form-data" class="space-y-6">
-		<div class="rounded-lg border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+		<div
+			class="rounded-lg border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900"
+		>
 			<h2 class="mb-4 text-lg font-semibold text-zinc-900 dark:text-zinc-100">Basic Information</h2>
 
 			<!-- Move Name -->
@@ -63,20 +67,23 @@
 					name="name"
 					required
 					placeholder="e.g., Superman, Angel, Crucifix"
-					class="w-full rounded-lg border border-zinc-300 px-3 py-2 text-zinc-900 placeholder-zinc-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 dark:placeholder-zinc-500"
+					class="w-full rounded-lg border border-zinc-300 px-3 py-2 text-zinc-900 placeholder-zinc-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 dark:placeholder-zinc-500"
 				/>
 			</div>
 
 			<!-- Category -->
 			<div class="mb-4">
-				<label for="category-select" class="mb-2 block text-sm font-medium text-zinc-700 dark:text-zinc-300">
+				<label
+					for="category-select"
+					class="mb-2 block text-sm font-medium text-zinc-700 dark:text-zinc-300"
+				>
 					Category <span class="text-red-500">*</span>
 				</label>
 				<select
 					id="category-select"
 					onchange={handleCategoryChange}
 					bind:value={selectedCategory}
-					class="w-full rounded-lg border border-zinc-300 px-3 py-2 text-zinc-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
+					class="w-full rounded-lg border border-zinc-300 px-3 py-2 text-zinc-900 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
 				>
 					<option value="">Select a category</option>
 					{#each data.categories as category}
@@ -87,7 +94,10 @@
 
 				{#if categoryMode === 'new'}
 					<div class="mt-3">
-						<label for="new-category" class="mb-2 block text-sm font-medium text-zinc-700 dark:text-zinc-300">
+						<label
+							for="new-category"
+							class="mb-2 block text-sm font-medium text-zinc-700 dark:text-zinc-300"
+						>
 							New Category Name <span class="text-red-500">*</span>
 						</label>
 						<input
@@ -96,7 +106,7 @@
 							name="new_category"
 							required
 							placeholder="e.g., Floor Work, Dynamic"
-							class="w-full rounded-lg border border-zinc-300 px-3 py-2 text-zinc-900 placeholder-zinc-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 dark:placeholder-zinc-500"
+							class="w-full rounded-lg border border-zinc-300 px-3 py-2 text-zinc-900 placeholder-zinc-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 dark:placeholder-zinc-500"
 						/>
 					</div>
 				{:else}
@@ -106,7 +116,10 @@
 
 			<!-- Contributor -->
 			<div>
-				<label for="contributor" class="mb-2 block text-sm font-medium text-zinc-700 dark:text-zinc-300">
+				<label
+					for="contributor"
+					class="mb-2 block text-sm font-medium text-zinc-700 dark:text-zinc-300"
+				>
 					Original Contributor
 				</label>
 				<input
@@ -114,7 +127,7 @@
 					id="contributor"
 					name="contributor"
 					placeholder="e.g., Fer Medina"
-					class="w-full rounded-lg border border-zinc-300 px-3 py-2 text-zinc-900 placeholder-zinc-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 dark:placeholder-zinc-500"
+					class="w-full rounded-lg border border-zinc-300 px-3 py-2 text-zinc-900 placeholder-zinc-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 dark:placeholder-zinc-500"
 				/>
 				<p class="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
 					The person who originally created or popularized this move
@@ -122,11 +135,16 @@
 			</div>
 		</div>
 
-		<div class="rounded-lg border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+		<div
+			class="rounded-lg border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900"
+		>
 			<h2 class="mb-4 text-lg font-semibold text-zinc-900 dark:text-zinc-100">Description</h2>
 
 			<div>
-				<label for="description" class="mb-2 block text-sm font-medium text-zinc-700 dark:text-zinc-300">
+				<label
+					for="description"
+					class="mb-2 block text-sm font-medium text-zinc-700 dark:text-zinc-300"
+				>
 					Move Description
 				</label>
 				<textarea
@@ -134,12 +152,14 @@
 					name="description"
 					rows="6"
 					placeholder="Describe the move, how to perform it, key points, etc."
-					class="w-full rounded-lg border border-zinc-300 px-3 py-2 text-zinc-900 placeholder-zinc-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 dark:placeholder-zinc-500"
+					class="w-full rounded-lg border border-zinc-300 px-3 py-2 text-zinc-900 placeholder-zinc-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 dark:placeholder-zinc-500"
 				></textarea>
 			</div>
 		</div>
 
-		<div class="rounded-lg border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+		<div
+			class="rounded-lg border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900"
+		>
 			<h2 class="mb-4 text-lg font-semibold text-zinc-900 dark:text-zinc-100">Media</h2>
 
 			<!-- Image Upload -->
@@ -173,7 +193,10 @@
 
 			<!-- Video URL -->
 			<div>
-				<label for="video_url" class="mb-2 block text-sm font-medium text-zinc-700 dark:text-zinc-300">
+				<label
+					for="video_url"
+					class="mb-2 block text-sm font-medium text-zinc-700 dark:text-zinc-300"
+				>
 					Video URL
 				</label>
 				<input
@@ -181,11 +204,9 @@
 					id="video_url"
 					name="video_url"
 					placeholder="https://youtube.com/watch?v=..."
-					class="w-full rounded-lg border border-zinc-300 px-3 py-2 text-zinc-900 placeholder-zinc-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 dark:placeholder-zinc-500"
+					class="w-full rounded-lg border border-zinc-300 px-3 py-2 text-zinc-900 placeholder-zinc-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 dark:placeholder-zinc-500"
 				/>
-				<p class="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
-					YouTube or Vimeo URL
-				</p>
+				<p class="mt-1 text-xs text-zinc-500 dark:text-zinc-400">YouTube or Vimeo URL</p>
 			</div>
 		</div>
 
@@ -193,7 +214,7 @@
 		<div class="flex gap-4">
 			<button
 				type="submit"
-				class="rounded-lg bg-blue-600 px-6 py-2.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+				class="rounded-lg bg-blue-600 px-6 py-2.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none"
 			>
 				Create Move
 			</button>

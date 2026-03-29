@@ -67,6 +67,25 @@ export async function seedDatabase() {
 	console.log('🤸 Importing moves...');
 	let importedCount = 0;
 
+	// Deterministic level distribution: ~30% beginner, ~40% intermediate, ~30% advanced
+	const levelDistribution: Array<'beginner' | 'intermediate' | 'advanced'> = [
+		'beginner',
+		'beginner',
+		'beginner',
+		'intermediate',
+		'intermediate',
+		'intermediate',
+		'intermediate',
+		'advanced',
+		'advanced',
+		'advanced'
+	];
+	const levelCounts = new Map<string, number>([
+		['beginner', 0],
+		['intermediate', 0],
+		['advanced', 0]
+	]);
+
 	for (const toonMove of toonMoves) {
 		const categoryId = categoryMap.get(toonMove.base);
 		if (!categoryId) {
@@ -74,10 +93,13 @@ export async function seedDatabase() {
 			continue;
 		}
 
+		const level = levelDistribution[importedCount % levelDistribution.length];
+
 		await db.insert(moves).values({
-			id: toonMove.id,
+			id: generateId(10), // Generate unique ID (TOON IDs may have duplicates)
 			name: toonMove.figura,
 			categoryId,
+			level,
 			description: toonMove.descripcion,
 			imageUrl: toonMove.image,
 			videoUrl: toonMove.video,
@@ -86,6 +108,8 @@ export async function seedDatabase() {
 			createdAt: new Date(),
 			updatedAt: new Date()
 		});
+
+		levelCounts.set(level, (levelCounts.get(level) ?? 0) + 1);
 
 		importedCount++;
 
@@ -101,6 +125,11 @@ export async function seedDatabase() {
 	console.log(`  - Admin user: admin / admin123`);
 	console.log(`  - Categories: ${categoryNames.length}`);
 	console.log(`  - Moves: ${importedCount}`);
+	console.log(`  - Level distribution:`);
+	for (const [lvl, count] of levelCounts) {
+		const pct = importedCount > 0 ? ((count / importedCount) * 100).toFixed(1) : '0.0';
+		console.log(`    ${lvl}: ${count} (${pct}%)`);
+	}
 }
 
 // Run if executed directly

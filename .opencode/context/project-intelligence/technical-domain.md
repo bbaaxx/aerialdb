@@ -29,21 +29,17 @@
 ### Page Load Function
 
 ```ts
-import { getDb } from "$lib/server/db";
-import { moves } from "$lib/server/db/schema";
-import { eq } from "drizzle-orm";
-import { error } from "@sveltejs/kit";
-import type { PageServerLoad } from "./$types";
+import { getDb } from '$lib/server/db';
+import { moves } from '$lib/server/db/schema';
+import { eq } from 'drizzle-orm';
+import { error } from '@sveltejs/kit';
+import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async (event) => {
-  const db = getDb(event);
-  const [move] = await db
-    .select()
-    .from(moves)
-    .where(eq(moves.id, event.params.id))
-    .limit(1);
-  if (!move) throw error(404, "Move not found");
-  return { move };
+	const db = getDb(event);
+	const [move] = await db.select().from(moves).where(eq(moves.id, event.params.id)).limit(1);
+	if (!move) throw error(404, 'Move not found');
+	return { move };
 };
 ```
 
@@ -68,18 +64,18 @@ export const actions = {
 ### API Endpoint
 
 ```ts
-import { json } from "@sveltejs/kit";
-import type { RequestHandler } from "./$types";
+import { json } from '@sveltejs/kit';
+import type { RequestHandler } from './$types';
 
 export const GET: RequestHandler = async (event) => {
-  const db = getDb(event);
-  const query = event.url.searchParams.get("q") || "";
-  if (!query || query.length < 3) return json({ moves: [] });
-  const results = await db
-    .select()
-    .from(moves)
-    .where(like(moves.name, `%${query}%`));
-  return json({ moves: results });
+	const db = getDb(event);
+	const query = event.url.searchParams.get('q') || '';
+	if (!query || query.length < 3) return json({ moves: [] });
+	const results = await db
+		.select()
+		.from(moves)
+		.where(like(moves.name, `%${query}%`));
+	return json({ moves: results });
 };
 ```
 
@@ -95,8 +91,11 @@ export const GET: RequestHandler = async (event) => {
 	let hovered = $state(false);
 </script>
 
-<a href="/moves/{move.id}" class="group block rounded-lg border border-zinc-200 shadow-sm
-	dark:border-zinc-800 hover:shadow-md">
+<a
+	href="/moves/{move.id}"
+	class="group block rounded-lg border border-zinc-200 shadow-sm
+	hover:shadow-md dark:border-zinc-800"
+>
 	<h3 class="text-sm font-semibold text-zinc-900 dark:text-zinc-100">{move.name}</h3>
 </a>
 ```

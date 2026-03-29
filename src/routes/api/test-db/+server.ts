@@ -18,11 +18,14 @@ export const GET: RequestHandler = async (event) => {
 			platform: event.platform ? 'Cloudflare' : 'Local'
 		});
 	} catch (error) {
-		return json({
-			success: false,
-			error: error instanceof Error ? error.message : 'Unknown error',
-			stack: error instanceof Error ? error.stack : undefined,
-			platform: event.platform ? 'Cloudflare' : 'Local'
-		}, { status: 500 });
+		return json(
+			{
+				success: false,
+				error: error instanceof Error ? error.message : 'Unknown error',
+				stack: error instanceof Error ? error.stack : undefined,
+				platform: event.platform ? 'Cloudflare' : 'Local'
+			},
+			{ status: 500 }
+		);
 	}
 };

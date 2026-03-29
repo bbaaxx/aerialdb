@@ -4,6 +4,7 @@
 
 	let { form, data }: { form: ActionData; data: PageData } = $props();
 
+	// svelte-ignore state_referenced_locally — intentional: editable local copy of form data
 	let username = $state(form?.username || '');
 	let password = $state('');
 	let isSubmitting = $state(false);
@@ -39,12 +40,14 @@
 	}
 </script>
 
-<div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 px-4 py-12">
+<div
+	class="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 px-4 py-12"
+>
 	<div class="w-full max-w-md">
-		<div class="bg-white rounded-2xl shadow-xl p-8">
+		<div class="rounded-2xl bg-white p-8 shadow-xl">
 			<!-- Header -->
-			<div class="text-center mb-8">
-				<h1 class="text-3xl font-bold text-gray-900 mb-2">Welcome Back</h1>
+			<div class="mb-8 text-center">
+				<h1 class="mb-2 text-3xl font-bold text-gray-900">Welcome Back</h1>
 				<p class="text-gray-600">Sign in to your account</p>
 			</div>
 
@@ -64,14 +67,14 @@
 				{/if}
 				<!-- Error Message -->
 				{#if form?.message}
-					<div class="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+					<div class="mb-6 rounded-lg border border-red-200 bg-red-50 p-4">
 						<p class="text-sm text-red-800">{form.message}</p>
 						{#if form.showSignupLink}
-							<p class="text-sm text-red-800 mt-2">
+							<p class="mt-2 text-sm text-red-800">
 								Don't have an account?
 								<a
 									href="/auth/signup"
-									class="font-medium text-blue-600 hover:text-blue-700 underline"
+									class="font-medium text-blue-600 underline hover:text-blue-700"
 								>
 									Create one here
 								</a>
@@ -82,7 +85,7 @@
 
 				<!-- Username Field -->
 				<div class="mb-5">
-					<label for="username" class="block text-sm font-medium text-gray-700 mb-2">
+					<label for="username" class="mb-2 block text-sm font-medium text-gray-700">
 						Username
 					</label>
 					<input
@@ -98,7 +101,7 @@
 								validateUsernameClient(username);
 							}
 						}}
-						class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition outline-none"
+						class="w-full rounded-lg border border-gray-300 px-4 py-3 transition outline-none focus:border-transparent focus:ring-2 focus:ring-blue-500"
 						class:border-red-500={usernameError}
 						class:bg-red-50={usernameError}
 						disabled={isSubmitting}
@@ -110,7 +113,7 @@
 
 				<!-- Password Field -->
 				<div class="mb-6">
-					<label for="password" class="block text-sm font-medium text-gray-700 mb-2">
+					<label for="password" class="mb-2 block text-sm font-medium text-gray-700">
 						Password
 					</label>
 					<input
@@ -126,7 +129,7 @@
 								validatePasswordClient(password);
 							}
 						}}
-						class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition outline-none"
+						class="w-full rounded-lg border border-gray-300 px-4 py-3 transition outline-none focus:border-transparent focus:ring-2 focus:ring-blue-500"
 						class:border-red-500={passwordError}
 						class:bg-red-50={passwordError}
 						disabled={isSubmitting}
@@ -140,12 +143,12 @@
 				<button
 					type="submit"
 					disabled={isSubmitting || !!usernameError || !!passwordError || !username || !password}
-					class="w-full bg-blue-600 text-white font-medium py-3 px-4 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition disabled:bg-gray-400 disabled:cursor-not-allowed"
+					class="w-full rounded-lg bg-blue-600 px-4 py-3 font-medium text-white transition hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:bg-gray-400"
 				>
 					{#if isSubmitting}
 						<span class="flex items-center justify-center">
 							<svg
-								class="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+								class="mr-3 -ml-1 h-5 w-5 animate-spin text-white"
 								xmlns="http://www.w3.org/2000/svg"
 								fill="none"
 								viewBox="0 0 24 24"
@@ -178,7 +181,7 @@
 					Don't have an account?
 					<a
 						href="/auth/signup"
-						class="text-blue-600 hover:text-blue-700 font-medium hover:underline"
+						class="font-medium text-blue-600 hover:text-blue-700 hover:underline"
 					>
 						Create one
 					</a>

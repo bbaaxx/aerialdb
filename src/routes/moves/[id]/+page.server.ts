@@ -1,4 +1,5 @@
 import { getDb } from '$lib/server/db';
+import { type MoveWithCategoryRawFull } from '$lib/server/db/types';
 import { moves, categories } from '$lib/server/db/schema';
 import { eq } from 'drizzle-orm';
 import { error } from '@sveltejs/kit';
@@ -8,7 +9,9 @@ export const load: PageServerLoad = async (event) => {
 	const db = getDb(event);
 	const { params } = event;
 
-	const [moveRaw] = await db
+	// Type assertion needed: getDb() returns a union type (D1 | libsql)
+	// that breaks .select({fields}) overload resolution
+	const [moveRaw] = (await (db as any)
 		.select({
 			id: moves.id,
 			name: moves.name,
@@ -24,7 +27,7 @@ export const load: PageServerLoad = async (event) => {
 		.from(moves)
 		.innerJoin(categories, eq(moves.categoryId, categories.id))
 		.where(eq(moves.id, params.id))
-		.limit(1);
+		.limit(1)) as [MoveWithCategoryRawFull];
 
 	if (!moveRaw) {
 		throw error(404, 'Move not found');
