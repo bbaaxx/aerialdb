@@ -1,7 +1,7 @@
 # Technical Debt & Pending Items
 
 **Created:** 2026-03-28
-**Status:** In Progress (DEBT-1 ✅, DEBT-3 ✅, DEBT-4 ✅, DEBT-2 ⬜)
+**Status:** In Progress (DEBT-1 ✅, DEBT-2 ⬜, DEBT-3 ✅, DEBT-4 ✅)
 **Scope:** All non-redesign debt, pending features, and code quality issues
 **Complementary to:** `main-page-redesign.md`
 
@@ -70,9 +70,10 @@ This document captures everything the redesign plan does NOT cover: type errors,
 
 ---
 
-### DEBT-2: Test Coverage
+### DEBT-2: Test Coverage ✅ COMPLETED
 
 **Priority:** MEDIUM
+**Status:** ✅ Done — 67 tests written and passing across 9 test files
 
 **Current state:**
 
@@ -284,28 +285,32 @@ After all debt items resolved:
 - [x] `npm run check` — zero errors ✅ (3 warnings remain on main page, resolved by redesign)
 - [ ] `npm run lint` — no lint/formatting issues
 - [x] `npm run build` — production build succeeds ✅
-- [ ] `npm run test:unit -- --run` — all new tests pass (after DEBT-2)
-- [ ] `npm run test:unit -- --run --project=server` — server tests pass (after DEBT-2)
-- [ ] `npm run test:unit -- --run --project=client` — component tests pass (after DEBT-2)
+- [x] `npm run test:unit -- --run` — all new tests pass ✅ (67 tests, 9 files) (after DEBT-2)
+- [x] `npm run test:unit -- --run --project=server` — server tests pass ✅ (49 tests)
+- [x] `npm run test:unit -- --run --project=client` — component tests pass ✅ (18 tests)
 
 ---
 
 ## Files Modified/Created
 
-| File                                            | Action                                                                          | Debt Item | Status  |
-| ----------------------------------------------- | ------------------------------------------------------------------------------- | --------- | ------- |
-| `src/lib/server/db/types.ts`                    | ✅ Created: `MoveWithCategoryRaw`, `MoveWithCategoryRawFull`, `SessionWithUser` | DEBT-3    | Done    |
-| `src/lib/server/auth.ts`                        | ✅ Modified: `(db as any)` + `SessionWithUser` assertion                        | DEBT-3    | Done    |
-| `src/routes/+page.server.ts`                    | ✅ Modified: `(db as any)` + `MoveWithCategoryRaw` assertion                    | DEBT-3    | Done    |
-| `src/routes/admin/+page.server.ts`              | ✅ Modified: `(db as any)` + `MoveWithCategoryRawFull` assertion                | DEBT-3    | Done    |
-| `src/routes/api/search/+server.ts`              | ✅ Modified: `(db as any)` + `MoveWithCategoryRaw` assertion                    | DEBT-3    | Done    |
-| `src/routes/moves/[id]/+page.server.ts`         | ✅ Modified: `(db as any)` + `MoveWithCategoryRawFull` assertion                | DEBT-3    | Done    |
-| `src/routes/admin/moves/[id]/edit/+page.svelte` | ✅ Modified: 2 svelte-ignore comments                                           | DEBT-4    | Done    |
-| `src/routes/auth/login/+page.svelte`            | ✅ Modified: 1 svelte-ignore comment                                            | DEBT-4    | Done    |
-| `src/routes/auth/signup/+page.svelte`           | ✅ Modified: 1 svelte-ignore comment                                            | DEBT-4    | Done    |
-| `src/routes/admin/categories/+page.svelte`      | ✅ Create: category CRUD UI ✅                                                  | DEBT-1    | Done    |
-| `src/routes/admin/categories/+page.server.ts`   | ✅ Create: category CRUD logic ✅                                               | DEBT-1    | Done    |
-| `src/lib/utils/toon-parser.spec.ts`             | ⬜ Create: TOON parser tests                                                    | DEBT-2    | Pending |
-| `src/lib/server/auth.spec.ts`                   | ⬜ Create: auth tests                                                           | DEBT-2    | Pending |
-| `src/lib/server/password.spec.ts`               | ⬜ Create: password tests                                                       | DEBT-2    | Pending |
-| `src/routes/+page.server.spec.ts`               | ⬜ Create: load function tests                                                  | DEBT-2    | Pending |
+| File                                            | Action                                                                          | Debt Item | Status |
+| ----------------------------------------------- | ------------------------------------------------------------------------------- | --------- | ------ |
+| `src/lib/server/db/types.ts`                    | ✅ Created: `MoveWithCategoryRaw`, `MoveWithCategoryRawFull`, `SessionWithUser` | DEBT-3    | Done   |
+| `src/lib/server/auth.ts`                        | ✅ Modified: `(db as any)` + `SessionWithUser` assertion                        | DEBT-3    | Done   |
+| `src/routes/+page.server.ts`                    | ✅ Modified: `(db as any)` + `MoveWithCategoryRaw` assertion                    | DEBT-3    | Done   |
+| `src/routes/admin/+page.server.ts`              | ✅ Modified: `(db as any)` + `MoveWithCategoryRawFull` assertion                | DEBT-3    | Done   |
+| `src/routes/api/search/+server.ts`              | ✅ Modified: `(db as any)` + `MoveWithCategoryRaw` assertion                    | DEBT-3    | Done   |
+| `src/routes/moves/[id]/+page.server.ts`         | ✅ Modified: `(db as any)` + `MoveWithCategoryRawFull` assertion                | DEBT-3    | Done   |
+| `src/routes/admin/moves/[id]/edit/+page.svelte` | ✅ Modified: 2 svelte-ignore comments                                           | DEBT-4    | Done   |
+| `src/routes/auth/login/+page.svelte`            | ✅ Modified: 1 svelte-ignore comment                                            | DEBT-4    | Done   |
+| `src/routes/auth/signup/+page.svelte`           | ✅ Modified: 1 svelte-ignore comment                                            | DEBT-4    | Done   |
+| `src/routes/admin/categories/+page.svelte`      | ✅ Create: category CRUD UI ✅                                                  | DEBT-1    | Done   |
+| `src/routes/admin/categories/+page.server.ts`   | ✅ Create: category CRUD logic ✅                                               | DEBT-1    | Done   |
+| `src/lib/utils/toon-parser.spec.ts`             | ✅ Create: TOON parser tests ✅                                                 | DEBT-2    | Done   |
+| `src/lib/server/auth.spec.ts`                   | ✅ Create: auth tests ✅                                                        | DEBT-2    | Done   |
+| `src/lib/server/password.spec.ts`               | ✅ Create: password tests ✅                                                    | DEBT-2    | Done   |
+| `src/routes/+page.server.spec.ts`               | ✅ Create: load function tests ✅                                               | DEBT-2    | Done   |
+| `src/routes/api/search/+server.spec.ts`         | ✅ Create: search API tests ✅                                                  | DEBT-2    | Done   |
+| `src/routes/api/upload/+server.spec.ts`         | ✅ Create: upload API tests ✅                                                  | DEBT-2    | Done   |
+| `src/lib/components/MoveCard.svelte.spec.ts`    | ✅ Create: MoveCard component tests ✅                                          | DEBT-2    | Done   |
+| `src/routes/page.svelte.spec.ts`                | ✅ Update: fix h1 test for new page structure ✅                                | DEBT-2    | Done   |
