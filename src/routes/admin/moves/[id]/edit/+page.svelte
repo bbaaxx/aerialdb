@@ -124,13 +124,13 @@
 				/>
 			</div>
 
-			<!-- Category -->
+			<!-- Base Technique -->
 			<div class="mb-4">
 				<label
 					for="category-select"
 					class="mb-2 block text-sm font-medium text-zinc-700 dark:text-zinc-300"
 				>
-					Category <span class="text-red-500">*</span>
+					Base Technique <span class="text-red-500">*</span>
 				</label>
 				<select
 					id="category-select"
@@ -138,13 +138,13 @@
 					bind:value={selectedCategory}
 					class="w-full rounded-lg border border-zinc-300 px-3 py-2 text-zinc-900 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
 				>
-					<option value="">Select a category</option>
+					<option value="">Select a base technique</option>
 					{#each data.categories as category (category.id)}
 						<option value={category.id}>
 							{category.name}
 						</option>
 					{/each}
-					<option value="__new__">+ Create New Category</option>
+					<option value="__new__">+ Create New Base Technique</option>
 				</select>
 
 				{#if categoryMode === 'new'}
@@ -153,7 +153,7 @@
 							for="new-category"
 							class="mb-2 block text-sm font-medium text-zinc-700 dark:text-zinc-300"
 						>
-							New Category Name <span class="text-red-500">*</span>
+							New Base Technique Name <span class="text-red-500">*</span>
 						</label>
 						<input
 							type="text"

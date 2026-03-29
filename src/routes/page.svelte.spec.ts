@@ -4,19 +4,23 @@ import { render } from 'vitest-browser-svelte';
 import Page from './+page.svelte';
 
 const mockData = {
+	user: null,
 	moves: [
 		{
 			id: '1',
 			name: 'Birdie',
+			description: null,
 			imageUrl: null,
+			videoUrl: null,
 			level: 'beginner',
+			contributorName: null,
 			category: { id: 'silks', name: 'Silks' }
 		}
 	],
-	categories: [{ id: 'silks', name: 'Silks' }],
+	categories: [{ id: 'silks', name: 'Silks', createdAt: new Date() }],
 	searchQuery: '',
-	categoryFilter: null,
-	levelFilter: null,
+	categoryFilter: '',
+	levelFilter: '',
 	featuredMove: null
 };
 

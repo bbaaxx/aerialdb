@@ -13,7 +13,7 @@
 
 	// Filter state - initialized from URL params (server data)
 	let searchQuery = $state(data.searchQuery);
-	let selectedApparatus = $state<string | null>(data.categoryFilter || null);
+	let selectedBaseTechnique = $state<string | null>(data.categoryFilter || null);
 	let selectedLevel = $state<string | null>(data.levelFilter || null);
 	let favoriteIds = $state<Set<string>>(new Set());
 
@@ -24,7 +24,7 @@
 	function updateFilters() {
 		const params = new URLSearchParams();
 		if (searchQuery) params.set('q', searchQuery);
-		if (selectedApparatus) params.set('category', selectedApparatus);
+		if (selectedBaseTechnique) params.set('category', selectedBaseTechnique);
 		if (selectedLevel) params.set('level', selectedLevel);
 		const qs = params.toString();
 		goto(qs ? `/?${qs}` : '/', { invalidateAll: true });
@@ -41,8 +41,8 @@
 		updateFilters();
 	}
 
-	function handleSelectApparatus(id: string | null) {
-		selectedApparatus = id;
+	function handleSelectBaseTechnique(id: string | null) {
+		selectedBaseTechnique = id;
 		updateFilters();
 	}
 
@@ -78,9 +78,9 @@
 	<div class="mb-8">
 		<FilterChips
 			categories={data.categories}
-			activeApparatus={selectedApparatus}
+			activeApparatus={selectedBaseTechnique}
 			activeLevel={selectedLevel}
-			onSelectApparatus={handleSelectApparatus}
+			onSelectApparatus={handleSelectBaseTechnique}
 			onSelectLevel={handleSelectLevel}
 		/>
 	</div>
@@ -129,7 +129,7 @@
 				type="button"
 				onclick={() => {
 					searchQuery = '';
-					selectedApparatus = null;
+					selectedBaseTechnique = null;
 					selectedLevel = null;
 					goto('/');
 				}}

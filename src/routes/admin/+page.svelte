@@ -91,15 +91,15 @@
 			/>
 		</div>
 
-		<!-- Category Filter -->
+		<!-- Base Technique Filter -->
 		<div class="w-full sm:w-64">
-			<label for="category" class="sr-only">Filter by category</label>
+			<label for="category" class="sr-only">Filter by base technique</label>
 			<select
 				id="category"
 				bind:value={selectedCategory}
 				class="w-full rounded-lg border border-zinc-300 px-4 py-2 text-sm text-zinc-900 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
 			>
-				<option value="all">All Categories</option>
+				<option value="all">All Base Techniques</option>
 				{#each data.categories as category (category.id)}
 					<option value={category.id}>{category.name}</option>
 				{/each}
@@ -144,7 +144,7 @@
 						<th
 							class="hidden px-4 py-3 text-left text-xs font-semibold tracking-wider text-zinc-700 uppercase sm:table-cell dark:text-zinc-300"
 						>
-							Category
+							Base Technique
 						</th>
 						<th
 							class="hidden px-4 py-3 text-center text-xs font-semibold tracking-wider text-zinc-700 uppercase md:table-cell dark:text-zinc-300"

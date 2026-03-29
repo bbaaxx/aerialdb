@@ -24,9 +24,11 @@
 </script>
 
 <div class="flex flex-col flex-wrap justify-center gap-x-12 gap-y-6 sm:flex-row">
-	<!-- Apparatus -->
+	<!-- Base Technique -->
 	<div>
-		<p class="mb-2 text-xs font-semibold tracking-wider text-primary-light uppercase">Apparatus</p>
+		<p class="mb-2 text-xs font-semibold tracking-wider text-primary-light uppercase">
+			Base Technique
+		</p>
 		<div class="flex flex-wrap gap-2">
 			{#each categories as category (category.id)}
 				<button

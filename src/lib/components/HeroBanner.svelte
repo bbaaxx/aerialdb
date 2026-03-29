@@ -97,7 +97,7 @@
 
 					<div>
 						<span class="mb-1 block text-xs tracking-wide text-primary-light uppercase">
-							Apparatus
+							Base Technique
 						</span>
 						<span
 							class="rounded-full border border-gray-600 bg-gray-800/50 px-3 py-1 text-xs font-medium text-gray-300"

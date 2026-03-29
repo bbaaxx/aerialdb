@@ -136,7 +136,7 @@ describe('+page.server', () => {
 			setupMockDb([mockMoves, mockCategories, []]);
 
 			// Act
-			const result = await load(mockEvent);
+			const result = (await load(mockEvent)) as any;
 
 			// Assert
 			expect(result).toHaveProperty('moves');
@@ -153,7 +153,7 @@ describe('+page.server', () => {
 			setupMockDb([[mockMoves[0]], mockCategories, []]);
 
 			// Act
-			const result = await load(mockEvent);
+			const result = (await load(mockEvent)) as any;
 
 			// Assert
 			expect(result.searchQuery).toBe('Star');
@@ -167,7 +167,7 @@ describe('+page.server', () => {
 			setupMockDb([mockMoves, mockCategories, []]);
 
 			// Act
-			const result = await load(mockEvent);
+			const result = (await load(mockEvent)) as any;
 
 			// Assert
 			expect(result.categoryFilter).toBe('cat-1');
@@ -179,7 +179,7 @@ describe('+page.server', () => {
 			setupMockDb([[mockMoves[0]], mockCategories, []]);
 
 			// Act
-			const result = await load(mockEvent);
+			const result = (await load(mockEvent)) as any;
 
 			// Assert
 			expect(result.levelFilter).toBe('beginner');
@@ -192,7 +192,7 @@ describe('+page.server', () => {
 			setupMockDb([mockMoves, mockCategories, [mockMoves[1]]]);
 
 			// Act
-			const result = await load(mockEvent);
+			const result = (await load(mockEvent)) as any;
 
 			// Assert
 			expect(result).toHaveProperty('featuredMove');
@@ -207,7 +207,7 @@ describe('+page.server', () => {
 			setupMockDb([[mockMoves[0]], mockCategories, []]);
 
 			// Act
-			const result = await load(mockEvent);
+			const result = (await load(mockEvent)) as any;
 
 			// Assert
 			expect(result.featuredMove).toBeNull();
@@ -219,7 +219,7 @@ describe('+page.server', () => {
 			setupMockDb([mockMoves, mockCategories, []]);
 
 			// Act
-			const result = await load(mockEvent);
+			const result = (await load(mockEvent)) as any;
 
 			// Assert
 			expect(result.moves[0]).toHaveProperty('category');
