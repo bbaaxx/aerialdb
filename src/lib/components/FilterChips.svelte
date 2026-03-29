@@ -11,7 +11,6 @@
 		$props();
 
 	const levels = ['Beginner', 'Intermediate', 'Advanced', 'Professional'];
-	const styles = ['Dynamic', 'Flow', 'Strength', 'Dance', 'Lyrical'];
 
 	function handleApparatusClick(id: string) {
 		onSelectApparatus(activeApparatus === id ? null : id);
@@ -60,21 +59,6 @@
 				>
 					{level}
 				</button>
-			{/each}
-		</div>
-	</div>
-
-	<!-- Style (Coming Soon) -->
-	<div>
-		<p class="mb-2 text-xs font-semibold tracking-wider text-primary-light uppercase">Style</p>
-		<div class="flex flex-wrap gap-2">
-			{#each styles as style (style)}
-				<span
-					class="cursor-not-allowed rounded-full border border-gray-600 px-4 py-1.5 text-sm text-gray-300 opacity-50"
-					title="Coming Soon"
-				>
-					{style}
-				</span>
 			{/each}
 		</div>
 	</div>

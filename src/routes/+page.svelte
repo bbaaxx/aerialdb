@@ -27,7 +27,7 @@
 		if (selectedBaseTechnique) params.set('category', selectedBaseTechnique);
 		if (selectedLevel) params.set('level', selectedLevel);
 		const qs = params.toString();
-		goto(qs ? `/?${qs}` : '/', { invalidateAll: true });
+		goto(qs ? `/?${qs}` : '/', { replaceState: true, noScroll: true });
 	}
 
 	function handleSearch(value: string) {

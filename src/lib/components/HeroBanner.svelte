@@ -133,16 +133,6 @@
 					Discover a curated library of aerial acrobatics moves, from beginner to professional
 					level.
 				</p>
-
-				<div>
-					<a
-						href="/moves"
-						class="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-purple-500 to-indigo-500 px-6 py-3 font-medium text-white shadow-[0_0_15px_rgba(138,99,248,0.5)] transition hover:scale-105 hover:shadow-[0_0_20px_rgba(138,99,248,0.6)]"
-					>
-						Browse Library
-						<ChevronRight size={18} />
-					</a>
-				</div>
 			{/if}
 		</div>
 

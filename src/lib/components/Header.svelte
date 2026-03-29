@@ -10,7 +10,7 @@
 
 <header class="sticky top-0 z-50 w-full">
 	<div
-		class="mx-auto mt-4 max-w-7xl rounded-xl px-6 py-4"
+		class="mx-auto max-w-7xl rounded-xl px-6 py-4"
 		style="background: linear-gradient(180deg, rgba(26,28,41,0.9) 0%, rgba(26,28,41,0.7) 100%); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.05);"
 	>
 		<div class="flex items-center justify-between">
