@@ -1,7 +1,7 @@
 # Technical Debt & Pending Items
 
 **Created:** 2026-03-28
-**Status:** In Progress (DEBT-3 ✅, DEBT-4 ✅, DEBT-2 ⬜, DEBT-1 ⬜)
+**Status:** In Progress (DEBT-1 ✅, DEBT-3 ✅, DEBT-4 ✅, DEBT-2 ⬜)
 **Scope:** All non-redesign debt, pending features, and code quality issues
 **Complementary to:** `main-page-redesign.md`
 
@@ -26,7 +26,7 @@ This document captures everything the redesign plan does NOT cover: type errors,
 | Delete move            | ✅ Done           | None             |
 | Image upload component | ✅ Done           | None             |
 | Image upload API       | ✅ Done (R2)      | None             |
-| Category management UI | ❌ Not done       | **DEBT-1**       |
+| Category management UI | ✅ Done           | **DEBT-1**       |
 | Test coverage          | ❌ 2 placeholders | **DEBT-2**       |
 | Mobile responsiveness  | ⚠️ Partial        | Part of redesign |
 
@@ -44,9 +44,10 @@ This document captures everything the redesign plan does NOT cover: type errors,
 
 ## Debt Items
 
-### DEBT-1: Category Management UI
+### DEBT-1: Category Management UI ✅ COMPLETED
 
 **Priority:** LOW (can manage categories directly in DB or via Drizzle Studio)
+**Status:** ✅ Done — `src/routes/admin/categories/` route created
 
 **Scope:**
 
@@ -302,8 +303,8 @@ After all debt items resolved:
 | `src/routes/admin/moves/[id]/edit/+page.svelte` | ✅ Modified: 2 svelte-ignore comments                                           | DEBT-4    | Done    |
 | `src/routes/auth/login/+page.svelte`            | ✅ Modified: 1 svelte-ignore comment                                            | DEBT-4    | Done    |
 | `src/routes/auth/signup/+page.svelte`           | ✅ Modified: 1 svelte-ignore comment                                            | DEBT-4    | Done    |
-| `src/routes/admin/categories/+page.svelte`      | ⬜ Create: category CRUD UI                                                     | DEBT-1    | Pending |
-| `src/routes/admin/categories/+page.server.ts`   | ⬜ Create: category CRUD logic                                                  | DEBT-1    | Pending |
+| `src/routes/admin/categories/+page.svelte`      | ✅ Create: category CRUD UI ✅                                                  | DEBT-1    | Done    |
+| `src/routes/admin/categories/+page.server.ts`   | ✅ Create: category CRUD logic ✅                                               | DEBT-1    | Done    |
 | `src/lib/utils/toon-parser.spec.ts`             | ⬜ Create: TOON parser tests                                                    | DEBT-2    | Pending |
 | `src/lib/server/auth.spec.ts`                   | ⬜ Create: auth tests                                                           | DEBT-2    | Pending |
 | `src/lib/server/password.spec.ts`               | ⬜ Create: password tests                                                       | DEBT-2    | Pending |
