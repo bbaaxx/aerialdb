@@ -24,7 +24,7 @@ vi.mock('$lib/server/db/schema', () => ({
 }));
 
 // Now import the modules under test
-import { load } from './+page.server';
+import { load } from '../../../routes/+page.server';
 import * as dbModule from '$lib/server/db';
 
 describe('+page.server', () => {

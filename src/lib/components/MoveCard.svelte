@@ -7,7 +7,7 @@
 			name: string;
 			imageUrl: string | null;
 			level: string | null;
-			category: { id: string; name: string };
+			category: { name: string };
 		};
 		isFavorited?: boolean;
 		onToggleFavorite?: (id: string) => void;

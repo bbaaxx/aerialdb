@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { POST } from './+server';
+import { POST } from '../../../../../routes/api/upload/+server';
 
 describe('api/upload/+server', () => {
 	describe('POST', () => {

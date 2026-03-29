@@ -20,15 +20,15 @@
 			<!-- Nav links — hidden on mobile -->
 			<nav class="hidden items-center gap-6 md:flex">
 				<a
-					href="#"
+					href="/"
 					class="flex items-center gap-1 text-sm text-primary-light transition hover:text-white"
 				>
 					Discover
 					<ChevronDown size={14} />
 				</a>
 				<a href="/" class="text-sm text-primary-light transition hover:text-white"> Library </a>
-				<a href="#" class="text-sm text-primary-light transition hover:text-white"> Community </a>
-				<a href="#" class="text-sm text-primary-light transition hover:text-white"> My Training </a>
+				<a href="/" class="text-sm text-primary-light transition hover:text-white"> Community </a>
+				<a href="/" class="text-sm text-primary-light transition hover:text-white"> My Training </a>
 			</nav>
 
 			<!-- Auth section -->

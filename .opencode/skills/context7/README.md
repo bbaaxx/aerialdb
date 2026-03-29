@@ -90,6 +90,7 @@ To add a new library to the registry:
 
 1. Edit `library-registry.md`
 2. Add entry under appropriate category:
+
    ```markdown
    #### Library Name
 
@@ -98,6 +99,7 @@ To add a new library to the registry:
    - **Context7**: `use context7 for library-name`
    - **Common topics**: topic1, topic2, topic3
    ```
+
 3. (Optional) Add query optimization patterns
 4. ExternalScout will automatically detect the new library
 

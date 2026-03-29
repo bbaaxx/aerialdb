@@ -47,7 +47,7 @@
 	<div>
 		<p class="mb-2 text-xs font-semibold tracking-wider text-primary-light uppercase">Level</p>
 		<div class="flex flex-wrap gap-2">
-			{#each levels as level}
+			{#each levels as level (level)}
 				<button
 					type="button"
 					onclick={() => handleLevelClick(level)}
@@ -66,7 +66,7 @@
 	<div>
 		<p class="mb-2 text-xs font-semibold tracking-wider text-primary-light uppercase">Style</p>
 		<div class="flex flex-wrap gap-2">
-			{#each styles as style}
+			{#each styles as style (style)}
 				<span
 					class="cursor-not-allowed rounded-full border border-gray-600 px-4 py-1.5 text-sm text-gray-300 opacity-50"
 					title="Coming Soon"

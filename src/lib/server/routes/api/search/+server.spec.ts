@@ -23,7 +23,7 @@ vi.mock('$lib/server/db/schema', () => ({
 	}
 }));
 
-import { GET } from './+server';
+import { GET } from '../../../../../routes/api/search/+server';
 import * as dbModule from '$lib/server/db';
 
 describe('api/search/+server', () => {
