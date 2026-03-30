@@ -45,13 +45,11 @@ const localDb = localClient ? drizzleLibsql(localClient, { schema }) : null;
  * - In local development: Uses local SQLite
  */
 export function getDb(event?: RequestEvent) {
-	// Check if we're in Cloudflare environment
+	// Check if we're in Cloudflare environment (Preview or Production)
 	const platform = event?.platform as CloudflarePlatform | undefined;
 
-	const isProduction = process.env.NODE_ENV === 'production';
-
-	if (platform?.env?.DB && isProduction) {
-		// Production: Use Cloudflare D1
+	if (platform?.env?.DB) {
+		// Cloudflare: Use D1 binding
 		return drizzleD1(platform.env.DB, { schema });
 	}
 
