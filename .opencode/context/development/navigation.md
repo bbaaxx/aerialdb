@@ -42,11 +42,15 @@ development/
 │   ├── python/
 │   └── authentication/
 │
-├── data/                      # Data layer (future)
+├── data/                      # Data layer (Drizzle/SQLite)
 │   ├── navigation.md
-│   ├── sql-patterns/
-│   ├── nosql-patterns/
-│   └── orm-patterns/
+│   ├── concepts/
+│   │   └── db-type-assertions.md
+│   └── errors/
+│       ├── db-type-errors.md
+│       ├── lint-svelte-ignore.md
+│       ├── svelte-each-keys.md
+│       └── svelte-reactivity-lint.md
 │
 ├── integration/               # Connecting systems (future)
 │   ├── navigation.md

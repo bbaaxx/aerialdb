@@ -51,16 +51,14 @@
 	<!-- Header -->
 	<div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
 		<div>
-			<h1 class="text-3xl font-bold text-zinc-900 dark:text-zinc-100">Manage Categories</h1>
-			<p class="mt-2 text-zinc-600 dark:text-zinc-400">Organize aerial moves into categories</p>
+			<h1 class="text-3xl font-bold text-white">Manage Categories</h1>
+			<p class="mt-2 text-[#A0A5C0]">Organize aerial moves into categories</p>
 		</div>
 	</div>
 
 	<!-- Add Category Form -->
-	<div
-		class="mb-8 rounded-lg border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900"
-	>
-		<h2 class="mb-4 text-lg font-semibold text-zinc-900 dark:text-zinc-100">Add New Category</h2>
+	<div class="mb-8 rounded-lg border border-gray-800 bg-[#242736] p-6 shadow-sm">
+		<h2 class="mb-4 text-lg font-semibold text-white">Add New Category</h2>
 		<form
 			method="POST"
 			action="?/createCategory"
@@ -84,15 +82,15 @@
 					placeholder="Enter category name..."
 					maxlength="100"
 					required
-					class="w-full rounded-lg border border-zinc-300 px-4 py-2 text-sm text-zinc-900 placeholder-zinc-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 dark:placeholder-zinc-500"
+					class="w-full rounded-lg border border-gray-600 bg-[#242736] px-4 py-2 text-sm text-gray-200 placeholder-gray-400 focus:border-purple-500 focus:ring-2 focus:ring-purple-500 focus:outline-none"
 				/>
 				{#if form?.action === 'create' && form?.error}
-					<p class="mt-1 text-sm text-red-600 dark:text-red-400">{form.error}</p>
+					<p class="mt-1 text-sm text-red-400">{form.error}</p>
 				{/if}
 			</div>
 			<button
 				type="submit"
-				class="inline-flex items-center justify-center rounded-lg bg-gradient-to-r from-purple-500 to-indigo-500 px-6 py-2.5 text-sm font-medium text-white shadow-sm transition-all hover:from-purple-600 hover:to-indigo-600 focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:outline-none"
+				class="inline-flex items-center justify-center rounded-lg bg-gradient-to-r from-purple-500 to-indigo-500 px-6 py-2.5 text-sm font-medium text-white shadow-[0_0_15px_rgba(138,99,248,0.5)] transition-all hover:shadow-[0_0_20px_rgba(138,99,248,0.6)] focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:outline-none"
 			>
 				Add Category
 			</button>
@@ -101,49 +99,43 @@
 
 	<!-- Error/Success Messages -->
 	{#if form?.error && form?.action !== 'create'}
-		<div
-			class="mb-6 rounded-lg border border-red-200 bg-red-50 p-4 dark:border-red-900 dark:bg-red-950"
-		>
-			<p class="text-sm text-red-700 dark:text-red-300">{form.error}</p>
+		<div class="mb-6 rounded-lg border border-red-900 bg-red-950/50 p-4">
+			<p class="text-sm text-red-300">{form.error}</p>
 		</div>
 	{/if}
 
 	{#if form?.success}
-		<div
-			class="mb-6 rounded-lg border border-green-200 bg-green-50 p-4 dark:border-green-900 dark:bg-green-950"
-		>
-			<p class="text-sm text-green-700 dark:text-green-300">Operation completed successfully.</p>
+		<div class="mb-6 rounded-lg border border-green-900 bg-green-950/50 p-4">
+			<p class="text-sm text-green-300">Operation completed successfully.</p>
 		</div>
 	{/if}
 
 	<!-- Categories Table -->
-	<div
-		class="overflow-hidden rounded-lg border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900"
-	>
+	<div class="overflow-hidden rounded-lg border border-gray-800 bg-[#242736] shadow-sm">
 		<div class="overflow-x-auto">
 			<table class="w-full border-collapse">
-				<thead class="border-b border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-800">
+				<thead class="border-b border-gray-800 bg-[#242736]">
 					<tr>
 						<th
-							class="px-4 py-3 text-left text-xs font-semibold tracking-wider text-zinc-700 uppercase dark:text-zinc-300"
+							class="px-4 py-3 text-left text-xs font-semibold tracking-wider text-[#A0A5C0] uppercase"
 						>
 							Name
 						</th>
 						<th
-							class="px-4 py-3 text-center text-xs font-semibold tracking-wider text-zinc-700 uppercase dark:text-zinc-300"
+							class="px-4 py-3 text-center text-xs font-semibold tracking-wider text-[#A0A5C0] uppercase"
 						>
 							Moves
 						</th>
 						<th
-							class="px-4 py-3 text-right text-xs font-semibold tracking-wider text-zinc-700 uppercase dark:text-zinc-300"
+							class="px-4 py-3 text-right text-xs font-semibold tracking-wider text-[#A0A5C0] uppercase"
 						>
 							Actions
 						</th>
 					</tr>
 				</thead>
-				<tbody class="divide-y divide-zinc-200 dark:divide-zinc-800">
+				<tbody class="divide-y divide-gray-800">
 					{#each data.categories as category (category.id)}
-						<tr class="transition-colors hover:bg-zinc-50 dark:hover:bg-zinc-800">
+						<tr class="transition-colors hover:bg-[#2A2D3E]">
 							<td class="px-4 py-3">
 								{#if editingId === category.id}
 									<!-- Inline Edit Form -->
@@ -168,32 +160,32 @@
 											bind:value={editingName}
 											maxlength="100"
 											required
-											class="flex-1 rounded-lg border border-zinc-300 px-3 py-1.5 text-sm text-zinc-900 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
+											class="flex-1 rounded-lg border border-gray-600 bg-[#242736] px-3 py-1.5 text-sm text-gray-200 focus:border-purple-500 focus:ring-2 focus:ring-purple-500 focus:outline-none"
 										/>
 										<button
 											type="submit"
-											class="rounded-lg bg-blue-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-blue-700"
+											class="rounded-lg bg-purple-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-purple-700"
 										>
 											Save
 										</button>
 										<button
 											type="button"
 											onclick={cancelEdit}
-											class="rounded-lg border border-gray-600 px-3 py-1.5 text-sm font-medium text-gray-300 hover:bg-gray-800"
+											class="rounded-lg border border-gray-600 px-3 py-1.5 text-sm font-medium text-gray-300 hover:bg-gray-700"
 										>
 											Cancel
 										</button>
 									</form>
 									{#if form?.action === 'update' && form?.id === category.id && (form as any).error}
-										<p class="mt-1 text-sm text-red-600 dark:text-red-400">{(form as any).error}</p>
+										<p class="mt-1 text-sm text-red-400">{(form as any).error}</p>
 									{/if}
 								{:else}
-									<span class="font-medium text-zinc-900 dark:text-zinc-100">{category.name}</span>
+									<span class="font-medium text-gray-200">{category.name}</span>
 								{/if}
 							</td>
 							<td class="px-4 py-3 text-center">
 								<span
-									class="inline-flex items-center rounded-full bg-zinc-100 px-2.5 py-0.5 text-xs font-medium text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300"
+									class="inline-flex items-center rounded-full bg-[#2A2D3E] px-2.5 py-0.5 text-xs font-medium text-gray-300"
 								>
 									{category.moveCount}
 								</span>
@@ -202,7 +194,7 @@
 								{#if deletingId === category.id}
 									<!-- Delete Confirmation -->
 									<div class="flex items-center justify-end gap-2">
-										<span class="text-sm text-zinc-600 dark:text-zinc-400">
+										<span class="text-sm text-[#A0A5C0]">
 											{#if deleteMoveCount > 0}
 												{deleteMoveCount} move{deleteMoveCount === 1 ? '' : 's'} linked
 											{:else}
@@ -234,27 +226,27 @@
 										<button
 											type="button"
 											onclick={cancelDelete}
-											class="rounded-lg border border-gray-600 px-3 py-1.5 text-sm font-medium text-gray-300 hover:bg-gray-800"
+											class="rounded-lg border border-gray-600 px-3 py-1.5 text-sm font-medium text-gray-300 hover:bg-gray-700"
 										>
 											Cancel
 										</button>
 									</div>
 									{#if form?.action === 'delete' && form?.id === category.id && (form as any).error}
-										<p class="mt-1 text-sm text-red-600 dark:text-red-400">{(form as any).error}</p>
+										<p class="mt-1 text-sm text-red-400">{(form as any).error}</p>
 									{/if}
 								{:else}
 									<div class="flex items-center justify-end gap-2">
 										<button
 											type="button"
 											onclick={() => startEdit(category.id, category.name)}
-											class="rounded-lg bg-blue-50 px-3 py-1.5 text-sm font-medium text-blue-700 transition-colors hover:bg-blue-100 dark:bg-blue-950 dark:text-blue-300 dark:hover:bg-blue-900"
+											class="rounded-lg bg-purple-600 px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-purple-700"
 										>
 											Edit
 										</button>
 										<button
 											type="button"
 											onclick={() => startDelete(category.id, category.moveCount)}
-											class="rounded-lg bg-red-50 px-3 py-1.5 text-sm font-medium text-red-700 transition-colors hover:bg-red-100 dark:bg-red-950 dark:text-red-300 dark:hover:bg-red-900"
+											class="rounded-lg bg-red-600 px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-red-700"
 										>
 											Delete
 										</button>
@@ -265,10 +257,8 @@
 					{:else}
 						<tr>
 							<td colspan="3" class="px-4 py-8 text-center">
-								<p class="text-zinc-500 dark:text-zinc-400">No categories found</p>
-								<p class="mt-1 text-sm text-zinc-400 dark:text-zinc-500">
-									Add your first category above
-								</p>
+								<p class="text-gray-400">No categories found</p>
+								<p class="mt-1 text-sm text-gray-500">Add your first category above</p>
 							</td>
 						</tr>
 					{/each}

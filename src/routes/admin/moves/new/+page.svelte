@@ -36,29 +36,23 @@
 
 <div class="mx-auto max-w-3xl px-4 py-8 sm:px-6 lg:px-8">
 	<div class="mb-8">
-		<h1 class="text-3xl font-bold text-zinc-900 dark:text-zinc-100">Add New Move</h1>
-		<p class="mt-2 text-zinc-600 dark:text-zinc-400">
-			Create a new aerial move entry in the database.
-		</p>
+		<h1 class="text-3xl font-bold text-white">Add New Move</h1>
+		<p class="mt-2 text-[#A0A5C0]">Create a new aerial move entry in the database.</p>
 	</div>
 
 	{#if form?.error}
-		<div
-			class="mb-6 rounded-lg border border-red-200 bg-red-50 p-4 dark:border-red-900 dark:bg-red-950"
-		>
-			<p class="text-sm text-red-800 dark:text-red-200">{form.error}</p>
+		<div class="mb-6 rounded-lg border border-red-500/50 bg-red-500/10 p-4">
+			<p class="text-sm text-red-400">{form.error}</p>
 		</div>
 	{/if}
 
 	<form method="POST" enctype="multipart/form-data" class="space-y-6">
-		<div
-			class="rounded-lg border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900"
-		>
-			<h2 class="mb-4 text-lg font-semibold text-zinc-900 dark:text-zinc-100">Basic Information</h2>
+		<div class="rounded-lg border border-gray-800 bg-[#242736] p-6 shadow-sm">
+			<h2 class="mb-4 text-lg font-semibold text-white">Basic Information</h2>
 
 			<!-- Move Name -->
 			<div class="mb-4">
-				<label for="name" class="mb-2 block text-sm font-medium text-zinc-700 dark:text-zinc-300">
+				<label for="name" class="mb-2 block text-sm font-medium text-[#A0A5C0]">
 					Move Name <span class="text-red-500">*</span>
 				</label>
 				<input
@@ -67,23 +61,20 @@
 					name="name"
 					required
 					placeholder="e.g., Superman, Angel, Crucifix"
-					class="w-full rounded-lg border border-zinc-300 px-3 py-2 text-zinc-900 placeholder-zinc-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 dark:placeholder-zinc-500"
+					class="w-full rounded-lg border border-gray-600 bg-[#242736] px-3 py-2 text-gray-200 placeholder-gray-500 focus:border-[#8A63F8] focus:ring-1 focus:ring-[#8A63F8] focus:outline-none"
 				/>
 			</div>
 
 			<!-- Base Technique -->
 			<div class="mb-4">
-				<label
-					for="category-select"
-					class="mb-2 block text-sm font-medium text-zinc-700 dark:text-zinc-300"
-				>
+				<label for="category-select" class="mb-2 block text-sm font-medium text-[#A0A5C0]">
 					Base Technique <span class="text-red-500">*</span>
 				</label>
 				<select
 					id="category-select"
 					onchange={handleCategoryChange}
 					bind:value={selectedCategory}
-					class="w-full rounded-lg border border-zinc-300 px-3 py-2 text-zinc-900 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
+					class="w-full rounded-lg border border-gray-600 bg-[#242736] px-3 py-2 text-gray-200 focus:border-[#8A63F8] focus:ring-1 focus:ring-[#8A63F8] focus:outline-none"
 				>
 					<option value="">Select a base technique</option>
 					{#each data.categories as category (category.id)}
@@ -94,10 +85,7 @@
 
 				{#if categoryMode === 'new'}
 					<div class="mt-3">
-						<label
-							for="new-category"
-							class="mb-2 block text-sm font-medium text-zinc-700 dark:text-zinc-300"
-						>
+						<label for="new-category" class="mb-2 block text-sm font-medium text-[#A0A5C0]">
 							New Base Technique Name <span class="text-red-500">*</span>
 						</label>
 						<input
@@ -106,7 +94,7 @@
 							name="new_category"
 							required
 							placeholder="e.g., Floor Work, Dynamic"
-							class="w-full rounded-lg border border-zinc-300 px-3 py-2 text-zinc-900 placeholder-zinc-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 dark:placeholder-zinc-500"
+							class="w-full rounded-lg border border-gray-600 bg-[#242736] px-3 py-2 text-gray-200 placeholder-gray-500 focus:border-[#8A63F8] focus:ring-1 focus:ring-[#8A63F8] focus:outline-none"
 						/>
 					</div>
 				{:else}
@@ -116,10 +104,7 @@
 
 			<!-- Contributor -->
 			<div>
-				<label
-					for="contributor"
-					class="mb-2 block text-sm font-medium text-zinc-700 dark:text-zinc-300"
-				>
+				<label for="contributor" class="mb-2 block text-sm font-medium text-[#A0A5C0]">
 					Original Contributor
 				</label>
 				<input
@@ -127,24 +112,19 @@
 					id="contributor"
 					name="contributor"
 					placeholder="e.g., Fer Medina"
-					class="w-full rounded-lg border border-zinc-300 px-3 py-2 text-zinc-900 placeholder-zinc-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 dark:placeholder-zinc-500"
+					class="w-full rounded-lg border border-gray-600 bg-[#242736] px-3 py-2 text-gray-200 placeholder-gray-500 focus:border-[#8A63F8] focus:ring-1 focus:ring-[#8A63F8] focus:outline-none"
 				/>
-				<p class="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
+				<p class="mt-1 text-xs text-[#A0A5C0]">
 					The person who originally created or popularized this move
 				</p>
 			</div>
 		</div>
 
-		<div
-			class="rounded-lg border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900"
-		>
-			<h2 class="mb-4 text-lg font-semibold text-zinc-900 dark:text-zinc-100">Description</h2>
+		<div class="rounded-lg border border-gray-800 bg-[#242736] p-6 shadow-sm">
+			<h2 class="mb-4 text-lg font-semibold text-white">Description</h2>
 
 			<div>
-				<label
-					for="description"
-					class="mb-2 block text-sm font-medium text-zinc-700 dark:text-zinc-300"
-				>
+				<label for="description" class="mb-2 block text-sm font-medium text-[#A0A5C0]">
 					Move Description
 				</label>
 				<textarea
@@ -152,40 +132,34 @@
 					name="description"
 					rows="6"
 					placeholder="Describe the move, how to perform it, key points, etc."
-					class="w-full rounded-lg border border-zinc-300 px-3 py-2 text-zinc-900 placeholder-zinc-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 dark:placeholder-zinc-500"
+					class="w-full rounded-lg border border-gray-600 bg-[#242736] px-3 py-2 text-gray-200 placeholder-gray-500 focus:border-[#8A63F8] focus:ring-1 focus:ring-[#8A63F8] focus:outline-none"
 				></textarea>
 			</div>
 		</div>
 
-		<div
-			class="rounded-lg border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900"
-		>
-			<h2 class="mb-4 text-lg font-semibold text-zinc-900 dark:text-zinc-100">Media</h2>
+		<div class="rounded-lg border border-gray-800 bg-[#242736] p-6 shadow-sm">
+			<h2 class="mb-4 text-lg font-semibold text-white">Media</h2>
 
 			<!-- Image Upload -->
 			<div class="mb-4">
-				<label for="image" class="mb-2 block text-sm font-medium text-zinc-700 dark:text-zinc-300">
-					Image
-				</label>
+				<label for="image" class="mb-2 block text-sm font-medium text-[#A0A5C0]"> Image </label>
 				<input
 					type="file"
 					id="image"
 					name="image"
 					accept="image/jpeg,image/png,image/webp"
 					onchange={handleImageChange}
-					class="w-full rounded-lg border border-zinc-300 px-3 py-2 text-zinc-900 file:mr-4 file:rounded-md file:border-0 file:bg-blue-50 file:px-4 file:py-1.5 file:text-sm file:font-medium file:text-blue-700 hover:file:bg-blue-100 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 dark:file:bg-blue-950 dark:file:text-blue-300"
+					class="w-full rounded-lg border border-gray-600 bg-[#242736] px-3 py-2 text-gray-200 file:mr-4 file:rounded-md file:border-0 file:bg-[#242736] file:px-4 file:py-1.5 file:text-sm file:font-medium file:text-[#A0A5C0] hover:file:bg-white/5"
 				/>
-				<p class="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
-					Max 5MB. Formats: JPEG, PNG, WebP
-				</p>
+				<p class="mt-1 text-xs text-[#A0A5C0]">Max 5MB. Formats: JPEG, PNG, WebP</p>
 
 				{#if imagePreview}
 					<div class="mt-4">
-						<p class="mb-2 text-sm font-medium text-zinc-700 dark:text-zinc-300">Preview:</p>
+						<p class="mb-2 text-sm font-medium text-[#A0A5C0]">Preview:</p>
 						<img
 							src={imagePreview}
 							alt="Preview"
-							class="h-48 w-auto rounded-lg border border-zinc-200 object-cover dark:border-zinc-800"
+							class="h-48 w-auto rounded-lg border border-gray-700 object-cover"
 						/>
 					</div>
 				{/if}
@@ -193,10 +167,7 @@
 
 			<!-- Video URL -->
 			<div>
-				<label
-					for="video_url"
-					class="mb-2 block text-sm font-medium text-zinc-700 dark:text-zinc-300"
-				>
+				<label for="video_url" class="mb-2 block text-sm font-medium text-[#A0A5C0]">
 					Video URL
 				</label>
 				<input
@@ -204,9 +175,9 @@
 					id="video_url"
 					name="video_url"
 					placeholder="https://youtube.com/watch?v=..."
-					class="w-full rounded-lg border border-zinc-300 px-3 py-2 text-zinc-900 placeholder-zinc-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 dark:placeholder-zinc-500"
+					class="w-full rounded-lg border border-gray-600 bg-[#242736] px-3 py-2 text-gray-200 placeholder-gray-500 focus:border-[#8A63F8] focus:ring-1 focus:ring-[#8A63F8] focus:outline-none"
 				/>
-				<p class="mt-1 text-xs text-zinc-500 dark:text-zinc-400">YouTube or Vimeo URL</p>
+				<p class="mt-1 text-xs text-[#A0A5C0]">YouTube or Vimeo URL</p>
 			</div>
 		</div>
 
@@ -214,13 +185,13 @@
 		<div class="flex gap-4">
 			<button
 				type="submit"
-				class="rounded-lg bg-blue-600 px-6 py-2.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none"
+				class="rounded-lg bg-gradient-to-r from-purple-500 to-indigo-500 px-6 py-2.5 text-sm font-medium text-white shadow-[0_0_15px_rgba(138,99,248,0.5)] transition hover:shadow-[0_0_20px_rgba(138,99,248,0.6)] focus:ring-2 focus:ring-[#8A63F8] focus:ring-offset-2 focus:outline-none"
 			>
 				Create Move
 			</button>
 			<a
 				href="/admin"
-				class="rounded-lg border border-zinc-300 px-6 py-2.5 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-50 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
+				class="rounded-lg border border-gray-600 px-6 py-2.5 text-sm font-medium text-[#A0A5C0] transition-colors hover:bg-white/5"
 			>
 				Cancel
 			</a>

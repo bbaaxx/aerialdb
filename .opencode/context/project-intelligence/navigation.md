@@ -62,6 +62,8 @@ Quick reference — commands, schema, dependencies.
 | -------------------- | -------- | ------------------------------------- |
 | `commands.md`        | high     | All npm scripts (dev, test, db, lint) |
 | `database-schema.md` | high     | User + session tables (Drizzle ORM)   |
+| `db-types.md`        | high     | Drizzle query type definitions        |
+| `design-tokens.md`   | high     | Dark theme design tokens              |
 | `dependencies.md`    | medium   | Key packages by category              |
 
 ## Loading Strategy
