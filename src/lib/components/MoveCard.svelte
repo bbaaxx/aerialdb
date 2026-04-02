@@ -36,7 +36,7 @@
 
 <a
 	href="/moves/{move.id}"
-	class="group block rounded-xl border border-gray-800/50 bg-dark-card p-3 transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_10px_25px_-5px_rgba(0,0,0,0.5)]"
+	class="group block rounded-xl border border-gray-800/50 bg-dark-card p-3 transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_10px_25px_-5px_rgba(0,0,0,0.5)] focus:ring-2 focus:ring-accent-purple focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-purple"
 >
 	<div class="relative aspect-video overflow-hidden rounded-lg bg-gray-800">
 		{#if move.imageUrl}
@@ -50,7 +50,7 @@
 		<button
 			type="button"
 			onclick={handleFavoriteClick}
-			class="absolute bottom-3 left-1/2 flex -translate-x-1/2 items-center gap-1.5 rounded-full bg-black/50 px-4 py-2 text-sm text-white opacity-0 backdrop-blur-sm transition-opacity duration-200 group-hover:opacity-100 {isFavorited
+			class="absolute bottom-3 left-1/2 flex -translate-x-1/2 items-center gap-1.5 rounded-full bg-black/50 px-4 py-2 text-sm text-white opacity-0 backdrop-blur-sm transition-all duration-200 group-focus-within:opacity-100 group-hover:opacity-100 hover:scale-105 focus:opacity-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-white active:scale-95 {isFavorited
 				? 'text-purple-400'
 				: ''}"
 			aria-label={isFavorited ? 'Remove from favorites' : 'Save to favorites'}
