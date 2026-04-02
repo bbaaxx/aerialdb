@@ -349,21 +349,21 @@ body {
 ```html
 <!-- Primary button -->
 <button
-	class="bg-primary text-primary-foreground rounded-lg px-6 py-3 font-medium transition-opacity hover:opacity-90"
+	class="text-primary-foreground rounded-lg bg-primary px-6 py-3 font-medium transition-opacity hover:opacity-90"
 >
 	Primary Action
 </button>
 
 <!-- Secondary button -->
 <button
-	class="bg-secondary text-secondary-foreground hover:bg-secondary/80 rounded-lg px-6 py-3 font-medium transition-colors"
+	class="text-secondary-foreground rounded-lg bg-secondary px-6 py-3 font-medium transition-colors hover:bg-secondary/80"
 >
 	Secondary Action
 </button>
 
 <!-- Outline button -->
 <button
-	class="border-primary text-primary hover:bg-primary hover:text-primary-foreground rounded-lg border-2 px-6 py-3 font-medium transition-all"
+	class="hover:text-primary-foreground rounded-lg border-2 border-primary px-6 py-3 font-medium text-primary transition-all hover:bg-primary"
 >
 	Outline Action
 </button>

@@ -14,14 +14,14 @@ This plan addresses the redesign of AerialDB's exploration library to match the 
 
 ### Decided Design Decisions
 
-| # | Decision | Resolution |
-|---|----------|------------|
-| 1 | Move type taxonomy | **Column approach** — `move_type TEXT` on `moves`, nullable/optional. NOT a tag system. |
-| 2 | Level rename | **Rename in DB** — `professional` → `master`. Must migrate 100+ existing records AND update seed scripts. |
-| 3 | View counting | **Simple counter** — `view_count INT DEFAULT 0` on `moves`. No analytics table. |
-| 4 | Premium flag | **Fully deferred.** No `is_premium` column now. Premium concept may be entirely rethought — no paywall blocking moves. |
-| 5 | Hero background | **Hybrid** — curated default image + dynamic override from featured move when available. |
-| 6 | Mobile sidebar | **Hidden (Option A).** No sidebar on mobile. Desktop-only. Can enhance later. |
+| #   | Decision           | Resolution                                                                                                             |
+| --- | ------------------ | ---------------------------------------------------------------------------------------------------------------------- |
+| 1   | Move type taxonomy | **Column approach** — `move_type TEXT` on `moves`, nullable/optional. NOT a tag system.                                |
+| 2   | Level rename       | **Rename in DB** — `professional` → `master`. Must migrate 100+ existing records AND update seed scripts.              |
+| 3   | View counting      | **Simple counter** — `view_count INT DEFAULT 0` on `moves`. No analytics table.                                        |
+| 4   | Premium flag       | **Fully deferred.** No `is_premium` column now. Premium concept may be entirely rethought — no paywall blocking moves. |
+| 5   | Hero background    | **Hybrid** — curated default image + dynamic override from featured move when available.                               |
+| 6   | Mobile sidebar     | **Hidden (Option A).** No sidebar on mobile. Desktop-only. Can enhance later.                                          |
 
 ---
 
@@ -54,28 +54,28 @@ Map the design system's named colors to Tailwind custom properties in `src/route
 
 Map the design system spacing scale:
 
-| Token | Value | Tailwind utility |
-|-------|-------|------------------|
-| `spacing-4` | 1rem | `p-4`, `gap-4` |
-| `spacing-6` | 1.5rem | `p-6`, `gap-6` |
-| `spacing-8` | 2rem | `p-8`, `gap-8` |
-| `spacing-10` | 2.5rem | `p-10` |
-| `spacing-12` | 3rem | `p-12` |
-| `spacing-16` | 4rem | `p-16` |
-| `spacing-24` | 6rem | `p-24` |
+| Token        | Value  | Tailwind utility |
+| ------------ | ------ | ---------------- |
+| `spacing-4`  | 1rem   | `p-4`, `gap-4`   |
+| `spacing-6`  | 1.5rem | `p-6`, `gap-6`   |
+| `spacing-8`  | 2rem   | `p-8`, `gap-8`   |
+| `spacing-10` | 2.5rem | `p-10`           |
+| `spacing-12` | 3rem   | `p-12`           |
+| `spacing-16` | 4rem   | `p-16`           |
+| `spacing-24` | 6rem   | `p-24`           |
 
 ### 1.5 Typography scale
 
 Define and apply the editorial type scale:
 
-| Level | Font | Size | Weight | Usage |
-|-------|------|------|--------|-------|
-| `display-lg` | Noto Serif | 3.5rem (56px) | 700 | Hero statements |
-| `headline-lg` | Noto Serif | 2.0rem (32px) | 600 | Section anchors |
-| `title-lg` | Inter | 1.375rem (22px) | 500 | Card titles, component headers |
-| `body-lg` | Inter | 1.0rem (16px) | 400 | Body text |
-| `body-md` | Inter | 0.875rem (14px) | 400 | Secondary body |
-| `label-md` | Inter | 0.75rem (12px) | 500 | Labels, metadata, tags |
+| Level         | Font       | Size            | Weight | Usage                          |
+| ------------- | ---------- | --------------- | ------ | ------------------------------ |
+| `display-lg`  | Noto Serif | 3.5rem (56px)   | 700    | Hero statements                |
+| `headline-lg` | Noto Serif | 2.0rem (32px)   | 600    | Section anchors                |
+| `title-lg`    | Inter      | 1.375rem (22px) | 500    | Card titles, component headers |
+| `body-lg`     | Inter      | 1.0rem (16px)   | 400    | Body text                      |
+| `body-md`     | Inter      | 0.875rem (14px) | 400    | Secondary body                 |
+| `label-md`    | Inter      | 0.75rem (12px)  | 500    | Labels, metadata, tags         |
 
 **Deliverable:** All visual tokens updated; app looks like the new design system but with old layout.
 
@@ -487,11 +487,11 @@ All schema changes consolidated here for a single view. These changes are distri
 
 ### New columns on `moves` table
 
-| Column | Type | Default | Stage | Notes |
-|--------|------|---------|-------|-------|
-| `style` | `TEXT` | `NULL` | 3 | Values: `'contemporary'` \| `'classical'` \| `'power'` \| `'flow'` \| `NULL` |
-| `move_type` | `TEXT` | `NULL` | 4 | Values: `'static'` \| `'dynamic'` \| `'drop'` \| `'transition'` \| `NULL` |
-| `view_count` | `INTEGER` | `0` | 4 | Simple counter, incremented on move detail page load |
+| Column       | Type      | Default | Stage | Notes                                                                        |
+| ------------ | --------- | ------- | ----- | ---------------------------------------------------------------------------- |
+| `style`      | `TEXT`    | `NULL`  | 3     | Values: `'contemporary'` \| `'classical'` \| `'power'` \| `'flow'` \| `NULL` |
+| `move_type`  | `TEXT`    | `NULL`  | 4     | Values: `'static'` \| `'dynamic'` \| `'drop'` \| `'transition'` \| `NULL`    |
+| `view_count` | `INTEGER` | `0`     | 4     | Simple counter, incremented on move detail page load                         |
 
 ### New table: `user_favorites`
 
@@ -523,18 +523,22 @@ All three `ALTER TABLE` additions + the new table + data migration can be done i
 ```ts
 // Existing columns in src/lib/server/db/schema.ts
 export const moves = sqliteTable('moves', {
-    id: text('id').primaryKey(),                    // TEXT (UUID)
-    name: text('name').notNull(),
-    categoryId: text('category_id').notNull().references(() => categories.id),
-    description: text('description'),
-    imageUrl: text('image_url'),
-    videoUrl: text('video_url'),
-    level: text('level'),                           // TEXT — values being renamed
-    contributorName: text('contributor_name'),
-    createdBy: text('created_by').notNull().references(() => user.id),
-    createdAt: integer('created_at', { mode: 'timestamp' }).notNull(),
-    updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull()
-    // NEW: style, move_type, view_count (added in Stages 3-4)
+	id: text('id').primaryKey(), // TEXT (UUID)
+	name: text('name').notNull(),
+	categoryId: text('category_id')
+		.notNull()
+		.references(() => categories.id),
+	description: text('description'),
+	imageUrl: text('image_url'),
+	videoUrl: text('video_url'),
+	level: text('level'), // TEXT — values being renamed
+	contributorName: text('contributor_name'),
+	createdBy: text('created_by')
+		.notNull()
+		.references(() => user.id),
+	createdAt: integer('created_at', { mode: 'timestamp' }).notNull(),
+	updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull()
+	// NEW: style, move_type, view_count (added in Stages 3-4)
 });
 ```
 
