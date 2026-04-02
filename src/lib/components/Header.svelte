@@ -5,7 +5,7 @@
 		user?: { username: string } | null;
 	}
 
-	let { user = null }: Props = $props();
+	const { user = null }: Props = $props();
 </script>
 
 <header class="sticky top-0 z-50 w-full">

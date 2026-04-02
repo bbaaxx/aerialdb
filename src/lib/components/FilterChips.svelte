@@ -7,7 +7,7 @@
 		onSelectLevel: (level: string | null) => void;
 	}
 
-	let { categories, activeApparatus, activeLevel, onSelectApparatus, onSelectLevel }: Props =
+	const { categories, activeApparatus, activeLevel, onSelectApparatus, onSelectLevel }: Props =
 		$props();
 
 	const levels = ['Beginner', 'Intermediate', 'Advanced', 'Professional'];

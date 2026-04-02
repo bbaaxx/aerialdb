@@ -8,7 +8,7 @@
 		onclear?: () => void;
 	}
 
-	let {
+	const {
 		value = '',
 		placeholder = 'Search moves, performers, techniques...',
 		oninput,

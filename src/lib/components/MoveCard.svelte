@@ -13,7 +13,7 @@
 		onToggleFavorite?: (id: string) => void;
 	}
 
-	let { move, isFavorited = false, onToggleFavorite }: Props = $props();
+	const { move, isFavorited = false, onToggleFavorite }: Props = $props();
 
 	let levelClasses = $derived(
 		move.level === 'beginner'

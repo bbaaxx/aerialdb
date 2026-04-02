@@ -11,7 +11,7 @@
 		} | null;
 	}
 
-	let { move }: Props = $props();
+	const { move }: Props = $props();
 
 	function levelClasses(level: string): string {
 		const map: Record<string, string> = {
