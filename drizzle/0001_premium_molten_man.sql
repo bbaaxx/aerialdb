@@ -1,0 +1,1 @@
+ALTER TABLE `moves` ADD `level` text;

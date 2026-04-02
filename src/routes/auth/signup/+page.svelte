@@ -28,7 +28,8 @@
 			return false;
 		}
 		if (!/^[a-z0-9_-]+$/.test(value)) {
-			usernameError = 'Username can only contain lowercase letters, numbers, hyphens, and underscores';
+			usernameError =
+				'Username can only contain lowercase letters, numbers, hyphens, and underscores';
 			return false;
 		}
 		usernameError = '';
@@ -66,13 +67,13 @@
 	}
 </script>
 
-<div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 px-4 py-12">
+<div class="flex min-h-screen items-center justify-center bg-[#1A1C29] px-4 py-12">
 	<div class="w-full max-w-md">
-		<div class="bg-white rounded-2xl shadow-xl p-8">
+		<div class="rounded-2xl border border-gray-800 bg-[#242736] p-8 shadow-2xl">
 			<!-- Header -->
-			<div class="text-center mb-8">
-				<h1 class="text-3xl font-bold text-gray-900 mb-2">Create Account</h1>
-				<p class="text-gray-600">Sign up to get started</p>
+			<div class="mb-8 text-center">
+				<h1 class="mb-2 text-3xl font-bold text-white">Create Account</h1>
+				<p class="text-[#A0A5C0]">Sign up to get started</p>
 			</div>
 
 			<!-- Form -->
@@ -88,14 +89,14 @@
 			>
 				<!-- Global Error Message -->
 				{#if form?.message && !('field' in form)}
-					<div class="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
-						<p class="text-sm text-red-800">{form.message}</p>
+					<div class="mb-6 rounded-lg border border-red-500 bg-red-500/10 p-4">
+						<p class="text-sm text-red-400">{form.message}</p>
 					</div>
 				{/if}
 
 				<!-- Username Field -->
 				<div class="mb-5">
-					<label for="username" class="block text-sm font-medium text-gray-700 mb-2">
+					<label for="username" class="mb-2 block text-sm font-medium text-[#A0A5C0]">
 						Username
 					</label>
 					<input
@@ -111,17 +112,18 @@
 								validateUsernameClient(username);
 							}
 						}}
-						class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition outline-none"
-						class:border-red-500={usernameError || (form && 'field' in form && form.field === 'username')}
-						class:bg-red-50={usernameError || (form && 'field' in form && form.field === 'username')}
+						class="w-full rounded-lg border bg-[#242736] px-4 py-3 text-gray-200 transition outline-none focus:border-transparent focus:ring-2 focus:ring-[#8A63F8] {usernameError ||
+						(form && 'field' in form && form.field === 'username')
+							? 'border-red-500 bg-red-500/10'
+							: 'border-gray-600'}"
 						disabled={isSubmitting}
 					/>
 					{#if usernameError}
-						<p class="mt-2 text-sm text-red-600">{usernameError}</p>
+						<p class="mt-2 text-sm text-red-400">{usernameError}</p>
 					{:else if form && 'field' in form && form.field === 'username' && form?.message}
-						<p class="mt-2 text-sm text-red-600">{form.message}</p>
+						<p class="mt-2 text-sm text-red-400">{form.message}</p>
 					{:else}
-						<p class="mt-2 text-xs text-gray-500">
+						<p class="mt-2 text-xs text-gray-400">
 							3-31 characters, lowercase letters, numbers, hyphens, and underscores only
 						</p>
 					{/if}
@@ -129,7 +131,7 @@
 
 				<!-- Password Field -->
 				<div class="mb-5">
-					<label for="password" class="block text-sm font-medium text-gray-700 mb-2">
+					<label for="password" class="mb-2 block text-sm font-medium text-[#A0A5C0]">
 						Password
 					</label>
 					<input
@@ -148,23 +150,24 @@
 								validateConfirmPasswordClient(confirmPassword);
 							}
 						}}
-						class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition outline-none"
-						class:border-red-500={passwordError || (form && 'field' in form && form.field === 'password')}
-						class:bg-red-50={passwordError || (form && 'field' in form && form.field === 'password')}
+						class="w-full rounded-lg border bg-[#242736] px-4 py-3 text-gray-200 transition outline-none focus:border-transparent focus:ring-2 focus:ring-[#8A63F8] {passwordError ||
+						(form && 'field' in form && form.field === 'password')
+							? 'border-red-500 bg-red-500/10'
+							: 'border-gray-600'}"
 						disabled={isSubmitting}
 					/>
 					{#if passwordError}
-						<p class="mt-2 text-sm text-red-600">{passwordError}</p>
+						<p class="mt-2 text-sm text-red-400">{passwordError}</p>
 					{:else if form && 'field' in form && form.field === 'password' && form?.message}
-						<p class="mt-2 text-sm text-red-600">{form.message}</p>
+						<p class="mt-2 text-sm text-red-400">{form.message}</p>
 					{:else}
-						<p class="mt-2 text-xs text-gray-500">Minimum 6 characters</p>
+						<p class="mt-2 text-xs text-gray-400">Minimum 6 characters</p>
 					{/if}
 				</div>
 
 				<!-- Confirm Password Field -->
 				<div class="mb-6">
-					<label for="confirmPassword" class="block text-sm font-medium text-gray-700 mb-2">
+					<label for="confirmPassword" class="mb-2 block text-sm font-medium text-[#A0A5C0]">
 						Confirm Password
 					</label>
 					<input
@@ -176,19 +179,23 @@
 						bind:value={confirmPassword}
 						onblur={() => validateConfirmPasswordClient(confirmPassword)}
 						oninput={() => {
-							if (confirmPasswordError || (form && 'field' in form && form.field === 'confirmPassword')) {
+							if (
+								confirmPasswordError ||
+								(form && 'field' in form && form.field === 'confirmPassword')
+							) {
 								validateConfirmPasswordClient(confirmPassword);
 							}
 						}}
-						class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition outline-none"
-						class:border-red-500={confirmPasswordError || (form && 'field' in form && form.field === 'confirmPassword')}
-						class:bg-red-50={confirmPasswordError || (form && 'field' in form && form.field === 'confirmPassword')}
+						class="w-full rounded-lg border bg-[#242736] px-4 py-3 text-gray-200 transition outline-none focus:border-transparent focus:ring-2 focus:ring-[#8A63F8] {confirmPasswordError ||
+						(form && 'field' in form && form.field === 'confirmPassword')
+							? 'border-red-500 bg-red-500/10'
+							: 'border-gray-600'}"
 						disabled={isSubmitting}
 					/>
 					{#if confirmPasswordError}
-						<p class="mt-2 text-sm text-red-600">{confirmPasswordError}</p>
+						<p class="mt-2 text-sm text-red-400">{confirmPasswordError}</p>
 					{:else if form && 'field' in form && form.field === 'confirmPassword' && form?.message}
-						<p class="mt-2 text-sm text-red-600">{form.message}</p>
+						<p class="mt-2 text-sm text-red-400">{form.message}</p>
 					{/if}
 				</div>
 
@@ -202,12 +209,12 @@
 						!username ||
 						!password ||
 						!confirmPassword}
-					class="w-full bg-blue-600 text-white font-medium py-3 px-4 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition disabled:bg-gray-400 disabled:cursor-not-allowed"
+					class="w-full rounded-lg bg-gradient-to-r from-purple-500 to-indigo-500 px-4 py-3 font-medium text-white shadow-[0_0_15px_rgba(138,99,248,0.5)] transition hover:shadow-[0_0_20px_rgba(138,99,248,0.6)] focus:ring-2 focus:ring-[#8A63F8] focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:bg-gray-400 disabled:shadow-none"
 				>
 					{#if isSubmitting}
 						<span class="flex items-center justify-center">
 							<svg
-								class="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+								class="mr-3 -ml-1 h-5 w-5 animate-spin text-white"
 								xmlns="http://www.w3.org/2000/svg"
 								fill="none"
 								viewBox="0 0 24 24"
@@ -236,11 +243,11 @@
 
 			<!-- Login Link -->
 			<div class="mt-6 text-center">
-				<p class="text-sm text-gray-600">
+				<p class="text-sm text-[#A0A5C0]">
 					Already have an account?
 					<a
 						href="/auth/login"
-						class="text-blue-600 hover:text-blue-700 font-medium hover:underline"
+						class="font-medium text-[#8A63F8] hover:drop-shadow-[0_0_8px_rgba(138,99,248,0.6)]"
 					>
 						Sign in
 					</a>

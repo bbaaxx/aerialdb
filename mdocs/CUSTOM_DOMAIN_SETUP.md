@@ -1,6 +1,7 @@
 # Custom Domain Setup Guide
 
 This guide will help you set up:
+
 - **Main site:** `aerialdb.codetitlan.org`
 - **Images:** `images.aerialdb.codetitlan.org`
 
@@ -133,16 +134,19 @@ After setup, verify these URLs work:
 ## Troubleshooting
 
 ### DNS Not Propagating
+
 - Wait up to 24 hours for DNS propagation
 - Check DNS with: `dig aerialdb.codetitlan.org`
 - Verify CNAME records point to your Pages/R2 endpoints
 
 ### SSL Certificate Not Provisioning
+
 - Ensure domain is proxied through Cloudflare (orange cloud icon)
 - Check that DNS records are correct
 - Wait a few more minutes - SSL can take up to 15 minutes
 
 ### Images Still Not Loading
+
 - Clear browser cache
 - Verify PUBLIC_R2_URL is set correctly
 - Check that migration ran successfully

@@ -39,22 +39,26 @@ aerialdb/
 ## 🚀 Entry Points
 
 ### Development
+
 - **Dev Server:** `npm run dev` - Start Vite dev server
 - **Build:** `npm run build` - Production build
 - **Preview:** `npm run preview` - Preview production build
 
 ### Testing
+
 - **Unit Tests:** `npm run test:unit` - Vitest unit tests
 - **E2E Tests:** `npm run test:e2e` - Playwright e2e tests
 - **Full Test Suite:** `npm test` - Run all tests
 
 ### Database
+
 - **Push Schema:** `npm run db:push` - Push schema to database
 - **Generate Migrations:** `npm run db:generate` - Generate migrations
 - **Migrate:** `npm run db:migrate` - Run migrations
 - **Studio:** `npm run db:studio` - Open Drizzle Studio
 
 ### Code Quality
+
 - **Check:** `npm run check` - Type checking with svelte-check
 - **Lint:** `npm run lint` - ESLint + Prettier
 - **Format:** `npm run format` - Auto-format code
@@ -64,6 +68,7 @@ aerialdb/
 ## 📦 Core Modules
 
 ### Authentication (`src/lib/server/auth.ts`)
+
 - **Exports:**
   - `generateSessionToken()` - Generate secure session token
   - `createSession(token, userId)` - Create new session
@@ -75,6 +80,7 @@ aerialdb/
 - **Security:** 30-day sessions with automatic renewal at 15 days
 
 ### Database (`src/lib/server/db/`)
+
 - **index.ts:**
   - Exports: `db` - Drizzle ORM client instance
   - Uses: LibSQL client (Turso-compatible)
@@ -85,6 +91,7 @@ aerialdb/
   - Purpose: SQLite database schema with Drizzle ORM
 
 ### Server Hooks (`src/hooks.server.ts`)
+
 - **Exports:** `handle` - Combined middleware chain
 - **Middleware:**
   - `handleParaglide` - i18n request processing
@@ -96,6 +103,7 @@ aerialdb/
 ## 🔧 Configuration Files
 
 ### Core Config
+
 - **svelte.config.js** - SvelteKit configuration
   - Adapter: auto
   - Preprocessors: Vite + MDsveX (markdown support)
@@ -116,6 +124,7 @@ aerialdb/
   - Extends: `.svelte-kit/tsconfig.json`
 
 ### Linting & Formatting
+
 - **eslint.config.js** - ESLint v9 flat config
 - **prettier** - Auto-formatting (Svelte + TailwindCSS plugins)
 
@@ -124,6 +133,7 @@ aerialdb/
 ## 🧪 Test Coverage
 
 ### Test Files
+
 - **Unit Tests:**
   - `src/demo.spec.ts`
   - `src/routes/page.svelte.spec.ts`
@@ -131,6 +141,7 @@ aerialdb/
   - `e2e/demo.test.ts`
 
 ### Test Configuration
+
 - **Framework:** Vitest + Playwright
 - **Browser Tests:** Svelte components (Chromium headless)
 - **Server Tests:** Node environment
@@ -141,34 +152,41 @@ aerialdb/
 ## 🔗 Key Dependencies
 
 ### Framework
+
 - **@sveltejs/kit** ^2.47.1 - SvelteKit framework
 - **svelte** ^5.41.0 - Svelte 5 (latest runes)
 - **vite** ^7.1.10 - Build tool
 
 ### Database & ORM
+
 - **drizzle-orm** ^0.44.6 - TypeScript ORM
 - **drizzle-kit** ^0.31.5 - Schema management
 - **@libsql/client** ^0.15.15 - LibSQL/Turso client
 
 ### Authentication
+
 - **@node-rs/argon2** ^2.0.2 - Password hashing
 - **@oslojs/crypto** ^1.0.1 - Cryptographic utilities
 - **@oslojs/encoding** ^1.1.0 - Encoding helpers
 
 ### UI & Styling
+
 - **@tailwindcss/vite** ^4.1.14 - TailwindCSS v4
 - **@tailwindcss/forms** ^0.5.10 - Form styles
 - **@tailwindcss/typography** ^0.5.19 - Typography plugin
 
 ### Internationalization
+
 - **@inlang/paraglide-js** ^2.4.0 - Type-safe i18n
 
 ### Testing
+
 - **vitest** ^4.0.5 - Unit testing
 - **@playwright/test** ^1.56.1 - E2E testing
 - **@vitest/browser-playwright** ^4.0.5 - Browser testing
 
 ### Content
+
 - **mdsvex** ^0.12.6 - Markdown in Svelte
 
 ---
@@ -176,6 +194,7 @@ aerialdb/
 ## 🌍 Internationalization
 
 ### Setup
+
 - **Library:** Paraglide JS (Inlang)
 - **Project:** `./project.inlang`
 - **Output:** `./src/lib/paraglide` (auto-generated)
@@ -184,6 +203,7 @@ aerialdb/
   - Spanish (`messages/es.json`)
 
 ### Integration
+
 - Middleware in `hooks.server.ts`
 - HTML lang attribute via `%paraglide.lang%` placeholder
 
@@ -194,17 +214,20 @@ aerialdb/
 ### Tables
 
 #### `user`
+
 - `id` (text, primary key)
 - `username` (text, unique, not null)
 - `password_hash` (text, not null)
 - `age` (integer, nullable)
 
 #### `session`
+
 - `id` (text, primary key) - SHA-256 hash of token
 - `user_id` (text, foreign key → user.id)
 - `expires_at` (timestamp, not null)
 
 ### Connection
+
 - **Type:** SQLite (LibSQL compatible)
 - **URL:** Set via `DATABASE_URL` environment variable
 - **Local DB:** `./db/` directory
@@ -214,15 +237,18 @@ aerialdb/
 ## 📝 Routes Overview
 
 ### Public Routes
+
 - **/** - Home page (`src/routes/+page.svelte`)
 - **/demo** - Demo landing page
 
 ### Demo Routes
+
 - **/demo/lucia** - Authentication demo
   - **/demo/lucia/login** - Login page
 - **/demo/paraglide** - i18n demo
 
 ### Layout
+
 - **src/routes/+layout.svelte** - Root layout
 - **src/routes/layout.css** - Global styles
 
@@ -231,6 +257,7 @@ aerialdb/
 ## 🔐 Security Features
 
 ### Authentication
+
 - Session-based (no JWT)
 - SHA-256 token hashing
 - Base64url-encoded session IDs
@@ -238,6 +265,7 @@ aerialdb/
 - Argon2 password hashing
 
 ### Best Practices
+
 - TypeScript strict mode
 - Environment variable validation
 - HTTPS cookie settings
@@ -248,10 +276,12 @@ aerialdb/
 ## 🚀 Quick Start
 
 ### Prerequisites
+
 - Node.js 18+
 - npm/pnpm/yarn
 
 ### Setup
+
 ```bash
 # 1. Install dependencies
 npm install
@@ -267,6 +297,7 @@ npm run dev
 ```
 
 ### Development Workflow
+
 ```bash
 # Run type checking
 npm run check
@@ -286,6 +317,7 @@ npm run db:studio
 ## 🎯 Project Features
 
 ### Current Implementation
+
 - Session-based authentication
 - SQLite database with Drizzle ORM
 - Internationalization (i18n) support
@@ -295,6 +327,7 @@ npm run db:studio
 - Unit + E2E testing setup
 
 ### Tech Stack Highlights
+
 - **Frontend:** Svelte 5 (with runes)
 - **Backend:** SvelteKit server endpoints
 - **Database:** SQLite/LibSQL (Turso-compatible)

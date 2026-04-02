@@ -89,7 +89,9 @@ async function generateD1SQL() {
 		let moveId = toonMove.id;
 		if (usedIds.has(moveId)) {
 			moveId = generateId(16); // Generate a new unique ID
-			console.error(`  ⚠️  Duplicate ID detected for "${toonMove.figura}" (${toonMove.base}), generating new ID: ${moveId}`);
+			console.error(
+				`  ⚠️  Duplicate ID detected for "${toonMove.figura}" (${toonMove.base}), generating new ID: ${moveId}`
+			);
 		}
 		usedIds.add(moveId);
 

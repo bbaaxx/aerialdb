@@ -42,11 +42,15 @@ development/
 │   ├── python/
 │   └── authentication/
 │
-├── data/                      # Data layer (future)
+├── data/                      # Data layer (Drizzle/SQLite)
 │   ├── navigation.md
-│   ├── sql-patterns/
-│   ├── nosql-patterns/
-│   └── orm-patterns/
+│   ├── concepts/
+│   │   └── db-type-assertions.md
+│   └── errors/
+│       ├── db-type-errors.md
+│       ├── lint-svelte-ignore.md
+│       ├── svelte-each-keys.md
+│       └── svelte-reactivity-lint.md
 │
 ├── integration/               # Connecting systems (future)
 │   ├── navigation.md
@@ -64,14 +68,14 @@ development/
 
 ## Quick Routes
 
-| Task | Path |
-|------|------|
-| **UI/Frontend** | `ui-navigation.md` |
+| Task                          | Path                           |
+| ----------------------------- | ------------------------------ |
+| **UI/Frontend**               | `ui-navigation.md`             |
 | **When to delegate frontend** | `frontend/when-to-delegate.md` |
-| **Backend/API** | `backend-navigation.md` |
-| **Full-stack** | `fullstack-navigation.md` |
-| **Clean code** | `principles/clean-code.md` |
-| **API design** | `principles/api-design.md` |
+| **Backend/API**               | `backend-navigation.md`        |
+| **Full-stack**                | `fullstack-navigation.md`      |
+| **Clean code**                | `principles/clean-code.md`     |
+| **API design**                | `principles/api-design.md`     |
 
 ---
 

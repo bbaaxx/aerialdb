@@ -3,11 +3,36 @@ import { describe, expect, it } from 'vitest';
 import { render } from 'vitest-browser-svelte';
 import Page from './+page.svelte';
 
-describe('/+page.svelte', () => {
-	it('should render h1', async () => {
-		render(Page);
+const mockData = {
+	user: null,
+	moves: [
+		{
+			id: '1',
+			name: 'Birdie',
+			description: null,
+			imageUrl: null,
+			videoUrl: null,
+			level: 'beginner',
+			contributorName: null,
+			category: { id: 'silks', name: 'Silks' }
+		}
+	],
+	categories: [{ id: 'silks', name: 'Silks', createdAt: new Date() }],
+	searchQuery: '',
+	categoryFilter: '',
+	levelFilter: '',
+	featuredMove: null
+};
 
-		const heading = page.getByRole('heading', { level: 1 });
+describe('/+page.svelte', () => {
+	it('should render the page heading', async () => {
+		render(Page, { data: mockData });
+
+		const heading = page.getByRole('heading', { name: 'Library' });
 		await expect.element(heading).toBeInTheDocument();
+	});
+
+	it('should render without errors', async () => {
+		expect(() => render(Page, { data: mockData })).not.toThrow();
 	});
 });

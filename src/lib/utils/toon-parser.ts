@@ -99,7 +99,7 @@ function parseCSVLine(line: string): string[] {
  */
 export function extractCategories(moves: ToonMove[]): string[] {
 	const categories = new Set<string>();
-	moves.forEach(move => {
+	moves.forEach((move) => {
 		if (move.base) {
 			categories.add(move.base);
 		}

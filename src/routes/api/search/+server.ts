@@ -1,5 +1,6 @@
 import { json } from '@sveltejs/kit';
 import { getDb } from '$lib/server/db';
+import { type MoveWithCategoryRaw } from '$lib/server/db/types';
 import { moves, categories } from '$lib/server/db/schema';
 import { eq, like, or } from 'drizzle-orm';
 import type { RequestHandler } from './$types';
@@ -17,7 +18,7 @@ export const GET: RequestHandler = async (event) => {
 	}
 
 	// Build search conditions - search both move name AND category name
-	let conditions = [];
+	const conditions = [];
 
 	// Search in move name OR category name
 	const searchPattern = `%${query}%`;
@@ -29,7 +30,9 @@ export const GET: RequestHandler = async (event) => {
 	}
 
 	// Fetch moves with category info
-	const movesDataRaw = await db
+	// Type assertion needed: getDb() returns a union type (D1 | libsql)
+	// that breaks .select({fields}) overload resolution
+	const movesDataRaw = (await (db as any)
 		.select({
 			id: moves.id,
 			name: moves.name,
@@ -43,7 +46,7 @@ export const GET: RequestHandler = async (event) => {
 		.from(moves)
 		.innerJoin(categories, eq(moves.categoryId, categories.id))
 		.where(conditions.length > 0 ? or(...conditions) : undefined)
-		.orderBy(moves.name);
+		.orderBy(moves.name)) as MoveWithCategoryRaw[];
 
 	const movesData = movesDataRaw.map((move) => ({
 		id: move.id,

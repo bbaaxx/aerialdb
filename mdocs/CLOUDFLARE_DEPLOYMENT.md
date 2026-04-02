@@ -1,6 +1,7 @@
 # 🚀 Deploying AerialDB to Cloudflare
 
 This guide walks you through deploying AerialDB to Cloudflare's free tier using:
+
 - **Cloudflare Pages** for hosting
 - **Cloudflare D1** for SQLite database
 - **Cloudflare R2** for image storage
@@ -30,6 +31,7 @@ npx wrangler d1 create aerialdb-production
 ```
 
 **Copy the database ID** from the output. It will look like:
+
 ```
 ✅ Successfully created DB 'aerialdb-production'
 database_id = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
@@ -89,12 +91,14 @@ binding = "aerialdb_images"
 For public image access, you have two options:
 
 **Option A: Public Bucket (Easier)**
+
 1. Go to Cloudflare Dashboard → R2
 2. Select `aerialdb-images` bucket
 3. Click "Settings" → "Public Access"
 4. Enable public access and note the public URL
 
 **Option B: Custom Domain (Recommended)**
+
 1. Go to your R2 bucket settings
 2. Add a custom domain (e.g., `images.yourdomain.com`)
 3. Update image URLs in your code to use this domain
@@ -118,21 +122,25 @@ import { parseToonFile } from '../src/lib/utils/toon-parser';
 import { readFileSync } from 'fs';
 
 async function seed() {
-  // This will run in Cloudflare Workers context
-  // You'll need to execute this locally and generate SQL
-  const toonData = readFileSync('./db/db.toon', 'utf-8');
-  const parsed = parseToonFile(toonData);
+	// This will run in Cloudflare Workers context
+	// You'll need to execute this locally and generate SQL
+	const toonData = readFileSync('./db/db.toon', 'utf-8');
+	const parsed = parseToonFile(toonData);
 
-  // Generate SQL INSERT statements
-  console.log('-- Categories');
-  for (const cat of parsed.categories) {
-    console.log(`INSERT INTO categories (id, name, created_at) VALUES ('${cat.id}', '${cat.name}', ${Date.now()});`);
-  }
+	// Generate SQL INSERT statements
+	console.log('-- Categories');
+	for (const cat of parsed.categories) {
+		console.log(
+			`INSERT INTO categories (id, name, created_at) VALUES ('${cat.id}', '${cat.name}', ${Date.now()});`
+		);
+	}
 
-  console.log('\\n-- Moves');
-  for (const move of parsed.moves) {
-    console.log(`INSERT INTO moves (id, name, category_id, contributor_name, created_by, created_at, updated_at) VALUES ('${move.id}', '${move.name.replace(/'/g, "''")}', '${move.categoryId}', ${move.contributorName ? `'${move.contributorName}'` : 'NULL'}, 'admin-user-id', ${Date.now()}, ${Date.now()});`);
-  }
+	console.log('\\n-- Moves');
+	for (const move of parsed.moves) {
+		console.log(
+			`INSERT INTO moves (id, name, category_id, contributor_name, created_by, created_at, updated_at) VALUES ('${move.id}', '${move.name.replace(/'/g, "''")}', '${move.categoryId}', ${move.contributorName ? `'${move.contributorName}'` : 'NULL'}, 'admin-user-id', ${Date.now()}, ${Date.now()});`
+		);
+	}
 }
 
 seed();
@@ -212,6 +220,7 @@ done
 You'll need to update the `image_url` column to use R2 URLs instead of local paths.
 
 If using custom domain:
+
 ```sql
 UPDATE moves
 SET image_url = REPLACE(image_url, '/uploads/', 'https://images.yourdomain.com/')
@@ -260,11 +269,13 @@ WHERE image_url IS NOT NULL;
 The codebase now supports **dual-mode operation**:
 
 ### Local Development
+
 - Uses local SQLite database (`local.db`)
 - Stores images in `/static/uploads/`
 - Run with: `npm run dev`
 
 ### Cloudflare Production
+
 - Uses Cloudflare D1 (accessed via `platform.env.DB`)
 - Stores images in R2 (accessed via `platform.env.IMAGES`)
 - Auto-deployed via GitHub push
@@ -276,6 +287,7 @@ The codebase now supports **dual-mode operation**:
 ## Monitoring & Debugging
 
 ### View D1 Database
+
 ```bash
 # List all moves
 npx wrangler d1 execute aerialdb-production --command="SELECT * FROM moves LIMIT 10"
@@ -285,6 +297,7 @@ npx wrangler d1 execute aerialdb-production --command="SELECT * FROM categories"
 ```
 
 ### View R2 Objects
+
 ```bash
 # List all images
 npx wrangler r2 object list aerialdb-images
@@ -306,17 +319,20 @@ npx wrangler r2 object get aerialdb-images/filename.jpg --file=./downloaded.jpg
 Your project is **well within** Cloudflare's free limits:
 
 ### D1 (SQLite)
+
 - ✅ **Database:** First database free
 - ✅ **Storage:** 5 GB (you'll use ~1 MB)
 - ✅ **Reads:** 5 million/day (you'll use ~1000/day)
 - ✅ **Writes:** 100,000/day (you'll use ~10/day)
 
 ### R2 (Object Storage)
+
 - ✅ **Storage:** 10 GB free (you'll use ~100 MB for images)
 - ✅ **Reads:** Unlimited (egress is free!)
 - ✅ **Writes:** 1 million/month (you'll use ~100/month)
 
 ### Pages (Hosting)
+
 - ✅ **Bandwidth:** Unlimited
 - ✅ **Builds:** 500/month (you'll use ~10/month)
 - ✅ **Requests:** Unlimited
@@ -328,11 +344,13 @@ Your project is **well within** Cloudflare's free limits:
 ## Troubleshooting
 
 ### Build Fails: "Cannot find module '@sveltejs/adapter-cloudflare'"
+
 ```bash
 npm install -D @sveltejs/adapter-cloudflare
 ```
 
 ### Database Errors: "table moves does not exist"
+
 ```bash
 # Re-run schema migration
 npx drizzle-kit generate:sqlite
@@ -340,11 +358,13 @@ npx wrangler d1 execute aerialdb-production --file=./drizzle/XXXX.sql
 ```
 
 ### Images Not Uploading
+
 1. Check R2 binding in Pages settings
 2. Verify bucket name matches `wrangler.toml`
 3. Check browser console for errors
 
 ### "Platform is undefined" Errors
+
 - Ensure you're accessing database via `getDb(event)` not `db` directly
 - Check that all server files import `getDb` from `$lib/server/db`
 
@@ -367,12 +387,12 @@ Once deployed:
 
 ## Cost Breakdown
 
-| Service | Free Tier | Your Usage | Monthly Cost |
-|---------|-----------|------------|--------------|
-| Cloudflare Pages | Unlimited | ~1000 requests/day | **$0** |
-| D1 Database | 5GB, 5M reads | ~1MB, ~1000 reads | **$0** |
-| R2 Storage | 10GB, 1M writes | ~100MB, ~100 writes | **$0** |
-| **TOTAL** | | | **$0** |
+| Service          | Free Tier       | Your Usage          | Monthly Cost |
+| ---------------- | --------------- | ------------------- | ------------ |
+| Cloudflare Pages | Unlimited       | ~1000 requests/day  | **$0**       |
+| D1 Database      | 5GB, 5M reads   | ~1MB, ~1000 reads   | **$0**       |
+| R2 Storage       | 10GB, 1M writes | ~100MB, ~100 writes | **$0**       |
+| **TOTAL**        |                 |                     | **$0**       |
 
 ---
 

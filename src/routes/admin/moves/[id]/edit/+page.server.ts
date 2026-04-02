@@ -23,11 +23,7 @@ export const load: PageServerLoad = async (event) => {
 	const db = getDb(event);
 	const { params } = event;
 
-	const [move] = await db
-		.select()
-		.from(moves)
-		.where(eq(moves.id, params.id))
-		.limit(1);
+	const [move] = await db.select().from(moves).where(eq(moves.id, params.id)).limit(1);
 
 	if (!move) {
 		throw error(404, 'Move not found');
@@ -75,11 +71,7 @@ export const actions = {
 		}
 
 		// Get current move data
-		const [currentMove] = await db
-			.select()
-			.from(moves)
-			.where(eq(moves.id, params.id))
-			.limit(1);
+		const [currentMove] = await db.select().from(moves).where(eq(moves.id, params.id)).limit(1);
 
 		if (!currentMove) {
 			return fail(404, { error: 'Move not found' });
@@ -145,11 +137,7 @@ export const actions = {
 		const { params, platform } = event;
 
 		// Get move to delete associated image
-		const [move] = await db
-			.select()
-			.from(moves)
-			.where(eq(moves.id, params.id))
-			.limit(1);
+		const [move] = await db.select().from(moves).where(eq(moves.id, params.id)).limit(1);
 
 		if (move?.imageUrl) {
 			// Delete file from storage (local or R2)

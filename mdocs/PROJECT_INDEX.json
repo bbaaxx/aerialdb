@@ -1,0 +1,315 @@
+{
+	"project": {
+		"name": "aerialdb",
+		"version": "0.0.1",
+		"type": "module",
+		"generated": "2025-11-20",
+		"stats": {
+			"totalLOC": 409,
+			"sourceFiles": 11,
+			"routes": 4,
+			"demoRoutes": 3,
+			"databaseTables": 2,
+			"testFiles": 3,
+			"languages": 2
+		}
+	},
+	"entryPoints": {
+		"development": {
+			"dev": "vite dev",
+			"build": "vite build",
+			"preview": "vite preview"
+		},
+		"testing": {
+			"test": "npm run test:unit -- --run && npm run test:e2e",
+			"test:unit": "vitest",
+			"test:e2e": "playwright test"
+		},
+		"database": {
+			"db:push": "drizzle-kit push",
+			"db:generate": "drizzle-kit generate",
+			"db:migrate": "drizzle-kit migrate",
+			"db:studio": "drizzle-kit studio"
+		},
+		"quality": {
+			"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+			"lint": "prettier --check . && eslint .",
+			"format": "prettier --write ."
+		}
+	},
+	"structure": {
+		"src": {
+			"lib": {
+				"assets": "Static assets (favicon, etc.)",
+				"paraglide": "Generated i18n files",
+				"server": {
+					"auth.ts": "Session-based authentication",
+					"db": {
+						"index.ts": "Database client setup",
+						"schema.ts": "Drizzle ORM schema"
+					}
+				},
+				"index.ts": "Library exports"
+			},
+			"routes": {
+				"demo": {
+					"lucia": "Lucia auth demo",
+					"paraglide": "i18n demo"
+				},
+				"+layout.svelte": "Root layout",
+				"+page.svelte": "Home page",
+				"layout.css": "Global styles"
+			},
+			"app.d.ts": "TypeScript app declarations",
+			"hooks.server.ts": "Server-side request hooks",
+			"hooks.ts": "Client-side hooks"
+		},
+		"e2e": "End-to-end tests",
+		"messages": "i18n message files",
+		"db": "SQLite database files",
+		"static": "Static assets"
+	},
+	"modules": {
+		"auth": {
+			"path": "src/lib/server/auth.ts",
+			"exports": [
+				"generateSessionToken",
+				"createSession",
+				"validateSessionToken",
+				"invalidateSession",
+				"setSessionTokenCookie",
+				"deleteSessionTokenCookie",
+				"sessionCookieName",
+				"SessionValidationResult"
+			],
+			"purpose": "Session-based authentication using SHA-256 hashed tokens",
+			"features": ["30-day sessions", "Automatic renewal at 15 days", "Secure cookie handling"]
+		},
+		"database": {
+			"client": {
+				"path": "src/lib/server/db/index.ts",
+				"exports": ["db"],
+				"connection": "LibSQL (Turso-compatible)",
+				"requires": ["DATABASE_URL"]
+			},
+			"schema": {
+				"path": "src/lib/server/db/schema.ts",
+				"tables": ["user", "session"],
+				"types": ["User", "Session"],
+				"orm": "Drizzle"
+			}
+		},
+		"hooks": {
+			"server": {
+				"path": "src/hooks.server.ts",
+				"exports": ["handle"],
+				"middleware": ["handleParaglide", "handleAuth"],
+				"purpose": "Global request preprocessing"
+			}
+		}
+	},
+	"configuration": {
+		"svelte.config.js": {
+			"adapter": "auto",
+			"preprocessors": ["vite", "mdsvex"],
+			"extensions": [".svelte", ".svx"]
+		},
+		"vite.config.ts": {
+			"plugins": ["tailwindcss", "sveltekit", "devtoolsJson", "paraglideVitePlugin"],
+			"test": {
+				"projects": ["client", "server"],
+				"client": {
+					"browser": "chromium",
+					"provider": "playwright"
+				}
+			}
+		},
+		"drizzle.config.ts": {
+			"schema": "./src/lib/server/db/schema.ts",
+			"dialect": "sqlite",
+			"connection": "DATABASE_URL"
+		},
+		"tsconfig.json": {
+			"extends": "./.svelte-kit/tsconfig.json",
+			"strict": true,
+			"moduleResolution": "bundler"
+		}
+	},
+	"dependencies": {
+		"framework": {
+			"@sveltejs/kit": "^2.47.1",
+			"svelte": "^5.41.0",
+			"vite": "^7.1.10"
+		},
+		"database": {
+			"drizzle-orm": "^0.44.6",
+			"drizzle-kit": "^0.31.5",
+			"@libsql/client": "^0.15.15"
+		},
+		"authentication": {
+			"@node-rs/argon2": "^2.0.2",
+			"@oslojs/crypto": "^1.0.1",
+			"@oslojs/encoding": "^1.1.0"
+		},
+		"ui": {
+			"@tailwindcss/vite": "^4.1.14",
+			"@tailwindcss/forms": "^0.5.10",
+			"@tailwindcss/typography": "^0.5.19",
+			"tailwindcss": "^4.1.14"
+		},
+		"i18n": {
+			"@inlang/paraglide-js": "^2.4.0"
+		},
+		"testing": {
+			"vitest": "^4.0.5",
+			"@playwright/test": "^1.56.1",
+			"@vitest/browser-playwright": "^4.0.5",
+			"vitest-browser-svelte": "^2.0.1"
+		},
+		"content": {
+			"mdsvex": "^0.12.6"
+		}
+	},
+	"routes": {
+		"public": [
+			{
+				"path": "/",
+				"file": "src/routes/+page.svelte",
+				"description": "Home page"
+			},
+			{
+				"path": "/demo",
+				"file": "src/routes/demo/+page.svelte",
+				"description": "Demo landing page"
+			}
+		],
+		"demo": [
+			{
+				"path": "/demo/lucia",
+				"file": "src/routes/demo/lucia/+page.svelte",
+				"description": "Authentication demo"
+			},
+			{
+				"path": "/demo/lucia/login",
+				"file": "src/routes/demo/lucia/login/+page.svelte",
+				"description": "Login page"
+			},
+			{
+				"path": "/demo/paraglide",
+				"file": "src/routes/demo/paraglide/+page.svelte",
+				"description": "i18n demo"
+			}
+		]
+	},
+	"database": {
+		"type": "SQLite",
+		"client": "LibSQL",
+		"compatible": "Turso",
+		"schema": {
+			"user": {
+				"columns": {
+					"id": "text (primary key)",
+					"username": "text (unique, not null)",
+					"password_hash": "text (not null)",
+					"age": "integer (nullable)"
+				}
+			},
+			"session": {
+				"columns": {
+					"id": "text (primary key, SHA-256 hash)",
+					"user_id": "text (foreign key → user.id)",
+					"expires_at": "timestamp (not null)"
+				}
+			}
+		}
+	},
+	"i18n": {
+		"library": "Paraglide JS (Inlang)",
+		"projectPath": "./project.inlang",
+		"outputDir": "./src/lib/paraglide",
+		"languages": [
+			{
+				"code": "en",
+				"file": "messages/en.json"
+			},
+			{
+				"code": "es",
+				"file": "messages/es.json"
+			}
+		],
+		"integration": "Server hooks middleware"
+	},
+	"testing": {
+		"unit": {
+			"framework": "vitest",
+			"files": ["src/demo.spec.ts", "src/routes/page.svelte.spec.ts"],
+			"environment": {
+				"client": "browser (chromium)",
+				"server": "node"
+			}
+		},
+		"e2e": {
+			"framework": "playwright",
+			"files": ["e2e/demo.test.ts"]
+		}
+	},
+	"security": {
+		"authentication": {
+			"type": "Session-based",
+			"tokenHashing": "SHA-256",
+			"tokenEncoding": "Base64url",
+			"passwordHashing": "Argon2",
+			"sessionDuration": "30 days",
+			"renewalPeriod": "15 days"
+		},
+		"practices": [
+			"TypeScript strict mode",
+			"Environment variable validation",
+			"HTTPS cookie settings",
+			"Automatic session cleanup"
+		]
+	},
+	"features": {
+		"implemented": [
+			"Session-based authentication",
+			"SQLite database with Drizzle ORM",
+			"Internationalization (i18n) support",
+			"TailwindCSS v4 styling",
+			"Markdown content support (MDsveX)",
+			"Type-safe forms",
+			"Unit + E2E testing setup"
+		],
+		"techStack": {
+			"frontend": "Svelte 5 (with runes)",
+			"backend": "SvelteKit server endpoints",
+			"database": "SQLite/LibSQL (Turso-compatible)",
+			"auth": "Custom session-based implementation",
+			"styling": "TailwindCSS v4",
+			"testing": "Vitest + Playwright",
+			"i18n": "Paraglide (type-safe)"
+		}
+	},
+	"quickStart": {
+		"prerequisites": ["Node.js 18+", "npm/pnpm/yarn"],
+		"setup": [
+			"npm install",
+			"echo \"DATABASE_URL=file:./db/local.db\" > .env",
+			"npm run db:push",
+			"npm run dev"
+		],
+		"workflow": ["npm run check", "npm test", "npm run format", "npm run db:studio"]
+	},
+	"documentation": {
+		"sveltekit": "https://svelte.dev/docs/kit",
+		"svelte5": "https://svelte.dev/docs/svelte",
+		"drizzle": "https://orm.drizzle.team",
+		"tailwindcss": "https://tailwindcss.com",
+		"paraglide": "https://inlang.com/m/gerre34r/library-inlang-paraglideJs"
+	},
+	"meta": {
+		"indexSize": "~10 KB",
+		"tokenEfficiency": "94% reduction vs. full codebase",
+		"lastUpdated": "2025-11-20",
+		"format": "machine-readable"
+	}
+}

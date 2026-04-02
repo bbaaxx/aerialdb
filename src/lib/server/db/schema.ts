@@ -33,6 +33,7 @@ export const moves = sqliteTable('moves', {
 	description: text('description'),
 	imageUrl: text('image_url'),
 	videoUrl: text('video_url'),
+	level: text('level'), // 'beginner' | 'intermediate' | 'advanced' | 'professional' | null
 	contributorName: text('contributor_name'), // Original creator/popularizer of the move
 	createdBy: text('created_by')
 		.notNull()

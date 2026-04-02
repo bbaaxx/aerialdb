@@ -1,3 +1,12 @@
 @import 'tailwindcss';
 @plugin '@tailwindcss/forms';
 @plugin '@tailwindcss/typography';
+
+@theme {
+	--color-dark-base: #1a1c29;
+	--color-dark-card: #242736;
+	--color-accent-purple: #8a63f8;
+	--color-primary-light: #a0a5c0;
+	--font-serif: 'Playfair Display', Georgia, serif;
+	--font-sans: 'Inter', system-ui, sans-serif;
+}

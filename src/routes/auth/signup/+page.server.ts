@@ -24,7 +24,8 @@ export const actions: Actions = {
 		// Validate username
 		if (!validateUsername(username)) {
 			return fail(400, {
-				message: 'Username must be 3-31 characters and contain only lowercase letters, numbers, hyphens, and underscores',
+				message:
+					'Username must be 3-31 characters and contain only lowercase letters, numbers, hyphens, and underscores',
 				field: 'username' as const,
 				username: typeof username === 'string' ? username : ''
 			});
