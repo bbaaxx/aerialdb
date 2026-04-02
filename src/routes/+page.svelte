@@ -133,7 +133,7 @@
 					selectedLevel = null;
 					goto('/');
 				}}
-				class="mt-6 rounded-lg border border-gray-600 px-5 py-2 text-sm text-gray-300 transition hover:border-accent-purple hover:text-white"
+				class="mt-6 rounded-lg bg-surface-container px-5 py-2 text-sm text-on-surface-variant transition hover:text-on-surface"
 			>
 				Clear all filters
 			</button>

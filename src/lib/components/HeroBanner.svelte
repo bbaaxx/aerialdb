@@ -15,10 +15,10 @@
 
 	function levelClasses(level: string): string {
 		const map: Record<string, string> = {
-			beginner: 'text-teal-400 border-teal-400/30 bg-teal-400/10',
-			intermediate: 'text-blue-400 border-blue-400/30 bg-blue-400/10',
-			advanced: 'text-purple-400 border-purple-400/30 bg-purple-400/10',
-			professional: 'text-amber-400 border-amber-400/30 bg-amber-400/10'
+			beginner: 'text-teal-400 bg-teal-400/10',
+			intermediate: 'text-blue-400 bg-blue-400/10',
+			advanced: 'text-purple-400 bg-purple-400/10',
+			professional: 'text-amber-400 bg-amber-400/10'
 		};
 		return map[level] ?? '';
 	}
@@ -87,9 +87,7 @@
 							<span class="mb-1 block text-xs tracking-wide text-primary-light uppercase">
 								Difficulty
 							</span>
-							<span
-								class="rounded-full border px-3 py-1 text-xs font-medium {levelClasses(move.level)}"
-							>
+							<span class="rounded-full px-3 py-1 text-xs font-medium {levelClasses(move.level)}">
 								{move.level}
 							</span>
 						</div>
@@ -100,7 +98,7 @@
 							Base Technique
 						</span>
 						<span
-							class="rounded-full border border-gray-600 bg-gray-800/50 px-3 py-1 text-xs font-medium text-gray-300"
+							class="rounded-full bg-surface-container-high px-3 py-1 text-xs font-medium text-on-surface-variant"
 						>
 							{move.category.name}
 						</span>

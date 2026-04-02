@@ -15,10 +15,10 @@
 	/>
 	<link
 		rel="stylesheet"
-		href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
+		href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400..900;1,400..900&display=swap"
 	/>
 </svelte:head>
 
-<div class="min-h-screen bg-[#1A1C29] font-sans text-gray-100">
+<div class="min-h-screen bg-surface-container-low font-sans text-on-surface">
 	{@render children()}
 </div>
