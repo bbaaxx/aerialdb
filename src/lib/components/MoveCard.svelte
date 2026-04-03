@@ -36,7 +36,7 @@
 
 <a
 	href="/moves/{move.id}"
-	class="group block rounded-xl border border-gray-800/50 bg-dark-card p-3 transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_10px_25px_-5px_rgba(0,0,0,0.5)]"
+	class="group block rounded-xl border border-gray-800/50 bg-dark-card p-3 transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_10px_25px_-5px_rgba(0,0,0,0.5)] focus-visible:ring-2 focus-visible:ring-accent-purple/50 focus-visible:outline-none"
 >
 	<div class="relative aspect-video overflow-hidden rounded-lg bg-gray-800">
 		{#if move.imageUrl}
@@ -50,12 +50,17 @@
 		<button
 			type="button"
 			onclick={handleFavoriteClick}
-			class="absolute bottom-3 left-1/2 flex -translate-x-1/2 items-center gap-1.5 rounded-full bg-black/50 px-4 py-2 text-sm text-white opacity-0 backdrop-blur-sm transition-opacity duration-200 group-hover:opacity-100 {isFavorited
-				? 'text-purple-400'
-				: ''}"
+			class="absolute bottom-3 left-1/2 flex -translate-x-1/2 items-center gap-1.5 rounded-full bg-black/60 px-4 py-2 text-sm text-white backdrop-blur-md transition-all duration-300 active:scale-95 group-hover:opacity-100 group-focus-within:opacity-100 focus-visible:opacity-100 {isFavorited
+				? 'text-accent-purple opacity-100 shadow-[0_0_15px_rgba(138,99,248,0.4)]'
+				: 'opacity-0'}"
 			aria-label={isFavorited ? 'Remove from favorites' : 'Save to favorites'}
+			aria-pressed={isFavorited}
 		>
-			<Heart size={14} fill={isFavorited ? 'currentColor' : 'none'} />
+			<Heart
+				size={14}
+				fill={isFavorited ? 'currentColor' : 'none'}
+				class="transition-transform duration-300 {isFavorited ? 'scale-110' : ''}"
+			/>
 			<span>{isFavorited ? 'Saved to Favorites' : 'Save to Favorites'}</span>
 		</button>
 	</div>
