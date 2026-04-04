@@ -28,6 +28,7 @@
 			type="text"
 			{value}
 			{placeholder}
+			aria-label={placeholder}
 			oninput={(e: Event) => oninput?.((e.target as HTMLInputElement).value)}
 			class="w-full rounded-xl border border-gray-600 bg-dark-card py-3.5 pr-10 pl-12 text-gray-200 placeholder-gray-500 shadow-inner transition-colors focus:border-accent-purple focus:ring-1 focus:ring-accent-purple focus:outline-none"
 		/>

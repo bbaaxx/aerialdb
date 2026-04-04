@@ -50,7 +50,10 @@
 
 	<!-- Level -->
 	<div role="group" aria-labelledby="level-label">
-		<p id="level-label" class="mb-2 text-xs font-semibold tracking-wider text-primary-light uppercase">
+		<p
+			id="level-label"
+			class="mb-2 text-xs font-semibold tracking-wider text-primary-light uppercase"
+		>
 			Level
 		</p>
 		<div class="flex flex-wrap gap-2">

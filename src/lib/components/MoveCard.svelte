@@ -36,7 +36,7 @@
 
 <a
 	href="/moves/{move.id}"
-	class="group block rounded-xl border border-gray-800/50 bg-dark-card p-3 transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_10px_25px_-5px_rgba(0,0,0,0.5)] focus-visible:ring-2 focus-visible:ring-accent-purple/50 focus-visible:outline-none"
+	class="group block rounded-xl border border-gray-800/50 bg-dark-card p-3 transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_10px_25px_-5px_rgba(0,0,0,0.5)] focus:ring-2 focus:ring-accent-purple focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-purple"
 >
 	<div class="relative aspect-video overflow-hidden rounded-lg bg-gray-800">
 		{#if move.imageUrl}
