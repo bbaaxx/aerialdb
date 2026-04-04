@@ -24,9 +24,9 @@
 
 <div class="flex flex-col flex-wrap justify-center gap-x-12 gap-y-6 sm:flex-row">
 	<!-- Base Technique -->
-	<div role="group" aria-labelledby="technique-label">
+	<div role="group" aria-labelledby="base-technique-label">
 		<p
-			id="technique-label"
+			id="base-technique-label"
 			class="mb-2 text-xs font-semibold tracking-wider text-primary-light uppercase"
 		>
 			Base Technique
@@ -37,7 +37,7 @@
 					type="button"
 					onclick={() => handleApparatusClick(category.id)}
 					aria-pressed={activeApparatus === category.id}
-					class="rounded-full border px-4 py-1.5 text-sm transition-all focus:ring-2 focus:ring-accent-purple focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-purple {activeApparatus ===
+					class="rounded-full border px-4 py-1.5 text-sm transition-all focus-visible:ring-2 focus-visible:ring-accent-purple focus-visible:outline-none {activeApparatus ===
 					category.id
 						? 'border-accent-purple bg-dark-card text-white'
 						: 'border-gray-600 text-gray-300 hover:border-accent-purple hover:text-white'}"
@@ -62,7 +62,7 @@
 					type="button"
 					onclick={() => handleLevelClick(level)}
 					aria-pressed={activeLevel === level.toLowerCase()}
-					class="rounded-full border px-4 py-1.5 text-sm transition-all focus:ring-2 focus:ring-accent-purple focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-purple {activeLevel ===
+					class="rounded-full border px-4 py-1.5 text-sm transition-all focus-visible:ring-2 focus-visible:ring-accent-purple focus-visible:outline-none {activeLevel ===
 					level.toLowerCase()
 						? 'border-accent-purple bg-dark-card text-white'
 						: 'border-gray-600 text-gray-300 hover:border-accent-purple hover:text-white'}"
