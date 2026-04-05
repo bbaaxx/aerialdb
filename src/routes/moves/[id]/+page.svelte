@@ -32,7 +32,7 @@
 		<div class="mx-auto max-w-7xl px-4 py-4 sm:px-6 sm:py-6 lg:px-8">
 			<a
 				href="/"
-				class="inline-flex items-center gap-2 rounded-lg px-3 py-2 text-base font-medium text-[#A0A5C0] transition-all hover:bg-white/5 hover:text-white active:scale-95"
+				class="inline-flex items-center gap-2 rounded-lg px-3 py-2 text-base font-medium text-[#A0A5C0] transition-all hover:bg-white/5 hover:text-white focus-visible:ring-2 focus-visible:ring-accent-purple focus-visible:outline-none active:scale-95"
 			>
 				<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"
@@ -137,7 +137,7 @@
 		<div class="mt-6 sm:mt-8">
 			<a
 				href="/admin/moves/{data.move.id}/edit"
-				class="inline-flex items-center gap-2 rounded-lg px-4 py-3 text-base font-medium text-[#8A63F8] transition-all hover:bg-[#8A63F8]/10 active:scale-95"
+				class="inline-flex items-center gap-2 rounded-lg px-4 py-3 text-base font-medium text-[#8A63F8] transition-all hover:bg-[#8A63F8]/10 focus-visible:ring-2 focus-visible:ring-accent-purple focus-visible:outline-none active:scale-95"
 			>
 				<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 					<path
