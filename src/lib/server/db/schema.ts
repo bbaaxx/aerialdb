@@ -1,4 +1,4 @@
-import { integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
+import { index, integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 
 // Auth tables
 export const user = sqliteTable('user', {
@@ -24,23 +24,34 @@ export const categories = sqliteTable('categories', {
 });
 
 // Moves table
-export const moves = sqliteTable('moves', {
-	id: text('id').primaryKey(),
-	name: text('name').notNull(),
-	categoryId: text('category_id')
-		.notNull()
-		.references(() => categories.id),
-	description: text('description'),
-	imageUrl: text('image_url'),
-	videoUrl: text('video_url'),
-	level: text('level'), // 'beginner' | 'intermediate' | 'advanced' | 'professional' | null
-	contributorName: text('contributor_name'), // Original creator/popularizer of the move
-	createdBy: text('created_by')
-		.notNull()
-		.references(() => user.id), // User who added it to the platform
-	createdAt: integer('created_at', { mode: 'timestamp' }).notNull(),
-	updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull()
-});
+export const moves = sqliteTable(
+	'moves',
+	{
+		id: text('id').primaryKey(),
+		name: text('name').notNull(),
+		categoryId: text('category_id')
+			.notNull()
+			.references(() => categories.id),
+		description: text('description'),
+		imageUrl: text('image_url'),
+		videoUrl: text('video_url'),
+		level: text('level'), // 'beginner' | 'intermediate' | 'advanced' | 'professional' | null
+		contributorName: text('contributor_name'), // Original creator/popularizer of the move
+		createdBy: text('created_by')
+			.notNull()
+			.references(() => user.id), // User who added it to the platform
+		createdAt: integer('created_at', { mode: 'timestamp' }).notNull(),
+		updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull()
+	},
+	(table) => [
+		// Performance: Optimize search by name (used in SearchBar)
+		index('moves_name_idx').on(table.name),
+		// Performance: Optimize joining with categories and filtering (used in +page.server.ts)
+		index('moves_category_id_idx').on(table.categoryId),
+		// Performance: Optimize filtering by difficulty level (used in FilterChips)
+		index('moves_level_idx').on(table.level)
+	]
+);
 
 // Type exports
 export type Session = typeof session.$inferSelect;
