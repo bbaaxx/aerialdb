@@ -44,12 +44,15 @@ export const moves = sqliteTable(
 		updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull()
 	},
 	(table) => [
-		// Performance: Optimize search by name (used in SearchBar)
+		// Performance: Optimize ORDER BY name (used in all listing queries)
+		// Note: LIKE '%...%' patterns cannot use B-tree indexes; full-text search needs FTS5
 		index('moves_name_idx').on(table.name),
-		// Performance: Optimize joining with categories and filtering (used in +page.server.ts)
+		// Performance: Optimize JOIN with categories and WHERE category_id = ? filtering
 		index('moves_category_id_idx').on(table.categoryId),
-		// Performance: Optimize filtering by difficulty level (used in FilterChips)
-		index('moves_level_idx').on(table.level)
+		// Performance: Optimize WHERE level = ? filtering (used in FilterChips)
+		index('moves_level_idx').on(table.level),
+		// Performance: Optimize ORDER BY created_at DESC for featured move query
+		index('moves_created_at_idx').on(table.createdAt)
 	]
 );
 
