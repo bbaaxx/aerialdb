@@ -15,6 +15,13 @@
       "when": 1775095895126,
       "tag": "0001_premium_molten_man",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1775521340250,
+      "tag": "0002_careless_quicksilver",
+      "breakpoints": true
     }
   ]
 }
