@@ -3,6 +3,11 @@ import { getDb } from '$lib/server/db';
 import type { RequestHandler } from './$types';
 
 export const GET: RequestHandler = async (event) => {
+	// Security check: Only allow authenticated users to test database connection
+	if (!event.locals.user) {
+		return json({ error: 'Unauthorized' }, { status: 401 });
+	}
+
 	try {
 		const db = getDb(event);
 
