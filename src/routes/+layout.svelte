@@ -1,8 +1,10 @@
 <script lang="ts">
 	import './layout.css';
 	import favicon from '$lib/assets/favicon.svg';
+	import Header from '$lib/components/Header.svelte';
+	import type { LayoutData } from './$types';
 
-	const { children } = $props();
+	const { children, data }: { children: any; data: LayoutData } = $props();
 </script>
 
 <svelte:head>
@@ -20,5 +22,6 @@
 </svelte:head>
 
 <div class="min-h-screen bg-surface-container-low font-sans text-on-surface">
+	<Header user={data.user} />
 	{@render children()}
 </div>

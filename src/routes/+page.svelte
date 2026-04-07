@@ -1,8 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { navigating } from '$app/stores';
-	import Header from '$lib/components/Header.svelte';
-	import SearchBar from '$lib/components/SearchBar.svelte';
 	import FilterChips from '$lib/components/FilterChips.svelte';
 	import HeroBanner from '$lib/components/HeroBanner.svelte';
 	import MoveCard from '$lib/components/MoveCard.svelte';
@@ -12,33 +10,18 @@
 	let { data }: { data: PageData } = $props();
 
 	// Filter state - initialized from URL params (server data)
-	let searchQuery = $state(data.searchQuery);
 	let selectedBaseTechnique = $state<string | null>(data.categoryFilter || null);
 	let selectedLevel = $state<string | null>(data.levelFilter || null);
 	let favoriteIds = $state<Set<string>>(new Set());
 
-	// Debounce timer for search input
-	let searchTimeout: ReturnType<typeof setTimeout> | null = null;
-
 	// Update URL when filters change -> triggers server load -> data updates
 	function updateFilters() {
 		const params = new URLSearchParams();
-		if (searchQuery) params.set('q', searchQuery);
+		if (data.searchQuery) params.set('q', data.searchQuery);
 		if (selectedBaseTechnique) params.set('category', selectedBaseTechnique);
 		if (selectedLevel) params.set('level', selectedLevel);
 		const qs = params.toString();
 		goto(qs ? `/?${qs}` : '/', { replaceState: true, noScroll: true });
-	}
-
-	function handleSearch(value: string) {
-		searchQuery = value;
-		if (searchTimeout) clearTimeout(searchTimeout);
-		searchTimeout = setTimeout(() => updateFilters(), 300);
-	}
-
-	function handleClearSearch() {
-		searchQuery = '';
-		updateFilters();
 	}
 
 	function handleSelectBaseTechnique(id: string | null) {
@@ -66,14 +49,7 @@
 	<meta name="description" content="Browse and search aerial acrobatics moves" />
 </svelte:head>
 
-<Header user={data.user} />
-
 <main class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-	<!-- Search -->
-	<div class="mb-6">
-		<SearchBar value={searchQuery} oninput={handleSearch} onclear={handleClearSearch} />
-	</div>
-
 	<!-- Filter Chips -->
 	<div class="mb-8">
 		<FilterChips
@@ -128,7 +104,6 @@
 			<button
 				type="button"
 				onclick={() => {
-					searchQuery = '';
 					selectedBaseTechnique = null;
 					selectedLevel = null;
 					goto('/');
