@@ -15,7 +15,12 @@
 	>
 		<div class="flex items-center justify-between">
 			<!-- Logo -->
-			<a href="/" class="font-serif text-2xl text-white transition hover:opacity-90"> AerialDB </a>
+			<a
+				href="/"
+				class="rounded-lg font-serif text-2xl text-white transition hover:opacity-90 focus-visible:ring-2 focus-visible:ring-accent-purple focus-visible:outline-none"
+			>
+				AerialDB
+			</a>
 
 			<!-- Auth section -->
 			<div class="flex items-center gap-3">
@@ -25,7 +30,7 @@
 					</span>
 					<a
 						href="/auth/logout"
-						class="flex items-center gap-1.5 text-sm text-primary-light transition hover:text-white"
+						class="flex items-center gap-1.5 rounded-lg text-sm text-primary-light transition hover:text-white focus-visible:ring-2 focus-visible:ring-accent-purple focus-visible:outline-none"
 					>
 						<LogOut size={14} />
 						<span class="hidden sm:inline">Sign Out</span>
@@ -33,7 +38,7 @@
 				{:else}
 					<a
 						href="/auth/signup"
-						class="rounded-lg bg-gradient-to-r from-purple-500 to-indigo-500 px-5 py-2 text-sm font-medium text-white shadow-[0_0_15px_rgba(138,99,248,0.5)] transition hover:shadow-[0_0_20px_rgba(138,99,248,0.6)]"
+						class="rounded-lg bg-gradient-to-r from-purple-500 to-indigo-500 px-5 py-2 text-sm font-medium text-white shadow-[0_0_15px_rgba(138,99,248,0.5)] transition hover:shadow-[0_0_20px_rgba(138,99,248,0.6)] focus-visible:ring-2 focus-visible:ring-white focus-visible:outline-none"
 					>
 						Sign Up
 					</a>
