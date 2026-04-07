@@ -53,6 +53,8 @@ describe('MoveCard', () => {
 			const img = container.querySelector('img');
 			expect(img).not.toBeNull();
 			expect(img?.getAttribute('src')).toBe('https://example.com/star.jpg');
+			expect(img?.getAttribute('loading')).toBe('lazy');
+			expect(img?.getAttribute('decoding')).toBe('async');
 		});
 
 		it('renders placeholder when imageUrl is null', async () => {

@@ -40,7 +40,13 @@
 >
 	<div class="relative aspect-video overflow-hidden rounded-lg bg-gray-800">
 		{#if move.imageUrl}
-			<img src={move.imageUrl} alt={move.name} class="h-full w-full object-cover" />
+			<img
+				src={move.imageUrl}
+				alt={move.name}
+				class="h-full w-full object-cover"
+				loading="lazy"
+				decoding="async"
+			/>
 		{:else}
 			<div class="flex h-full w-full items-center justify-center text-gray-600">
 				<Image size={48} />
