@@ -33,3 +33,4 @@ src/lib/paraglide
 # Uploads
 /static/uploads/*
 !/static/uploads/.gitkeep
+.omc/

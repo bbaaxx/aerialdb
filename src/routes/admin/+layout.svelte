@@ -4,10 +4,10 @@
 	let { data, children }: { data: LayoutData; children: any } = $props();
 </script>
 
-<div class="min-h-screen bg-[#1A1C29]">
+<div class="min-h-screen bg-surface-container-low">
 	<!-- Admin Header with glassmorphism -->
 	<header
-		class="sticky top-0 z-50 border-b border-white/5"
+		class="sticky top-0 z-50"
 		style="background: linear-gradient(180deg, rgba(26,28,41,0.95) 0%, rgba(26,28,41,0.80) 100%); backdrop-filter: blur(12px);"
 	>
 		<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -19,26 +19,26 @@
 					<nav class="hidden space-x-4 sm:flex">
 						<a
 							href="/admin"
-							class="rounded-lg px-3 py-2 text-sm font-medium text-[#A0A5C0] transition hover:bg-white/5 hover:text-white"
+							class="rounded-lg px-3 py-2 text-sm font-medium text-on-surface-variant transition hover:bg-surface-container hover:text-on-surface"
 						>
 							Dashboard
 						</a>
 						<a
 							href="/admin/moves/new"
-							class="rounded-lg px-3 py-2 text-sm font-medium text-[#A0A5C0] transition hover:bg-white/5 hover:text-white"
+							class="rounded-lg px-3 py-2 text-sm font-medium text-on-surface-variant transition hover:bg-surface-container hover:text-on-surface"
 						>
 							Add Move
 						</a>
 					</nav>
 				</div>
 				<div class="flex items-center gap-4">
-					<span class="text-sm text-[#A0A5C0]">
+					<span class="text-sm text-on-surface-variant">
 						{data.user.username}
 					</span>
 					<form method="POST" action="/auth/logout">
 						<button
 							type="submit"
-							class="rounded-lg border border-gray-700 px-3 py-1.5 text-sm font-medium text-[#A0A5C0] transition hover:bg-white/5 hover:text-white"
+							class="rounded-lg border border-outline-variant/15 px-3 py-1.5 text-sm font-medium text-on-surface-variant transition hover:bg-surface-container hover:text-on-surface"
 						>
 							Logout
 						</button>

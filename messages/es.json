@@ -2,5 +2,19 @@
 	"$schema": "https://inlang.com/schema/inlang-message-format",
 	"hello_world": "Hello, {name} from es!",
 	"baseTechnique": "Técnnica Base",
-	"allBaseTechniques": "Todas las Técnicas Base"
+	"allBaseTechniques": "Todas las Técnicas Base",
+
+	"nav_library": "Biblioteca",
+	"nav_tutorials": "Tutoriales",
+	"nav_theory": "Teoría",
+	"nav_community": "Comunidad",
+	"nav_upload_move": "Subir Movimiento",
+	"nav_search_placeholder": "Buscar movimientos, artistas, técnicas...",
+	"nav_sign_up": "Registrarse",
+	"menu_profile": "Perfil",
+	"menu_my_library": "Mi Biblioteca",
+	"menu_sign_out": "Cerrar Sesión",
+	"coming_soon_title": "Próximamente",
+	"coming_soon_message": "Esta página está en construcción. ¡Vuelve pronto!",
+	"back_to_library": "Volver a la Biblioteca"
 }
