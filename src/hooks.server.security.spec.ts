@@ -2,20 +2,53 @@ import { describe, it, expect, vi } from 'vitest';
 import { handleSecurityHeaders } from './hooks.server';
 
 describe('hooks.server security headers', () => {
-	it('adds security headers to the response', async () => {
-		// Mock event
+	const expectedHeaders = {
+		'X-Frame-Options': 'SAMEORIGIN',
+		'X-Content-Type-Options': 'nosniff',
+		'Referrer-Policy': 'strict-origin-when-cross-origin',
+		'Permissions-Policy': 'geolocation=(), camera=(), microphone=(), payment=()',
+		'Strict-Transport-Security': 'max-age=31536000; includeSubDomains'
+	};
+
+	async function callHook(response: Response) {
 		const event = {} as any;
+		const resolve = vi.fn().mockResolvedValue(response);
+		return handleSecurityHeaders({ event, resolve });
+	}
 
-		// Mock resolve function that returns a basic response
-		const resolve = vi.fn().mockResolvedValue(new Response('OK'));
+	function assertSecurityHeaders(response: Response) {
+		for (const [header, value] of Object.entries(expectedHeaders)) {
+			expect(response.headers.get(header)).toBe(value);
+		}
+		expect(response.headers.get('Content-Security-Policy')).toContain("default-src 'self'");
+		expect(response.headers.get('Content-Security-Policy')).toContain("frame-src https://www.youtube.com");
+	}
 
-		const response = await handleSecurityHeaders({ event, resolve });
+	it('adds security headers to a successful response', async () => {
+		const response = await callHook(new Response('OK'));
+		assertSecurityHeaders(response);
+	});
 
-		expect(response.headers.get('X-Frame-Options')).toBe('DENY');
-		expect(response.headers.get('X-Content-Type-Options')).toBe('nosniff');
-		expect(response.headers.get('Referrer-Policy')).toBe('strict-origin-when-cross-origin');
-		expect(response.headers.get('Permissions-Policy')).toBe(
-			'geolocation=(), camera=(), microphone=(), payment=()'
+	it('adds security headers to an error response', async () => {
+		const response = await callHook(new Response('Not Found', { status: 404 }));
+		assertSecurityHeaders(response);
+	});
+
+	it('adds security headers to a JSON response', async () => {
+		const response = await callHook(
+			new Response(JSON.stringify({ error: 'Unauthorized' }), {
+				status: 401,
+				headers: { 'Content-Type': 'application/json' }
+			})
 		);
+		assertSecurityHeaders(response);
+	});
+
+	it('adds security headers to a redirect response', async () => {
+		const response = await callHook(
+			new Response(null, { status: 302, headers: { Location: '/login' } })
+		);
+		assertSecurityHeaders(response);
+		expect(response.headers.get('Location')).toBe('/login');
 	});
 });
