@@ -24,8 +24,11 @@
 
 <div class="flex flex-col flex-wrap justify-center gap-x-12 gap-y-6 sm:flex-row">
 	<!-- Base Technique -->
-	<div>
-		<p class="mb-2 text-xs font-semibold tracking-wider text-primary-light uppercase">
+	<div role="group" aria-labelledby="base-technique-label">
+		<p
+			id="base-technique-label"
+			class="mb-2 text-xs font-semibold tracking-wider text-primary-light uppercase"
+		>
 			Base Technique
 		</p>
 		<div class="flex flex-wrap gap-2">
@@ -44,8 +47,13 @@
 	</div>
 
 	<!-- Level -->
-	<div>
-		<p class="mb-2 text-xs font-semibold tracking-wider text-primary-light uppercase">Level</p>
+	<div role="group" aria-labelledby="level-label">
+		<p
+			id="level-label"
+			class="mb-2 text-xs font-semibold tracking-wider text-primary-light uppercase"
+		>
+			Level
+		</p>
 		<div class="flex flex-wrap gap-2">
 			{#each levels as level (level)}
 				<button
