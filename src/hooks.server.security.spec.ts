@@ -21,7 +21,9 @@ describe('hooks.server security headers', () => {
 			expect(response.headers.get(header)).toBe(value);
 		}
 		expect(response.headers.get('Content-Security-Policy')).toContain("default-src 'self'");
-		expect(response.headers.get('Content-Security-Policy')).toContain("frame-src https://www.youtube.com");
+		expect(response.headers.get('Content-Security-Policy')).toContain(
+			'frame-src https://www.youtube.com'
+		);
 	}
 
 	it('adds security headers to a successful response', async () => {
