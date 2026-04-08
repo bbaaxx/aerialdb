@@ -2,7 +2,7 @@ import { json } from '@sveltejs/kit';
 import { getDb } from '$lib/server/db';
 import { type MoveWithCategoryRaw } from '$lib/server/db/types';
 import { moves, categories } from '$lib/server/db/schema';
-import { eq, like, or } from 'drizzle-orm';
+import { and, eq, like, or } from 'drizzle-orm';
 import type { RequestHandler } from './$types';
 
 export const GET: RequestHandler = async (event) => {
@@ -30,6 +30,9 @@ export const GET: RequestHandler = async (event) => {
 	}
 
 	// Fetch moves with category info
+	// PERFORMANCE: Using 'and(...conditions)' ensures additive filtering.
+	// This narrows the result set efficiently when both search queries and
+	// category filters are applied, minimizing data transfer and memory usage.
 	// Type assertion needed: getDb() returns a union type (D1 | libsql)
 	// that breaks .select({fields}) overload resolution
 	const movesDataRaw = (await (db as any)
@@ -45,7 +48,7 @@ export const GET: RequestHandler = async (event) => {
 		})
 		.from(moves)
 		.innerJoin(categories, eq(moves.categoryId, categories.id))
-		.where(conditions.length > 0 ? or(...conditions) : undefined)
+		.where(conditions.length > 0 ? and(...conditions) : undefined)
 		.orderBy(moves.name)) as MoveWithCategoryRaw[];
 
 	const movesData = movesDataRaw.map((move) => ({

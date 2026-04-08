@@ -1,7 +1,7 @@
 import { getDb } from '$lib/server/db';
 import { type MoveWithCategoryRaw } from '$lib/server/db/types';
 import { moves, categories } from '$lib/server/db/schema';
-import { desc, eq, isNotNull, like, or } from 'drizzle-orm';
+import { and, desc, eq, isNotNull, like, or } from 'drizzle-orm';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async (event) => {
@@ -28,6 +28,9 @@ export const load: PageServerLoad = async (event) => {
 	}
 
 	// Fetch moves with category info
+	// PERFORMANCE: Using 'and(...conditions)' ensures additive filtering.
+	// This prevents the retrieval of excessively large result sets when multiple filters
+	// are active, reducing database load, network transfer, and client-side processing.
 	// Type assertion needed: getDb() returns a union type (D1 | libsql)
 	// that breaks .select({fields}) overload resolution
 	const movesDataRaw = (await (db as any)
@@ -44,7 +47,7 @@ export const load: PageServerLoad = async (event) => {
 		})
 		.from(moves)
 		.innerJoin(categories, eq(moves.categoryId, categories.id))
-		.where(conditions.length > 0 ? or(...conditions) : undefined)
+		.where(conditions.length > 0 ? and(...conditions) : undefined)
 		.orderBy(moves.name)) as MoveWithCategoryRaw[];
 
 	const movesData = movesDataRaw.map((move) => ({
