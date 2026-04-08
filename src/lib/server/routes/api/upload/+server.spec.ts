@@ -14,13 +14,16 @@ describe('api/upload/+server', () => {
 			};
 		});
 
-		function createMockEvent(platform: any, body?: BodyInit) {
+		function createMockEvent(platform: any, body?: BodyInit, user: any = { id: 'user-1' }) {
 			return {
 				request: new Request('http://localhost/api/upload', {
 					method: 'POST',
 					body
 				}),
-				platform
+				platform,
+				locals: {
+					user
+				}
 			};
 		}
 
@@ -208,6 +211,20 @@ describe('api/upload/+server', () => {
 			expect(response.status).toBe(200);
 			const urlPath = body.url.replace('https://custom-domain.example.com/', '');
 			expect(urlPath).toMatch(/^.+\.png$/);
+		});
+
+		it('rejects unauthenticated requests', async () => {
+			// Arrange
+			const formData = new FormData();
+			const mockEvent = createMockEvent(mockPlatform, formData, null);
+
+			// Act
+			const response = await POST(mockEvent as any);
+			const body = await response.json();
+
+			// Assert
+			expect(response.status).toBe(401);
+			expect(body.error).toBe('Unauthorized: Authentication required');
 		});
 	});
 });

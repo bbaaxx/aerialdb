@@ -1,7 +1,12 @@
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 
-export const POST: RequestHandler = async ({ request, platform }) => {
+export const POST: RequestHandler = async ({ request, platform, locals }) => {
+	// Authentication check: Only logged-in users can upload images
+	if (!locals.user) {
+		return json({ error: 'Unauthorized: Authentication required' }, { status: 401 });
+	}
+
 	const formData = await request.formData();
 	const file = formData.get('image') as File;
 
