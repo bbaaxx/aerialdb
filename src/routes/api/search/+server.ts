@@ -2,7 +2,7 @@ import { json } from '@sveltejs/kit';
 import { getDb } from '$lib/server/db';
 import { type MoveWithCategoryRaw } from '$lib/server/db/types';
 import { moves, categories } from '$lib/server/db/schema';
-import { eq, like, or } from 'drizzle-orm';
+import { and, eq, like, or } from 'drizzle-orm';
 import type { RequestHandler } from './$types';
 
 export const GET: RequestHandler = async (event) => {
@@ -45,7 +45,8 @@ export const GET: RequestHandler = async (event) => {
 		})
 		.from(moves)
 		.innerJoin(categories, eq(moves.categoryId, categories.id))
-		.where(conditions.length > 0 ? or(...conditions) : undefined)
+		// Performance & Correctness: Use 'and' for additive filtering (search term AND category filter)
+		.where(conditions.length > 0 ? and(...conditions) : undefined)
 		.orderBy(moves.name)) as MoveWithCategoryRaw[];
 
 	const movesData = movesDataRaw.map((move) => ({

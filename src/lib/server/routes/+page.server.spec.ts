@@ -78,21 +78,18 @@ describe('+page.server', () => {
 		}
 
 		// Create a proper Drizzle query builder mock
-		function createQueryBuilderMock(results: any[]) {
-			let resultIndex = 0;
+		function createQueryBuilderMock(result: any) {
 			const queryBuilder = {
 				from: vi.fn().mockReturnThis(),
 				innerJoin: vi.fn().mockReturnThis(),
 				where: vi.fn().mockImplementation(function (this: any) {
-					// Return a thenable that resolves to the next result
+					// Return a thenable that resolves to the result
 					const thenable = {
 						then: (resolve: any) => {
-							const result = results[resultIndex++] || [];
 							return Promise.resolve(result).then(resolve);
 						},
 						orderBy: vi.fn().mockReturnThis(),
 						limit: vi.fn().mockImplementation(function (this: any) {
-							const result = results[resultIndex++] || [];
 							return Promise.resolve(result);
 						})
 					};
@@ -102,26 +99,33 @@ describe('+page.server', () => {
 					// Return a thenable
 					const thenable = {
 						then: (resolve: any) => {
-							const result = results[resultIndex++] || [];
 							return Promise.resolve(result).then(resolve);
 						},
 						limit: vi.fn().mockImplementation(function (this: any) {
-							const result = results[resultIndex++] || [];
 							return Promise.resolve(result);
 						})
 					};
 					return thenable;
+				}),
+				limit: vi.fn().mockImplementation(function (this: any) {
+					return Promise.resolve(result);
 				})
 			};
 			return queryBuilder;
 		}
 
 		function setupMockDb(queryResults: any[]) {
-			const queryBuilder = createQueryBuilderMock(queryResults);
+			let resultIndex = 0;
 
 			mockDb = {
-				select: vi.fn().mockImplementation(() => queryBuilder),
-				from: vi.fn().mockReturnThis(),
+				select: vi.fn().mockImplementation(() => {
+					const result = queryResults[resultIndex++] || [];
+					return createQueryBuilderMock(result);
+				}),
+				from: vi.fn().mockImplementation(() => {
+					const result = queryResults[resultIndex++] || [];
+					return createQueryBuilderMock(result);
+				}),
 				innerJoin: vi.fn().mockReturnThis(),
 				where: vi.fn().mockReturnThis(),
 				orderBy: vi.fn().mockReturnThis()
