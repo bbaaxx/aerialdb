@@ -20,7 +20,10 @@ describe('api/upload/+server', () => {
 					method: 'POST',
 					body
 				}),
-				platform
+				platform,
+				locals: {
+					user: { id: 'test-user', username: 'testuser' }
+				}
 			};
 		}
 

@@ -64,8 +64,13 @@ export const actions: Actions = {
 		const session = await auth.createSession(sessionToken, existingUser.id, db);
 		auth.setSessionTokenCookie(event, sessionToken, session.expiresAt);
 
+		// Security: Validate redirectTo to prevent Open Redirect vulnerabilities
+		// Only allow internal paths (starting with / but not //)
+		const safeRedirectTo =
+			redirectTo && redirectTo.startsWith('/') && !redirectTo.startsWith('//') ? redirectTo : '/';
+
 		// Redirect to the specified URL or home page on successful login
-		return redirect(302, redirectTo || '/');
+		return redirect(302, safeRedirectTo);
 	}
 };
 
