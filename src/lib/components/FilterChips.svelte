@@ -37,8 +37,8 @@
 					type="button"
 					aria-pressed={activeApparatus === category.id}
 					onclick={() => handleApparatusClick(category.id)}
-					aria-pressed={activeApparatus === category.id}
-					class="rounded-full px-4 py-1.5 text-sm transition-all {activeApparatus === category.id
+					class="rounded-full px-4 py-1.5 text-sm transition-all focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none {activeApparatus ===
+					category.id
 						? 'bg-surface-container text-on-surface'
 						: 'text-on-surface-variant hover:bg-surface-container hover:text-on-surface'}"
 				>
@@ -62,8 +62,7 @@
 					type="button"
 					aria-pressed={activeLevel === level.toLowerCase()}
 					onclick={() => handleLevelClick(level)}
-					aria-pressed={activeLevel === level.toLowerCase()}
-					class="rounded-full px-4 py-1.5 text-sm transition-all {activeLevel ===
+					class="rounded-full px-4 py-1.5 text-sm transition-all focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none {activeLevel ===
 					level.toLowerCase()
 						? 'bg-surface-container text-on-surface'
 						: 'text-on-surface-variant hover:bg-surface-container hover:text-on-surface'}"
