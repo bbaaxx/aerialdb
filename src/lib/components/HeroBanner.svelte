@@ -109,7 +109,7 @@
 				<div>
 					<a
 						href="/moves/{move.id}"
-						class="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-purple-500 to-indigo-500 px-6 py-3 font-medium text-white shadow-[0_0_15px_rgba(138,99,248,0.5)] transition hover:scale-105 hover:shadow-[0_0_20px_rgba(138,99,248,0.6)]"
+						class="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-purple-500 to-indigo-500 px-6 py-3 font-medium text-white shadow-[0_0_15px_rgba(138,99,248,0.5)] transition hover:scale-105 hover:shadow-[0_0_20px_rgba(138,99,248,0.6)] focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
 					>
 						Learn More
 						<ChevronRight size={18} />
@@ -132,13 +132,6 @@
 					level.
 				</p>
 			{/if}
-		</div>
-
-		<!-- Carousel dots -->
-		<div class="absolute bottom-4 left-1/2 z-20 hidden -translate-x-1/2 gap-2 sm:flex">
-			<button class="h-2 w-2 rounded-full bg-white" aria-label="Slide 1"></button>
-			<button class="h-2 w-2 rounded-full bg-white/30" aria-label="Slide 2"></button>
-			<button class="h-2 w-2 rounded-full bg-white/30" aria-label="Slide 3"></button>
 		</div>
 	</div>
 </div>
