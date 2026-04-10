@@ -27,25 +27,47 @@ export const load: PageServerLoad = async (event) => {
 		conditions.push(eq(moves.level, levelFilter));
 	}
 
-	// Fetch moves with category info
+	// Performance: Fetch moves, categories, and featured move in parallel to reduce TTFB
 	// Type assertion needed: getDb() returns a union type (D1 | libsql)
 	// that breaks .select({fields}) overload resolution
-	const movesDataRaw = (await (db as any)
-		.select({
-			id: moves.id,
-			name: moves.name,
-			description: moves.description,
-			imageUrl: moves.imageUrl,
-			videoUrl: moves.videoUrl,
-			level: moves.level,
-			contributorName: moves.contributorName,
-			categoryId: categories.id,
-			categoryName: categories.name
-		})
-		.from(moves)
-		.innerJoin(categories, eq(moves.categoryId, categories.id))
-		.where(conditions.length > 0 ? or(...conditions) : undefined)
-		.orderBy(moves.name)) as MoveWithCategoryRaw[];
+	const [movesDataRaw, allCategories, [featuredMoveRaw]] = (await Promise.all([
+		(db as any)
+			.select({
+				id: moves.id,
+				name: moves.name,
+				description: moves.description,
+				imageUrl: moves.imageUrl,
+				videoUrl: moves.videoUrl,
+				level: moves.level,
+				contributorName: moves.contributorName,
+				categoryId: categories.id,
+				categoryName: categories.name
+			})
+			.from(moves)
+			.innerJoin(categories, eq(moves.categoryId, categories.id))
+			.where(conditions.length > 0 ? or(...conditions) : undefined)
+			.orderBy(moves.name),
+
+		db.select().from(categories).orderBy(categories.name),
+
+		(db as any)
+			.select({
+				id: moves.id,
+				name: moves.name,
+				description: moves.description,
+				imageUrl: moves.imageUrl,
+				videoUrl: moves.videoUrl,
+				level: moves.level,
+				contributorName: moves.contributorName,
+				categoryId: categories.id,
+				categoryName: categories.name
+			})
+			.from(moves)
+			.innerJoin(categories, eq(moves.categoryId, categories.id))
+			.where(isNotNull(moves.imageUrl))
+			.orderBy(desc(moves.createdAt))
+			.limit(1)
+	])) as [MoveWithCategoryRaw[], (typeof categories.$inferSelect)[], MoveWithCategoryRaw[]];
 
 	const movesData = movesDataRaw.map((move) => ({
 		id: move.id,
@@ -60,28 +82,6 @@ export const load: PageServerLoad = async (event) => {
 			name: move.categoryName
 		}
 	}));
-
-	// Fetch all categories for filter
-	const allCategories = await db.select().from(categories).orderBy(categories.name);
-
-	// Fetch a featured move (independent of search/filter params)
-	const [featuredMoveRaw] = (await (db as any)
-		.select({
-			id: moves.id,
-			name: moves.name,
-			description: moves.description,
-			imageUrl: moves.imageUrl,
-			videoUrl: moves.videoUrl,
-			level: moves.level,
-			contributorName: moves.contributorName,
-			categoryId: categories.id,
-			categoryName: categories.name
-		})
-		.from(moves)
-		.innerJoin(categories, eq(moves.categoryId, categories.id))
-		.where(isNotNull(moves.imageUrl))
-		.orderBy(desc(moves.createdAt))
-		.limit(1)) as MoveWithCategoryRaw[];
 
 	const featuredMove = featuredMoveRaw
 		? {
