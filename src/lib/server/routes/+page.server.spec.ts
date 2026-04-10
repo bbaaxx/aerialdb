@@ -78,49 +78,34 @@ describe('+page.server', () => {
 		}
 
 		// Create a proper Drizzle query builder mock
-		function createQueryBuilderMock(results: any[]) {
-			let resultIndex = 0;
+		function createQueryBuilderMock(result: any) {
 			const queryBuilder = {
 				from: vi.fn().mockReturnThis(),
 				innerJoin: vi.fn().mockReturnThis(),
-				where: vi.fn().mockImplementation(function (this: any) {
-					// Return a thenable that resolves to the next result
-					const thenable = {
-						then: (resolve: any) => {
-							const result = results[resultIndex++] || [];
-							return Promise.resolve(result).then(resolve);
-						},
-						orderBy: vi.fn().mockReturnThis(),
-						limit: vi.fn().mockImplementation(function (this: any) {
-							const result = results[resultIndex++] || [];
-							return Promise.resolve(result);
-						})
-					};
-					return thenable;
-				}),
-				orderBy: vi.fn().mockImplementation(function (this: any) {
-					// Return a thenable
-					const thenable = {
-						then: (resolve: any) => {
-							const result = results[resultIndex++] || [];
-							return Promise.resolve(result).then(resolve);
-						},
-						limit: vi.fn().mockImplementation(function (this: any) {
-							const result = results[resultIndex++] || [];
-							return Promise.resolve(result);
-						})
-					};
-					return thenable;
-				})
+				where: vi.fn().mockReturnThis(),
+				orderBy: vi.fn().mockReturnThis(),
+				limit: vi.fn().mockReturnThis(),
+				// Make it thenable so it can be awaited
+				then: (resolve: any) => {
+					return Promise.resolve(result).then(resolve);
+				}
 			};
+
+			// Ensure where, orderBy, limit also return the same thenable-compatible object
+			queryBuilder.where.mockReturnValue(queryBuilder);
+			queryBuilder.orderBy.mockReturnValue(queryBuilder);
+			queryBuilder.limit.mockReturnValue(queryBuilder);
+
 			return queryBuilder;
 		}
 
 		function setupMockDb(queryResults: any[]) {
-			const queryBuilder = createQueryBuilderMock(queryResults);
+			let resultIndex = 0;
 
 			mockDb = {
-				select: vi.fn().mockImplementation(() => queryBuilder),
+				select: vi.fn().mockImplementation(() => {
+					return createQueryBuilderMock(queryResults[resultIndex++]);
+				}),
 				from: vi.fn().mockReturnThis(),
 				innerJoin: vi.fn().mockReturnThis(),
 				where: vi.fn().mockReturnThis(),
