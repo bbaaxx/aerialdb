@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { PageData } from './$types';
-	import { ChevronLeft, Pencil, Image, Share2, Check } from 'lucide-svelte';
+	import { ChevronLeft, Pencil, ImageOff, Share2, Check } from 'lucide-svelte';
 
 	let { data }: { data: PageData } = $props();
 	let copied = $state(false);
@@ -56,7 +56,7 @@
 				type="button"
 				onclick={handleShare}
 				class="inline-flex items-center gap-2 rounded-lg px-3 py-2 text-base font-medium text-on-surface-variant transition-all hover:bg-surface-container hover:text-on-surface focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none active:scale-95"
-				aria-label="Share move"
+				aria-label={copied ? 'Copied to clipboard' : 'Share this move'}
 			>
 				{#if copied}
 					<Check size={20} class="text-teal-400" aria-hidden="true" />
@@ -121,7 +121,7 @@
 			{:else if !youtubeId}
 				<div class="flex aspect-video items-center justify-center rounded-lg bg-surface-container">
 					<div class="text-center">
-						<Image size={64} class="mx-auto text-on-surface-variant" aria-hidden="true" />
+						<ImageOff size={64} class="mx-auto text-on-surface-variant" aria-hidden="true" />
 						<p class="mt-2 text-sm text-on-surface-variant">No media available</p>
 					</div>
 				</div>
