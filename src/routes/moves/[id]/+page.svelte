@@ -1,7 +1,19 @@
 <script lang="ts">
 	import type { PageData } from './$types';
+	import { ChevronLeft, Pencil, Image, Share2, Check } from 'lucide-svelte';
 
 	let { data }: { data: PageData } = $props();
+	let copied = $state(false);
+
+	async function handleShare() {
+		try {
+			await navigator.clipboard.writeText(window.location.href);
+			copied = true;
+			setTimeout(() => (copied = false), 2000);
+		} catch (err) {
+			console.error('Failed to copy: ', err);
+		}
+	}
 
 	// Extract YouTube video ID from URL
 	function getYouTubeId(url: string | null): string | null {
@@ -29,17 +41,31 @@
 		class="sticky top-0 z-10 bg-surface-container-low/95 backdrop-blur"
 		style="backdrop-filter: blur(12px);"
 	>
-		<div class="mx-auto max-w-7xl px-4 py-4 sm:px-6 sm:py-6 lg:px-8">
+		<div
+			class="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 sm:py-6 lg:px-8"
+		>
 			<a
 				href="/"
-				class="inline-flex items-center gap-2 rounded-lg px-3 py-2 text-base font-medium text-on-surface-variant transition-all hover:bg-surface-container hover:text-on-surface active:scale-95"
+				class="inline-flex items-center gap-2 rounded-lg px-3 py-2 text-base font-medium text-on-surface-variant transition-all hover:bg-surface-container hover:text-on-surface focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none active:scale-95"
 			>
-				<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"
-					></path>
-				</svg>
+				<ChevronLeft size={20} aria-hidden="true" />
 				Back
 			</a>
+
+			<button
+				type="button"
+				onclick={handleShare}
+				class="inline-flex items-center gap-2 rounded-lg px-3 py-2 text-base font-medium text-on-surface-variant transition-all hover:bg-surface-container hover:text-on-surface focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none active:scale-95"
+				aria-label="Share move"
+			>
+				{#if copied}
+					<Check size={20} class="text-teal-400" aria-hidden="true" />
+					<span class="text-teal-400">Copied!</span>
+				{:else}
+					<Share2 size={20} aria-hidden="true" />
+					<span>Share</span>
+				{/if}
+			</button>
 		</div>
 	</header>
 
@@ -95,19 +121,7 @@
 			{:else if !youtubeId}
 				<div class="flex aspect-video items-center justify-center rounded-lg bg-surface-container">
 					<div class="text-center">
-						<svg
-							class="mx-auto h-16 w-16 text-on-surface-variant"
-							fill="none"
-							stroke="currentColor"
-							viewBox="0 0 24 24"
-						>
-							<path
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								stroke-width="2"
-								d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-							></path>
-						</svg>
+						<Image size={64} class="mx-auto text-on-surface-variant" aria-hidden="true" />
 						<p class="mt-2 text-sm text-on-surface-variant">No media available</p>
 					</div>
 				</div>
@@ -133,16 +147,9 @@
 		<div class="mt-6 sm:mt-8">
 			<a
 				href="/admin/moves/{data.move.id}/edit"
-				class="inline-flex items-center gap-2 rounded-lg px-4 py-3 text-base font-medium text-primary transition-all hover:bg-primary/10 active:scale-95"
+				class="inline-flex items-center gap-2 rounded-lg px-4 py-3 text-base font-medium text-primary transition-all hover:bg-primary/10 focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none active:scale-95"
 			>
-				<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-					<path
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						stroke-width="2"
-						d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-					></path>
-				</svg>
+				<Pencil size={20} aria-hidden="true" />
 				Edit this move
 			</a>
 		</div>
