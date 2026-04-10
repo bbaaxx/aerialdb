@@ -1,7 +1,7 @@
 import { getDb } from '$lib/server/db';
 import { type MoveWithCategoryRaw } from '$lib/server/db/types';
 import { moves, categories } from '$lib/server/db/schema';
-import { desc, eq, isNotNull, like, or } from 'drizzle-orm';
+import { desc, eq, isNotNull, like, and } from 'drizzle-orm';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async (event) => {
@@ -45,7 +45,7 @@ export const load: PageServerLoad = async (event) => {
 			})
 			.from(moves)
 			.innerJoin(categories, eq(moves.categoryId, categories.id))
-			.where(conditions.length > 0 ? or(...conditions) : undefined)
+			.where(conditions.length > 0 ? and(...conditions) : undefined)
 			.orderBy(moves.name),
 
 		db.select().from(categories).orderBy(categories.name),
