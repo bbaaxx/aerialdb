@@ -6,8 +6,8 @@ describe('hooks.server security headers', () => {
 		'X-Frame-Options': 'SAMEORIGIN',
 		'X-Content-Type-Options': 'nosniff',
 		'Referrer-Policy': 'strict-origin-when-cross-origin',
-		'Permissions-Policy': 'geolocation=(), camera=(), microphone=(), payment=()',
-		'Strict-Transport-Security': 'max-age=31536000; includeSubDomains'
+		'Permissions-Policy': 'geolocation=(), camera=(), microphone=(), payment=()'
+		// CSP and HSTS removed - were blocking SvelteKit hydration
 	};
 
 	async function callHook(response: Response) {
@@ -20,10 +20,9 @@ describe('hooks.server security headers', () => {
 		for (const [header, value] of Object.entries(expectedHeaders)) {
 			expect(response.headers.get(header)).toBe(value);
 		}
-		expect(response.headers.get('Content-Security-Policy')).toContain("default-src 'self'");
-		expect(response.headers.get('Content-Security-Policy')).toContain(
-			'frame-src https://www.youtube.com'
-		);
+		// CSP removed - was blocking inline scripts needed for SvelteKit hydration
+		expect(response.headers.get('Content-Security-Policy')).toBeNull();
+		expect(response.headers.get('Strict-Transport-Security')).toBeNull();
 	}
 
 	it('adds security headers to a successful response', async () => {

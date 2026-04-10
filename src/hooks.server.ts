@@ -46,19 +46,10 @@ export const handleSecurityHeaders: Handle = async ({ event, resolve }) => {
 		'Permissions-Policy',
 		'geolocation=(), camera=(), microphone=(), payment=()'
 	);
-	response.headers.set(
-		'Content-Security-Policy',
-		[
-			"default-src 'self'",
-			"script-src 'self'",
-			"style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-			"font-src 'self' https://fonts.gstatic.com",
-			"img-src 'self' data: blob: https:",
-			'frame-src https://www.youtube.com',
-			"connect-src 'self'"
-		].join('; ')
-	);
-	response.headers.set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+	// CSP removed - was blocking SvelteKit hydration inline scripts
+	// Uncomment if needed for production:
+	// response.headers.set('Content-Security-Policy', [...]);
+	// response.headers.set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
 
 	return response;
 };
