@@ -210,7 +210,7 @@ if (!move) throw error(404, 'Move not found');
 ### Authentication & Authorization
 
 - `event.locals.user` and `event.locals.session` are populated by `hooks.server.ts`
-- Admin routes check auth in `+layout.server.ts` — do not duplicate guards in every `+page.server.ts`
+- Admin routes check auth in `+layout.server.ts` load function. **Important:** Layout guards do not automatically protect form actions (`+page.server.ts` actions); these must explicitly check `event.locals.user`.
 - Never store plaintext passwords; use `hashPassword` / `verifyPassword` from `$lib/server/password`
 - Session token is stored as SHA-256 hash in DB; raw token lives only in the cookie
 
