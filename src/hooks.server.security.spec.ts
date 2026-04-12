@@ -6,8 +6,8 @@ describe('hooks.server security headers', () => {
 		'X-Frame-Options': 'SAMEORIGIN',
 		'X-Content-Type-Options': 'nosniff',
 		'Referrer-Policy': 'strict-origin-when-cross-origin',
-		'Permissions-Policy': 'geolocation=(), camera=(), microphone=(), payment=()'
-		// CSP and HSTS removed - were blocking SvelteKit hydration
+		'Permissions-Policy': 'geolocation=(), camera=(), microphone=(), payment=()',
+		'Strict-Transport-Security': 'max-age=31536000; includeSubDomains'
 	};
 
 	async function callHook(response: Response) {
@@ -22,7 +22,6 @@ describe('hooks.server security headers', () => {
 		}
 		// CSP removed - was blocking inline scripts needed for SvelteKit hydration
 		expect(response.headers.get('Content-Security-Policy')).toBeNull();
-		expect(response.headers.get('Strict-Transport-Security')).toBeNull();
 	}
 
 	it('adds security headers to a successful response', async () => {
