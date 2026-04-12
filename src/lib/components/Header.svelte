@@ -107,6 +107,20 @@
 			if (mobileMenuOpen) {
 				mobileMenuOpen = false;
 			}
+			return;
+		}
+
+		// Search shortcut (/, Ctrl+K, Meta+K)
+		const isInput =
+			e.target instanceof HTMLInputElement ||
+			e.target instanceof HTMLTextAreaElement ||
+			(e.target as HTMLElement).isContentEditable;
+
+		if (!isInput) {
+			if (e.key === '/' || ((e.ctrlKey || e.metaKey) && e.key === 'k')) {
+				e.preventDefault();
+				toggleSearch();
+			}
 		}
 	}
 </script>
@@ -149,7 +163,7 @@
 					type="button"
 					onclick={toggleSearch}
 					class="rounded-lg p-2 text-on-surface-variant transition hover:bg-surface-container-high/50 hover:text-on-surface"
-					aria-label={m.nav_search_placeholder()}
+					aria-label="{m.nav_search_placeholder()} (/)"
 				>
 					{#if searchOpen}
 						<X size={20} />
