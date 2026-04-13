@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { handleSecurityHeaders } from './hooks.server';
+import { handleSecurityHeaders, handleAdminGuard } from './hooks.server';
 
 describe('hooks.server security headers', () => {
 	const expectedHeaders = {
@@ -51,5 +51,23 @@ describe('hooks.server security headers', () => {
 		);
 		assertSecurityHeaders(response);
 		expect(response.headers.get('Location')).toBe('/login');
+	});
+});
+
+describe('hooks.server admin guard', () => {
+	it('redirects unauthenticated users from /admin routes', async () => {
+		const event = {
+			url: new URL('http://localhost/admin/moves'),
+			locals: { user: null }
+		} as any;
+		const resolve = vi.fn();
+
+		try {
+			await handleAdminGuard({ event, resolve });
+			expect.fail('Should have thrown a redirect');
+		} catch (e: any) {
+			expect(e.status).toBe(302);
+			expect(e.location).toBe('/auth/login?redirectTo=%2Fadmin%2Fmoves');
+		}
 	});
 });
