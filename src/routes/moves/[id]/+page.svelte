@@ -116,7 +116,14 @@
 			<!-- Image -->
 			{#if data.move.imageUrl}
 				<div class="overflow-hidden rounded-lg">
-					<img src={data.move.imageUrl} alt={data.move.name} class="w-full rounded-lg" />
+					<img
+						src={data.move.imageUrl}
+						alt={data.move.name}
+						class="w-full rounded-lg"
+						fetchpriority="high"
+						loading="eager"
+						decoding="async"
+					/>
 				</div>
 			{:else if !youtubeId}
 				<div class="flex aspect-video items-center justify-center rounded-lg bg-surface-container">
