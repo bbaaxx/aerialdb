@@ -15,3 +15,9 @@
 **Vulnerability:** The `redirectTo` parameter in the login page was used directly in SvelteKit `redirect()` calls without validation, allowing attackers to redirect users to external malicious domains after authentication.
 **Learning:** Even internal-looking parameters like `redirectTo` can be manipulated to point to external URLs if not explicitly restricted to local paths (e.g., starting with `/` but not `//`).
 **Prevention:** Always validate redirect targets against a whitelist of allowed domains or enforce that they are internal paths using a utility like `isValidRedirect`.
+
+## 2026-04-11 - [Missing Authentication in Admin Form Actions]
+
+**Vulnerability:** Administrative form actions (createCategory, updateCategory, deleteCategory) in `src/routes/admin/categories/+page.server.ts` were missing authentication checks, allowing unauthenticated POST requests to modify the database.
+**Learning:** SvelteKit layout guards (`+layout.server.ts`) only protect GET requests for page loads and nested layouts. They do NOT automatically protect form actions (`Actions`) in `+page.server.ts` files within that layout's directory.
+**Prevention:** Always explicitly verify `event.locals.user` (and roles if applicable) at the beginning of every SvelteKit form action, even if the route is nested under a protected layout.
