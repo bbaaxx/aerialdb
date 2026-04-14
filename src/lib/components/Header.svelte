@@ -108,6 +108,18 @@
 				mobileMenuOpen = false;
 			}
 		}
+
+		// Search shortcut (/)
+		if (
+			e.key === '/' &&
+			!searchOpen &&
+			!(e.target instanceof HTMLInputElement) &&
+			!(e.target instanceof HTMLTextAreaElement) &&
+			!(e.target instanceof HTMLElement && e.target.isContentEditable)
+		) {
+			e.preventDefault();
+			toggleSearch();
+		}
 	}
 </script>
 
@@ -148,8 +160,8 @@
 				<button
 					type="button"
 					onclick={toggleSearch}
-					class="rounded-lg p-2 text-on-surface-variant transition hover:bg-surface-container-high/50 hover:text-on-surface"
-					aria-label={m.nav_search_placeholder()}
+					class="rounded-lg p-2 text-on-surface-variant transition hover:bg-surface-container-high/50 hover:text-on-surface focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
+					aria-label={`${m.nav_search_placeholder()} (/)`}
 				>
 					{#if searchOpen}
 						<X size={20} />
@@ -256,7 +268,7 @@
 						<Search size={16} />
 					</div>
 					<input
-						type="text"
+						type="search"
 						bind:this={searchInput}
 						value={searchQuery}
 						placeholder={m.nav_search_placeholder()}
