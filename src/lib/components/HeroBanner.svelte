@@ -28,7 +28,14 @@
 	<!-- Left adjacent slide (visual bleed) -->
 	<div class="pointer-events-none absolute inset-y-0 -left-1/3 z-0 w-1/3 scale-95 opacity-30">
 		{#if move?.imageUrl}
-			<img src={move.imageUrl} alt="" aria-hidden="true" class="h-full w-full object-cover" />
+			<img
+				src={move.imageUrl}
+				alt=""
+				aria-hidden="true"
+				class="h-full w-full object-cover"
+				loading="lazy"
+				decoding="async"
+			/>
 		{:else}
 			<div class="h-full w-full bg-gradient-to-br from-gray-900 to-gray-800"></div>
 		{/if}
@@ -37,7 +44,14 @@
 	<!-- Right adjacent slide (visual bleed) -->
 	<div class="pointer-events-none absolute inset-y-0 -right-1/3 z-0 w-1/3 scale-95 opacity-30">
 		{#if move?.imageUrl}
-			<img src={move.imageUrl} alt="" aria-hidden="true" class="h-full w-full object-cover" />
+			<img
+				src={move.imageUrl}
+				alt=""
+				aria-hidden="true"
+				class="h-full w-full object-cover"
+				loading="lazy"
+				decoding="async"
+			/>
 		{:else}
 			<div class="h-full w-full bg-gradient-to-br from-gray-900 to-gray-800"></div>
 		{/if}
@@ -49,10 +63,14 @@
 	>
 		<!-- Image layer -->
 		{#if move?.imageUrl}
+			<!-- Performance: Added fetchpriority="high" and loading="eager" for LCP optimization -->
 			<img
 				src={move.imageUrl}
 				alt={move.name}
 				class="absolute inset-0 z-0 h-full w-full object-cover"
+				fetchpriority="high"
+				loading="eager"
+				decoding="async"
 			/>
 		{:else}
 			<div
