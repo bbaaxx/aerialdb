@@ -15,3 +15,9 @@
 **Vulnerability:** The `redirectTo` parameter in the login page was used directly in SvelteKit `redirect()` calls without validation, allowing attackers to redirect users to external malicious domains after authentication.
 **Learning:** Even internal-looking parameters like `redirectTo` can be manipulated to point to external URLs if not explicitly restricted to local paths (e.g., starting with `/` but not `//`).
 **Prevention:** Always validate redirect targets against a whitelist of allowed domains or enforce that they are internal paths using a utility like `isValidRedirect`.
+
+## 2026-04-15 - [Form Action Authentication Bypass]
+
+**Vulnerability:** Administrative form actions for creating, updating, and deleting categories lacked explicit authentication checks. While page loads were protected by layout-level guards, the POST actions themselves were vulnerable to cross-site request forgery or direct API manipulation if the user was not authenticated.
+**Learning:** SvelteKit layout guards (`+layout.server.ts`) only protect GET requests for page loads. Form actions and API RequestHandlers must independently verify `event.locals.user` to ensure full protection.
+**Prevention:** Explicitly check for `event.locals.user` at the start of every sensitive form action and return a `fail(401, ...)` if missing.
