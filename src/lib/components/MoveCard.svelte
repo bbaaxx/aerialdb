@@ -13,17 +13,17 @@
 		onToggleFavorite?: (id: string) => void;
 	}
 
-	let { move, isFavorited = false, onToggleFavorite }: Props = $props();
+	const { move, isFavorited = false, onToggleFavorite }: Props = $props();
 
 	let levelClasses = $derived(
 		move.level === 'beginner'
-			? 'text-teal-400 border border-teal-400/30 bg-teal-400/10'
+			? 'text-teal-400 bg-teal-400/10'
 			: move.level === 'intermediate'
-				? 'text-blue-400 border border-blue-400/30 bg-blue-400/10'
+				? 'text-blue-400 bg-blue-400/10'
 				: move.level === 'advanced'
-					? 'text-purple-400 border border-purple-400/30 bg-purple-400/10'
+					? 'text-purple-400 bg-purple-400/10'
 					: move.level === 'professional'
-						? 'text-amber-400 border border-amber-400/30 bg-amber-400/10'
+						? 'text-amber-400 bg-amber-400/10'
 						: ''
 	);
 
@@ -36,11 +36,17 @@
 
 <a
 	href="/moves/{move.id}"
-	class="group block rounded-xl border border-gray-800/50 bg-dark-card p-3 transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_10px_25px_-5px_rgba(0,0,0,0.5)] focus:ring-2 focus:ring-accent-purple focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-purple"
+	class="group block rounded-xl bg-surface-container p-3 transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_10px_25px_-5px_rgba(0,0,0,0.5)]"
 >
 	<div class="relative aspect-video overflow-hidden rounded-lg bg-gray-800">
 		{#if move.imageUrl}
-			<img src={move.imageUrl} alt={move.name} class="h-full w-full object-cover" />
+			<img
+				src={move.imageUrl}
+				alt={move.name}
+				class="h-full w-full object-cover"
+				loading="lazy"
+				decoding="async"
+			/>
 		{:else}
 			<div class="flex h-full w-full items-center justify-center text-gray-600">
 				<Image size={48} />
@@ -71,7 +77,7 @@
 
 	<div class="flex items-center justify-between">
 		<span
-			class="rounded-full border border-gray-700 bg-gray-800 px-2.5 py-0.5 text-xs text-gray-400"
+			class="rounded-full bg-surface-container-high px-2.5 py-0.5 text-xs text-on-surface-variant"
 		>
 			{move.category.name}
 		</span>

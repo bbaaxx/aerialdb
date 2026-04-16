@@ -52,13 +52,13 @@
 	<div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
 		<div>
 			<h1 class="text-3xl font-bold text-white">Manage Categories</h1>
-			<p class="mt-2 text-[#A0A5C0]">Organize aerial moves into categories</p>
+			<p class="mt-2 text-on-surface-variant">Organize aerial moves into categories</p>
 		</div>
 	</div>
 
 	<!-- Add Category Form -->
-	<div class="mb-8 rounded-lg border border-gray-800 bg-[#242736] p-6 shadow-sm">
-		<h2 class="mb-4 text-lg font-semibold text-white">Add New Category</h2>
+	<div class="mb-8 rounded-lg bg-surface-container p-6 shadow-sm">
+		<h2 class="mb-4 text-lg font-semibold text-on-surface">Add New Category</h2>
 		<form
 			method="POST"
 			action="?/createCategory"
@@ -82,10 +82,10 @@
 					placeholder="Enter category name..."
 					maxlength="100"
 					required
-					class="w-full rounded-lg border border-gray-600 bg-[#242736] px-4 py-2 text-sm text-gray-200 placeholder-gray-400 focus:border-purple-500 focus:ring-2 focus:ring-purple-500 focus:outline-none"
+					class="w-full rounded-lg border border-outline-variant/15 bg-surface-container px-4 py-2 text-sm text-on-surface placeholder-on-surface-variant focus:border-primary focus:ring-2 focus:ring-primary focus:outline-none"
 				/>
 				{#if form?.action === 'create' && form?.error}
-					<p class="mt-1 text-sm text-red-400">{form.error}</p>
+					<p class="mt-1 text-sm text-error">{form.error}</p>
 				{/if}
 			</div>
 			<button
@@ -99,43 +99,43 @@
 
 	<!-- Error/Success Messages -->
 	{#if form?.error && form?.action !== 'create'}
-		<div class="mb-6 rounded-lg border border-red-900 bg-red-950/50 p-4">
-			<p class="text-sm text-red-300">{form.error}</p>
+		<div class="mb-6 rounded-lg border border-error bg-error/10 p-4">
+			<p class="text-sm text-error">{form.error}</p>
 		</div>
 	{/if}
 
 	{#if form?.success}
-		<div class="mb-6 rounded-lg border border-green-900 bg-green-950/50 p-4">
+		<div class="mb-6 rounded-lg bg-green-500/10 p-4">
 			<p class="text-sm text-green-300">Operation completed successfully.</p>
 		</div>
 	{/if}
 
 	<!-- Categories Table -->
-	<div class="overflow-hidden rounded-lg border border-gray-800 bg-[#242736] shadow-sm">
+	<div class="overflow-hidden rounded-lg bg-surface-container shadow-sm">
 		<div class="overflow-x-auto">
 			<table class="w-full border-collapse">
-				<thead class="border-b border-gray-800 bg-[#242736]">
+				<thead class="bg-surface-container-high">
 					<tr>
 						<th
-							class="px-4 py-3 text-left text-xs font-semibold tracking-wider text-[#A0A5C0] uppercase"
+							class="px-4 py-3 text-left text-xs font-semibold tracking-wider text-on-surface-variant uppercase"
 						>
 							Name
 						</th>
 						<th
-							class="px-4 py-3 text-center text-xs font-semibold tracking-wider text-[#A0A5C0] uppercase"
+							class="px-4 py-3 text-center text-xs font-semibold tracking-wider text-on-surface-variant uppercase"
 						>
 							Moves
 						</th>
 						<th
-							class="px-4 py-3 text-right text-xs font-semibold tracking-wider text-[#A0A5C0] uppercase"
+							class="px-4 py-3 text-right text-xs font-semibold tracking-wider text-on-surface-variant uppercase"
 						>
 							Actions
 						</th>
 					</tr>
 				</thead>
-				<tbody class="divide-y divide-gray-800">
+				<tbody class="divide-y divide-outline-variant/15">
 					{#each data.categories as category (category.id)}
-						<tr class="transition-colors hover:bg-[#2A2D3E]">
+						<tr class="transition-colors hover:bg-surface-container-high">
 							<td class="px-4 py-3">
 								{#if editingId === category.id}
 									<!-- Inline Edit Form -->
@@ -160,7 +160,7 @@
 											bind:value={editingName}
 											maxlength="100"
 											required
-											class="flex-1 rounded-lg border border-gray-600 bg-[#242736] px-3 py-1.5 text-sm text-gray-200 focus:border-purple-500 focus:ring-2 focus:ring-purple-500 focus:outline-none"
+											class="flex-1 rounded-lg border border-outline-variant/15 bg-surface-container px-3 py-1.5 text-sm text-on-surface focus:border-primary focus:ring-2 focus:ring-primary focus:outline-none"
 										/>
 										<button
 											type="submit"
@@ -171,21 +171,21 @@
 										<button
 											type="button"
 											onclick={cancelEdit}
-											class="rounded-lg border border-gray-600 px-3 py-1.5 text-sm font-medium text-gray-300 hover:bg-gray-700"
+											class="rounded-lg border border-outline-variant/15 px-3 py-1.5 text-sm font-medium text-on-surface-variant hover:bg-surface-container-high"
 										>
 											Cancel
 										</button>
 									</form>
 									{#if form?.action === 'update' && form?.id === category.id && (form as any).error}
-										<p class="mt-1 text-sm text-red-400">{(form as any).error}</p>
+										<p class="mt-1 text-sm text-error">{form.error}</p>
 									{/if}
 								{:else}
-									<span class="font-medium text-gray-200">{category.name}</span>
+									<span class="font-medium text-on-surface">{category.name}</span>
 								{/if}
 							</td>
 							<td class="px-4 py-3 text-center">
 								<span
-									class="inline-flex items-center rounded-full bg-[#2A2D3E] px-2.5 py-0.5 text-xs font-medium text-gray-300"
+									class="inline-flex items-center rounded-full bg-surface-container-high px-2.5 py-0.5 text-xs font-medium text-on-surface-variant"
 								>
 									{category.moveCount}
 								</span>
@@ -194,7 +194,7 @@
 								{#if deletingId === category.id}
 									<!-- Delete Confirmation -->
 									<div class="flex items-center justify-end gap-2">
-										<span class="text-sm text-[#A0A5C0]">
+										<span class="text-sm text-on-surface-variant">
 											{#if deleteMoveCount > 0}
 												{deleteMoveCount} move{deleteMoveCount === 1 ? '' : 's'} linked
 											{:else}
@@ -226,13 +226,13 @@
 										<button
 											type="button"
 											onclick={cancelDelete}
-											class="rounded-lg border border-gray-600 px-3 py-1.5 text-sm font-medium text-gray-300 hover:bg-gray-700"
+											class="rounded-lg border border-outline-variant/15 px-3 py-1.5 text-sm font-medium text-on-surface-variant hover:bg-surface-container-high"
 										>
 											Cancel
 										</button>
 									</div>
 									{#if form?.action === 'delete' && form?.id === category.id && (form as any).error}
-										<p class="mt-1 text-sm text-red-400">{(form as any).error}</p>
+										<p class="mt-1 text-sm text-error">{(form as any).error}</p>
 									{/if}
 								{:else}
 									<div class="flex items-center justify-end gap-2">
@@ -257,8 +257,8 @@
 					{:else}
 						<tr>
 							<td colspan="3" class="px-4 py-8 text-center">
-								<p class="text-gray-400">No categories found</p>
-								<p class="mt-1 text-sm text-gray-500">Add your first category above</p>
+								<p class="text-on-surface-variant">No categories found</p>
+								<p class="mt-1 text-sm text-on-surface-variant">Add your first category above</p>
 							</td>
 						</tr>
 					{/each}

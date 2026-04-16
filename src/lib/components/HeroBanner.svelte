@@ -11,14 +11,14 @@
 		} | null;
 	}
 
-	let { move }: Props = $props();
+	const { move }: Props = $props();
 
 	function levelClasses(level: string): string {
 		const map: Record<string, string> = {
-			beginner: 'text-teal-400 border-teal-400/30 bg-teal-400/10',
-			intermediate: 'text-blue-400 border-blue-400/30 bg-blue-400/10',
-			advanced: 'text-purple-400 border-purple-400/30 bg-purple-400/10',
-			professional: 'text-amber-400 border-amber-400/30 bg-amber-400/10'
+			beginner: 'text-teal-400 bg-teal-400/10',
+			intermediate: 'text-blue-400 bg-blue-400/10',
+			advanced: 'text-purple-400 bg-purple-400/10',
+			professional: 'text-amber-400 bg-amber-400/10'
 		};
 		return map[level] ?? '';
 	}
@@ -28,7 +28,14 @@
 	<!-- Left adjacent slide (visual bleed) -->
 	<div class="pointer-events-none absolute inset-y-0 -left-1/3 z-0 w-1/3 scale-95 opacity-30">
 		{#if move?.imageUrl}
-			<img src={move.imageUrl} alt="" aria-hidden="true" class="h-full w-full object-cover" />
+			<img
+				src={move.imageUrl}
+				alt=""
+				aria-hidden="true"
+				class="h-full w-full object-cover"
+				loading="lazy"
+				decoding="async"
+			/>
 		{:else}
 			<div class="h-full w-full bg-gradient-to-br from-gray-900 to-gray-800"></div>
 		{/if}
@@ -37,7 +44,14 @@
 	<!-- Right adjacent slide (visual bleed) -->
 	<div class="pointer-events-none absolute inset-y-0 -right-1/3 z-0 w-1/3 scale-95 opacity-30">
 		{#if move?.imageUrl}
-			<img src={move.imageUrl} alt="" aria-hidden="true" class="h-full w-full object-cover" />
+			<img
+				src={move.imageUrl}
+				alt=""
+				aria-hidden="true"
+				class="h-full w-full object-cover"
+				loading="lazy"
+				decoding="async"
+			/>
 		{:else}
 			<div class="h-full w-full bg-gradient-to-br from-gray-900 to-gray-800"></div>
 		{/if}
@@ -49,10 +63,14 @@
 	>
 		<!-- Image layer -->
 		{#if move?.imageUrl}
+			<!-- Performance: Added fetchpriority="high" and loading="eager" for LCP optimization -->
 			<img
 				src={move.imageUrl}
 				alt={move.name}
 				class="absolute inset-0 z-0 h-full w-full object-cover"
+				fetchpriority="high"
+				loading="eager"
+				decoding="async"
 			/>
 		{:else}
 			<div
@@ -87,9 +105,7 @@
 							<span class="mb-1 block text-xs tracking-wide text-primary-light uppercase">
 								Difficulty
 							</span>
-							<span
-								class="rounded-full border px-3 py-1 text-xs font-medium {levelClasses(move.level)}"
-							>
+							<span class="rounded-full px-3 py-1 text-xs font-medium {levelClasses(move.level)}">
 								{move.level}
 							</span>
 						</div>
@@ -100,7 +116,7 @@
 							Base Technique
 						</span>
 						<span
-							class="rounded-full border border-gray-600 bg-gray-800/50 px-3 py-1 text-xs font-medium text-gray-300"
+							class="rounded-full bg-surface-container-high px-3 py-1 text-xs font-medium text-on-surface-variant"
 						>
 							{move.category.name}
 						</span>
@@ -111,7 +127,7 @@
 				<div>
 					<a
 						href="/moves/{move.id}"
-						class="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-purple-500 to-indigo-500 px-6 py-3 font-medium text-white shadow-[0_0_15px_rgba(138,99,248,0.5)] transition hover:scale-105 hover:shadow-[0_0_20px_rgba(138,99,248,0.6)]"
+						class="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-purple-500 to-indigo-500 px-6 py-3 font-medium text-white shadow-[0_0_15px_rgba(138,99,248,0.5)] transition hover:scale-105 hover:shadow-[0_0_20px_rgba(138,99,248,0.6)] focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
 					>
 						Learn More
 						<ChevronRight size={18} />
@@ -134,13 +150,6 @@
 					level.
 				</p>
 			{/if}
-		</div>
-
-		<!-- Carousel dots -->
-		<div class="absolute bottom-4 left-1/2 z-20 hidden -translate-x-1/2 gap-2 sm:flex">
-			<button class="h-2 w-2 rounded-full bg-white" aria-label="Slide 1"></button>
-			<button class="h-2 w-2 rounded-full bg-white/30" aria-label="Slide 2"></button>
-			<button class="h-2 w-2 rounded-full bg-white/30" aria-label="Slide 3"></button>
 		</div>
 	</div>
 </div>

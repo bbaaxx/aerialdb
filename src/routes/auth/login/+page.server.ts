@@ -4,13 +4,14 @@ import { eq } from 'drizzle-orm';
 import * as auth from '$lib/server/auth';
 import { getDb } from '$lib/server/db';
 import * as table from '$lib/server/db/schema';
+import { isValidRedirect } from '$lib/utils/security';
 import type { Actions, PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async (event) => {
 	// If user is already logged in, redirect to home or the specified redirect URL
 	if (event.locals.user) {
 		const redirectTo = event.url.searchParams.get('redirectTo');
-		return redirect(302, redirectTo || '/');
+		return redirect(302, isValidRedirect(redirectTo) ? redirectTo : '/');
 	}
 
 	const redirectTo = event.url.searchParams.get('redirectTo');
@@ -65,7 +66,8 @@ export const actions: Actions = {
 		auth.setSessionTokenCookie(event, sessionToken, session.expiresAt);
 
 		// Redirect to the specified URL or home page on successful login
-		return redirect(302, redirectTo || '/');
+		// Validate redirectTo to prevent Open Redirect vulnerabilities
+		return redirect(302, isValidRedirect(redirectTo) ? redirectTo : '/');
 	}
 };
 

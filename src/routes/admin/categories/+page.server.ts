@@ -61,6 +61,9 @@ export const load: PageServerLoad = async (event) => {
 
 export const actions = {
 	createCategory: async (event) => {
+		if (!event.locals.user) {
+			throw redirect(302, '/auth/login');
+		}
 		const db = getDb(event);
 		const formData = await event.request.formData();
 		const name = (formData.get('name') as string | null)?.trim();
@@ -91,6 +94,9 @@ export const actions = {
 	},
 
 	updateCategory: async (event) => {
+		if (!event.locals.user) {
+			throw redirect(302, '/auth/login');
+		}
 		const db = getDb(event);
 		const formData = await event.request.formData();
 		const id = formData.get('id') as string | null;
@@ -132,6 +138,9 @@ export const actions = {
 	},
 
 	deleteCategory: async (event) => {
+		if (!event.locals.user) {
+			throw redirect(302, '/auth/login');
+		}
 		const db = getDb(event);
 		const formData = await event.request.formData();
 		const id = formData.get('id') as string | null;

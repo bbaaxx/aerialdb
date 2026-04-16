@@ -67,13 +67,13 @@
 	}
 </script>
 
-<div class="flex min-h-screen items-center justify-center bg-[#1A1C29] px-4 py-12">
+<div class="flex min-h-screen items-center justify-center bg-surface-container-low px-4 py-12">
 	<div class="w-full max-w-md">
-		<div class="rounded-2xl border border-gray-800 bg-[#242736] p-8 shadow-2xl">
+		<div class="rounded-2xl bg-surface-container p-8 shadow-2xl">
 			<!-- Header -->
 			<div class="mb-8 text-center">
-				<h1 class="mb-2 text-3xl font-bold text-white">Create Account</h1>
-				<p class="text-[#A0A5C0]">Sign up to get started</p>
+				<h1 class="mb-2 text-3xl font-bold text-on-surface">Create Account</h1>
+				<p class="text-on-surface-variant">Sign up to get started</p>
 			</div>
 
 			<!-- Form -->
@@ -89,14 +89,14 @@
 			>
 				<!-- Global Error Message -->
 				{#if form?.message && !('field' in form)}
-					<div class="mb-6 rounded-lg border border-red-500 bg-red-500/10 p-4">
-						<p class="text-sm text-red-400">{form.message}</p>
+					<div class="mb-6 rounded-lg border border-error bg-error/10 p-4">
+						<p class="text-sm text-error">{form.message}</p>
 					</div>
 				{/if}
 
 				<!-- Username Field -->
 				<div class="mb-5">
-					<label for="username" class="mb-2 block text-sm font-medium text-[#A0A5C0]">
+					<label for="username" class="mb-2 block text-sm font-medium text-on-surface-variant">
 						Username
 					</label>
 					<input
@@ -112,18 +112,18 @@
 								validateUsernameClient(username);
 							}
 						}}
-						class="w-full rounded-lg border bg-[#242736] px-4 py-3 text-gray-200 transition outline-none focus:border-transparent focus:ring-2 focus:ring-[#8A63F8] {usernameError ||
+						class="w-full rounded-lg border bg-surface-container px-4 py-3 text-on-surface transition outline-none focus:border-transparent focus:ring-2 focus:ring-primary {usernameError ||
 						(form && 'field' in form && form.field === 'username')
-							? 'border-red-500 bg-red-500/10'
-							: 'border-gray-600'}"
+							? 'border-error bg-error/10'
+							: 'border-outline-variant/15'}"
 						disabled={isSubmitting}
 					/>
 					{#if usernameError}
-						<p class="mt-2 text-sm text-red-400">{usernameError}</p>
+						<p class="mt-2 text-sm text-error">{usernameError}</p>
 					{:else if form && 'field' in form && form.field === 'username' && form?.message}
-						<p class="mt-2 text-sm text-red-400">{form.message}</p>
+						<p class="mt-2 text-sm text-error">{form.message}</p>
 					{:else}
-						<p class="mt-2 text-xs text-gray-400">
+						<p class="mt-2 text-xs text-on-surface-variant">
 							3-31 characters, lowercase letters, numbers, hyphens, and underscores only
 						</p>
 					{/if}
@@ -131,7 +131,7 @@
 
 				<!-- Password Field -->
 				<div class="mb-5">
-					<label for="password" class="mb-2 block text-sm font-medium text-[#A0A5C0]">
+					<label for="password" class="mb-2 block text-sm font-medium text-on-surface-variant">
 						Password
 					</label>
 					<input
@@ -150,24 +150,27 @@
 								validateConfirmPasswordClient(confirmPassword);
 							}
 						}}
-						class="w-full rounded-lg border bg-[#242736] px-4 py-3 text-gray-200 transition outline-none focus:border-transparent focus:ring-2 focus:ring-[#8A63F8] {passwordError ||
+						class="w-full rounded-lg border bg-surface-container px-4 py-3 text-on-surface transition outline-none focus:border-transparent focus:ring-2 focus:ring-primary {passwordError ||
 						(form && 'field' in form && form.field === 'password')
-							? 'border-red-500 bg-red-500/10'
-							: 'border-gray-600'}"
+							? 'border-error bg-error/10'
+							: 'border-outline-variant/15'}"
 						disabled={isSubmitting}
 					/>
 					{#if passwordError}
-						<p class="mt-2 text-sm text-red-400">{passwordError}</p>
+						<p class="mt-2 text-sm text-error">{passwordError}</p>
 					{:else if form && 'field' in form && form.field === 'password' && form?.message}
-						<p class="mt-2 text-sm text-red-400">{form.message}</p>
+						<p class="mt-2 text-sm text-error">{form.message}</p>
 					{:else}
-						<p class="mt-2 text-xs text-gray-400">Minimum 6 characters</p>
+						<p class="mt-2 text-xs text-on-surface-variant">Minimum 6 characters</p>
 					{/if}
 				</div>
 
 				<!-- Confirm Password Field -->
 				<div class="mb-6">
-					<label for="confirmPassword" class="mb-2 block text-sm font-medium text-[#A0A5C0]">
+					<label
+						for="confirmPassword"
+						class="mb-2 block text-sm font-medium text-on-surface-variant"
+					>
 						Confirm Password
 					</label>
 					<input
@@ -186,16 +189,16 @@
 								validateConfirmPasswordClient(confirmPassword);
 							}
 						}}
-						class="w-full rounded-lg border bg-[#242736] px-4 py-3 text-gray-200 transition outline-none focus:border-transparent focus:ring-2 focus:ring-[#8A63F8] {confirmPasswordError ||
+						class="w-full rounded-lg border bg-surface-container px-4 py-3 text-on-surface transition outline-none focus:border-transparent focus:ring-2 focus:ring-primary {confirmPasswordError ||
 						(form && 'field' in form && form.field === 'confirmPassword')
-							? 'border-red-500 bg-red-500/10'
-							: 'border-gray-600'}"
+							? 'border-error bg-error/10'
+							: 'border-outline-variant/15'}"
 						disabled={isSubmitting}
 					/>
 					{#if confirmPasswordError}
-						<p class="mt-2 text-sm text-red-400">{confirmPasswordError}</p>
+						<p class="mt-2 text-sm text-error">{confirmPasswordError}</p>
 					{:else if form && 'field' in form && form.field === 'confirmPassword' && form?.message}
-						<p class="mt-2 text-sm text-red-400">{form.message}</p>
+						<p class="mt-2 text-sm text-error">{form.message}</p>
 					{/if}
 				</div>
 
@@ -209,7 +212,7 @@
 						!username ||
 						!password ||
 						!confirmPassword}
-					class="w-full rounded-lg bg-gradient-to-r from-purple-500 to-indigo-500 px-4 py-3 font-medium text-white shadow-[0_0_15px_rgba(138,99,248,0.5)] transition hover:shadow-[0_0_20px_rgba(138,99,248,0.6)] focus:ring-2 focus:ring-[#8A63F8] focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:bg-gray-400 disabled:shadow-none"
+					class="w-full rounded-lg bg-gradient-to-r from-purple-500 to-indigo-500 px-4 py-3 font-medium text-white shadow-[0_0_15px_rgba(138,99,248,0.5)] transition hover:shadow-[0_0_20px_rgba(138,99,248,0.6)] focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:bg-gray-400 disabled:shadow-none"
 				>
 					{#if isSubmitting}
 						<span class="flex items-center justify-center">
@@ -243,11 +246,11 @@
 
 			<!-- Login Link -->
 			<div class="mt-6 text-center">
-				<p class="text-sm text-[#A0A5C0]">
+				<p class="text-sm text-on-surface-variant">
 					Already have an account?
 					<a
 						href="/auth/login"
-						class="font-medium text-[#8A63F8] hover:drop-shadow-[0_0_8px_rgba(138,99,248,0.6)]"
+						class="font-medium text-primary hover:drop-shadow-[0_0_8px_rgba(138,99,248,0.6)]"
 					>
 						Sign in
 					</a>

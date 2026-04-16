@@ -7,7 +7,7 @@
 		onSelectLevel: (level: string | null) => void;
 	}
 
-	let { categories, activeApparatus, activeLevel, onSelectApparatus, onSelectLevel }: Props =
+	const { categories, activeApparatus, activeLevel, onSelectApparatus, onSelectLevel }: Props =
 		$props();
 
 	const levels = ['Beginner', 'Intermediate', 'Advanced', 'Professional'];
@@ -35,12 +35,12 @@
 			{#each categories as category (category.id)}
 				<button
 					type="button"
-					onclick={() => handleApparatusClick(category.id)}
 					aria-pressed={activeApparatus === category.id}
-					class="rounded-full border px-4 py-1.5 text-sm transition-all focus-visible:ring-2 focus-visible:ring-accent-purple focus-visible:outline-none {activeApparatus ===
+					onclick={() => handleApparatusClick(category.id)}
+					class="rounded-full px-4 py-1.5 text-sm transition-all focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none {activeApparatus ===
 					category.id
-						? 'border-accent-purple bg-dark-card text-white'
-						: 'border-gray-600 text-gray-300 hover:border-accent-purple hover:text-white'}"
+						? 'bg-surface-container text-on-surface'
+						: 'text-on-surface-variant hover:bg-surface-container hover:text-on-surface'}"
 				>
 					{category.name}
 				</button>
@@ -60,12 +60,12 @@
 			{#each levels as level (level)}
 				<button
 					type="button"
-					onclick={() => handleLevelClick(level)}
 					aria-pressed={activeLevel === level.toLowerCase()}
-					class="rounded-full border px-4 py-1.5 text-sm transition-all focus-visible:ring-2 focus-visible:ring-accent-purple focus-visible:outline-none {activeLevel ===
+					onclick={() => handleLevelClick(level)}
+					class="rounded-full px-4 py-1.5 text-sm transition-all focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none {activeLevel ===
 					level.toLowerCase()
-						? 'border-accent-purple bg-dark-card text-white'
-						: 'border-gray-600 text-gray-300 hover:border-accent-purple hover:text-white'}"
+						? 'bg-surface-container text-on-surface'
+						: 'text-on-surface-variant hover:bg-surface-container hover:text-on-surface'}"
 				>
 					{level}
 				</button>

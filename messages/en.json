@@ -2,5 +2,21 @@
 	"$schema": "https://inlang.com/schema/inlang-message-format",
 	"hello_world": "Hello, {name} from en!",
 	"baseTechnique": "Base Technique",
-	"allBaseTechniques": "All Base Techniques"
+	"allBaseTechniques": "All Base Techniques",
+
+	"nav_library": "Library",
+	"nav_tutorials": "Tutorials",
+	"nav_theory": "Theory",
+	"nav_community": "Community",
+	"nav_upload_move": "Upload Move",
+	"nav_search_placeholder": "Search moves, performers, techniques...",
+	"nav_search_toggle_label": "Search (/)",
+	"nav_search_shortcut": "/",
+	"nav_sign_up": "Sign Up",
+	"menu_profile": "Profile",
+	"menu_my_library": "My Library",
+	"menu_sign_out": "Sign Out",
+	"coming_soon_title": "Coming Soon",
+	"coming_soon_message": "This page is under construction. Check back soon!",
+	"back_to_library": "Back to Library"
 }

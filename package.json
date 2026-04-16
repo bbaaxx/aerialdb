@@ -70,9 +70,9 @@
 		"lucide-svelte": "^1.0.1"
 	},
 	"optionalDependencies": {
-		"@libsql/linux-x64-gnu": "^0.5.22",
-		"@rollup/rollup-linux-x64-gnu": "^4.53.3",
-		"@tailwindcss/oxide-linux-x64-gnu": "^4.1.17",
-		"lightningcss-linux-x64-gnu": "^1.30.2"
+		"@libsql/linux-x64-gnu": "^0.5.29",
+		"@rollup/rollup-linux-x64-gnu": "^4.60.1",
+		"@tailwindcss/oxide-linux-x64-gnu": "^4.2.2",
+		"lightningcss-linux-x64-gnu": "^1.32.0"
 	}
 }

@@ -3,10 +3,55 @@
 @plugin '@tailwindcss/typography';
 
 @theme {
+	/* ── Surface Tiers ── */
+	--color-surface-container-lowest: #0f1117;
+	--color-surface-container-low: #1a1c29;
+	--color-surface: #1e2030;
+	--color-surface-container: #242736;
+	--color-surface-container-high: #2a2d3e;
+	--color-surface-container-highest: #333650;
+
+	/* ── Semantic Colors ── */
+	--color-primary: #cebdff;
+	--color-primary-container: #9b7aff;
+	--color-secondary: #a0a5c0;
+	--color-on-surface: #e6e1e5;
+	--color-on-surface-variant: #a0a5c0;
+	--color-outline: #938f99;
+	--color-outline-variant: #49454f;
+
+	/* ── Error Palette ── */
+	--color-error: #f2b8b5;
+	--color-error-container: #8c1d18;
+	--color-on-error: #601410;
+	--color-on-error-container: #f9dedc;
+
+	/* ── Inverse Colors ── */
+	--color-inverse-surface: #e6e1e5;
+	--color-inverse-on-surface: #313033;
+	--color-inverse-primary: #6b5fa5;
+
+	/* ── Legacy Token Aliases ── */
 	--color-dark-base: #1a1c29;
 	--color-dark-card: #242736;
-	--color-accent-purple: #8a63f8;
+	--color-accent-purple: #cebdff;
 	--color-primary-light: #a0a5c0;
-	--font-serif: 'Playfair Display', Georgia, serif;
+
+	/* ── Typography ── */
+	--font-serif: 'Noto Serif', Georgia, serif;
 	--font-sans: 'Inter', system-ui, sans-serif;
+
+	/* ── Type Scale ── */
+	--font-size-display-lg: 3.5rem;
+	--line-height-display-lg: 1.1;
+	--font-size-headline-lg: 2rem;
+	--line-height-headline-lg: 1.2;
+	--font-size-title-lg: 1.375rem;
+	--line-height-title-lg: 1.3;
+	--font-size-body-lg: 1rem;
+	--line-height-body-lg: 1.5;
+	--font-size-body-md: 0.875rem;
+	--line-height-body-md: 1.5;
+	--font-size-label-md: 0.75rem;
+	--line-height-label-md: 1.4;
 }

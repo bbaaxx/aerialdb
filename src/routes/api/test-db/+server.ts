@@ -3,6 +3,11 @@ import { getDb } from '$lib/server/db';
 import type { RequestHandler } from './$types';
 
 export const GET: RequestHandler = async (event) => {
+	// Authentication check: Only logged-in users can test the database connection
+	if (!event.locals.user) {
+		return json({ error: 'Unauthorized: Authentication required' }, { status: 401 });
+	}
+
 	try {
 		const db = getDb(event);
 
@@ -18,11 +23,13 @@ export const GET: RequestHandler = async (event) => {
 			platform: event.platform ? 'Cloudflare' : 'Local'
 		});
 	} catch (error) {
+		// Log the error for internal tracking but don't leak details to the client
+		console.error('Database connection test failed:', error);
+
 		return json(
 			{
 				success: false,
-				error: error instanceof Error ? error.message : 'Unknown error',
-				stack: error instanceof Error ? error.stack : undefined,
+				error: 'An unexpected error occurred while testing the database connection',
 				platform: event.platform ? 'Cloudflare' : 'Local'
 			},
 			{ status: 500 }
