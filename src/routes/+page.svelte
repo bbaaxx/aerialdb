@@ -69,7 +69,7 @@
 	<!-- Section heading -->
 	<div class="mb-6 flex items-center justify-between">
 		<h2 class="font-serif text-2xl text-white">Library</h2>
-		<span class="text-sm text-primary-light">
+		<span class="text-sm text-primary-light" aria-live="polite">
 			{data.moves.length} move{data.moves.length !== 1 ? 's' : ''}
 		</span>
 	</div>
