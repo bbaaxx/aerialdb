@@ -111,7 +111,8 @@
 			e.key === '/' &&
 			!searchOpen &&
 			!(e.target instanceof HTMLInputElement) &&
-			!(e.target instanceof HTMLTextAreaElement)
+			!(e.target instanceof HTMLTextAreaElement) &&
+			!(e.target instanceof HTMLElement && e.target.isContentEditable)
 		) {
 			e.preventDefault();
 			toggleSearch();
@@ -156,7 +157,7 @@
 				<button
 					type="button"
 					onclick={toggleSearch}
-					class="group relative rounded-lg p-2 text-on-surface-variant transition hover:bg-surface-container-high/50 hover:text-on-surface"
+					class="group relative rounded-lg p-2 text-on-surface-variant transition hover:bg-surface-container-high/50 hover:text-on-surface focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
 					aria-label={m.nav_search_toggle_label()}
 				>
 					{#if searchOpen}
@@ -274,7 +275,7 @@
 						<Search size={16} />
 					</div>
 					<input
-						type="text"
+						type="search"
 						bind:this={searchInput}
 						value={searchQuery}
 						placeholder={m.nav_search_placeholder()}
