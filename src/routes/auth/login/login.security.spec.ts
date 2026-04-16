@@ -63,7 +63,7 @@ describe('Login Open Redirect Security Test', () => {
 		} as any;
 
 		try {
-			// @ts-expect-error - action is not typed in this mock context
+			// @ts-expect-error - action is default
 			await actions.default(event);
 			expect.fail('Should have thrown a redirect');
 		} catch (e: any) {

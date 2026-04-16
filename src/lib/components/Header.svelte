@@ -107,6 +107,15 @@
 			if (mobileMenuOpen) {
 				mobileMenuOpen = false;
 			}
+		} else if (
+			e.key === '/' &&
+			!searchOpen &&
+			!(e.target instanceof HTMLInputElement) &&
+			!(e.target instanceof HTMLTextAreaElement) &&
+			!(e.target instanceof HTMLElement && e.target.isContentEditable)
+		) {
+			e.preventDefault();
+			toggleSearch();
 		}
 	}
 </script>
@@ -148,13 +157,23 @@
 				<button
 					type="button"
 					onclick={toggleSearch}
-					class="rounded-lg p-2 text-on-surface-variant transition hover:bg-surface-container-high/50 hover:text-on-surface"
-					aria-label={m.nav_search_placeholder()}
+					class="group relative rounded-lg p-2 text-on-surface-variant transition hover:bg-surface-container-high/50 hover:text-on-surface focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
+					aria-label={m.nav_search_toggle_label()}
 				>
 					{#if searchOpen}
 						<X size={20} />
 					{:else}
 						<Search size={20} />
+						<!-- KBD hint (desktop only) -->
+						<div
+							class="pointer-events-none absolute top-full left-1/2 mt-2 hidden -translate-x-1/2 opacity-0 transition-opacity group-hover:opacity-100 group-focus:opacity-100 sm:block"
+						>
+							<kbd
+								class="flex h-5 items-center rounded border border-outline-variant/30 bg-surface-container-highest px-1.5 font-sans text-[10px] font-medium text-on-surface-variant shadow-sm"
+							>
+								{m.nav_search_shortcut()}
+							</kbd>
+						</div>
 					{/if}
 				</button>
 
@@ -256,7 +275,7 @@
 						<Search size={16} />
 					</div>
 					<input
-						type="text"
+						type="search"
 						bind:this={searchInput}
 						value={searchQuery}
 						placeholder={m.nav_search_placeholder()}
