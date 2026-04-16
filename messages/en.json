@@ -10,6 +10,8 @@
 	"nav_community": "Community",
 	"nav_upload_move": "Upload Move",
 	"nav_search_placeholder": "Search moves, performers, techniques...",
+	"nav_search_toggle_label": "Search (/)",
+	"nav_search_shortcut": "/",
 	"nav_sign_up": "Sign Up",
 	"menu_profile": "Profile",
 	"menu_my_library": "My Library",

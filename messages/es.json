@@ -10,6 +10,8 @@
 	"nav_community": "Comunidad",
 	"nav_upload_move": "Subir Movimiento",
 	"nav_search_placeholder": "Buscar movimientos, artistas, técnicas...",
+	"nav_search_toggle_label": "Buscar (/)",
+	"nav_search_shortcut": "/",
 	"nav_sign_up": "Registrarse",
 	"menu_profile": "Perfil",
 	"menu_my_library": "Mi Biblioteca",
