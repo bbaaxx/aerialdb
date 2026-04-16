@@ -1,6 +1,6 @@
 import { sequence } from '@sveltejs/kit/hooks';
 import * as auth from '$lib/server/auth';
-import type { Handle } from '@sveltejs/kit';
+import { type Handle, redirect } from '@sveltejs/kit';
 import { paraglideMiddleware } from '$lib/paraglide/server';
 import { getDb } from '$lib/server/db';
 
@@ -36,6 +36,16 @@ const handleAuth: Handle = async ({ event, resolve }) => {
 	return resolve(event);
 };
 
+export const handleAdminGuard: Handle = async ({ event, resolve }) => {
+	// Protect all routes starting with /admin
+	if (event.url.pathname.startsWith('/admin') && !event.locals.user) {
+		const redirectTo = encodeURIComponent(event.url.pathname + event.url.search);
+		throw redirect(302, `/auth/login?redirectTo=${redirectTo}`);
+	}
+
+	return resolve(event);
+};
+
 export const handleSecurityHeaders: Handle = async ({ event, resolve }) => {
 	const response = await resolve(event);
 
@@ -54,4 +64,9 @@ export const handleSecurityHeaders: Handle = async ({ event, resolve }) => {
 	return response;
 };
 
-export const handle: Handle = sequence(handleParaglide, handleAuth, handleSecurityHeaders);
+export const handle: Handle = sequence(
+	handleParaglide,
+	handleAuth,
+	handleAdminGuard,
+	handleSecurityHeaders
+);
