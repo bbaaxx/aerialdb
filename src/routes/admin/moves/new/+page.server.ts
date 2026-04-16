@@ -19,6 +19,9 @@ export const load: PageServerLoad = async (event) => {
 
 export const actions = {
 	default: async (event) => {
+		if (!event.locals.user) {
+			throw redirect(302, '/auth/login');
+		}
 		const db = getDb(event);
 		const { request, locals, fetch } = event;
 		const formData = await request.formData();

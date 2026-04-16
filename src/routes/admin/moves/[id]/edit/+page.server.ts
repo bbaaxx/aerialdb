@@ -36,6 +36,9 @@ export const load: PageServerLoad = async (event) => {
 
 export const actions = {
 	update: async (event) => {
+		if (!event.locals.user) {
+			throw redirect(302, '/auth/login');
+		}
 		const db = getDb(event);
 		const { request, params, fetch, platform } = event;
 		const formData = await request.formData();
@@ -133,6 +136,9 @@ export const actions = {
 	},
 
 	delete: async (event) => {
+		if (!event.locals.user) {
+			throw redirect(302, '/auth/login');
+		}
 		const db = getDb(event);
 		const { params, platform } = event;
 
