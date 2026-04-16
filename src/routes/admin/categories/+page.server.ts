@@ -61,6 +61,10 @@ export const load: PageServerLoad = async (event) => {
 
 export const actions = {
 	createCategory: async (event) => {
+		if (!event.locals.user) {
+			return fail(401, { error: 'Unauthorized: Authentication required', action: 'create' });
+		}
+
 		const db = getDb(event);
 		const formData = await event.request.formData();
 		const name = (formData.get('name') as string | null)?.trim();
@@ -91,6 +95,10 @@ export const actions = {
 	},
 
 	updateCategory: async (event) => {
+		if (!event.locals.user) {
+			return fail(401, { error: 'Unauthorized: Authentication required', action: 'update' });
+		}
+
 		const db = getDb(event);
 		const formData = await event.request.formData();
 		const id = formData.get('id') as string | null;
@@ -132,6 +140,10 @@ export const actions = {
 	},
 
 	deleteCategory: async (event) => {
+		if (!event.locals.user) {
+			return fail(401, { error: 'Unauthorized: Authentication required', action: 'delete' });
+		}
+
 		const db = getDb(event);
 		const formData = await event.request.formData();
 		const id = formData.get('id') as string | null;
