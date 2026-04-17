@@ -1,8 +1,18 @@
 import { getDb } from '$lib/server/db';
-import { type MoveWithCategoryRaw } from '$lib/server/db/types';
 import { moves, categories } from '$lib/server/db/schema';
 import { desc, eq, isNotNull, like, and } from 'drizzle-orm';
 import type { PageServerLoad } from './$types';
+
+type MoveRaw = {
+	id: string;
+	name: string;
+	description: string | null;
+	imageUrl: string | null;
+	videoUrl: string | null;
+	level: string | null;
+	contributorName: string | null;
+	categoryId: string;
+};
 
 export const load: PageServerLoad = async (event) => {
 	const db = getDb(event);
@@ -28,6 +38,7 @@ export const load: PageServerLoad = async (event) => {
 	}
 
 	// Performance: Fetch moves, categories, and featured move in parallel to reduce TTFB
+	// Optimization: Resolve category names in-memory to reduce redundant DB joins.
 	// Type assertion needed: getDb() returns a union type (D1 | libsql)
 	// that breaks .select({fields}) overload resolution
 	const [movesDataRaw, allCategories, [featuredMoveRaw]] = (await Promise.all([
@@ -40,11 +51,9 @@ export const load: PageServerLoad = async (event) => {
 				videoUrl: moves.videoUrl,
 				level: moves.level,
 				contributorName: moves.contributorName,
-				categoryId: categories.id,
-				categoryName: categories.name
+				categoryId: moves.categoryId
 			})
 			.from(moves)
-			.innerJoin(categories, eq(moves.categoryId, categories.id))
 			.where(conditions.length > 0 ? and(...conditions) : undefined)
 			.orderBy(moves.name),
 
@@ -59,15 +68,16 @@ export const load: PageServerLoad = async (event) => {
 				videoUrl: moves.videoUrl,
 				level: moves.level,
 				contributorName: moves.contributorName,
-				categoryId: categories.id,
-				categoryName: categories.name
+				categoryId: moves.categoryId
 			})
 			.from(moves)
-			.innerJoin(categories, eq(moves.categoryId, categories.id))
 			.where(isNotNull(moves.imageUrl))
 			.orderBy(desc(moves.createdAt))
 			.limit(1)
-	])) as [MoveWithCategoryRaw[], (typeof categories.$inferSelect)[], MoveWithCategoryRaw[]];
+	])) as [MoveRaw[], (typeof categories.$inferSelect)[], MoveRaw[]];
+
+	// Create a map for O(1) category lookup to avoid redundant database joins
+	const categoryMap = new Map(allCategories.map((c) => [c.id, c.name]));
 
 	const movesData = movesDataRaw.map((move) => ({
 		id: move.id,
@@ -79,7 +89,7 @@ export const load: PageServerLoad = async (event) => {
 		contributorName: move.contributorName,
 		category: {
 			id: move.categoryId,
-			name: move.categoryName
+			name: categoryMap.get(move.categoryId) || 'Unknown'
 		}
 	}));
 
@@ -94,7 +104,7 @@ export const load: PageServerLoad = async (event) => {
 				contributorName: featuredMoveRaw.contributorName,
 				category: {
 					id: featuredMoveRaw.categoryId,
-					name: featuredMoveRaw.categoryName
+					name: categoryMap.get(featuredMoveRaw.categoryId) || 'Unknown'
 				}
 			}
 		: null;
