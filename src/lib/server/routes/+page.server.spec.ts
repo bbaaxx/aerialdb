@@ -39,24 +39,16 @@ describe('+page.server', () => {
 			{
 				id: '1',
 				name: 'Star',
-				description: 'A beautiful move',
 				imageUrl: null,
-				videoUrl: null,
 				level: 'beginner',
-				contributorName: 'Alice',
-				categoryId: 'cat-1',
-				categoryName: 'Silks'
+				categoryId: 'cat-1'
 			},
 			{
 				id: '2',
 				name: 'Whip',
-				description: 'A dynamic move',
 				imageUrl: 'img.jpg',
-				videoUrl: null,
 				level: 'advanced',
-				contributorName: 'Bob',
-				categoryId: 'cat-1',
-				categoryName: 'Silks'
+				categoryId: 'cat-1'
 			}
 		];
 
@@ -81,7 +73,6 @@ describe('+page.server', () => {
 		function createQueryBuilderMock(result: any) {
 			const queryBuilder = {
 				from: vi.fn().mockReturnThis(),
-				innerJoin: vi.fn().mockReturnThis(),
 				where: vi.fn().mockReturnThis(),
 				orderBy: vi.fn().mockReturnThis(),
 				limit: vi.fn().mockReturnThis(),
@@ -107,7 +98,6 @@ describe('+page.server', () => {
 					return createQueryBuilderMock(queryResults[resultIndex++]);
 				}),
 				from: vi.fn().mockReturnThis(),
-				innerJoin: vi.fn().mockReturnThis(),
 				where: vi.fn().mockReturnThis(),
 				orderBy: vi.fn().mockReturnThis()
 			};

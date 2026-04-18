@@ -1,5 +1,4 @@
 import { getDb } from '$lib/server/db';
-import { type MoveWithCategoryRaw } from '$lib/server/db/types';
 import { moves, categories } from '$lib/server/db/schema';
 import { desc, eq, isNotNull, like, and } from 'drizzle-orm';
 import type { PageServerLoad } from './$types';
@@ -27,24 +26,18 @@ export const load: PageServerLoad = async (event) => {
 		conditions.push(eq(moves.level, levelFilter));
 	}
 
-	// Performance: Fetch moves, categories, and featured move in parallel to reduce TTFB
-	// Type assertion needed: getDb() returns a union type (D1 | libsql)
-	// that breaks .select({fields}) overload resolution
+	// Performance: Fetch moves, categories, and featured move in parallel to reduce TTFB.
+	// We optimize by removing redundant SQL joins and fetching only necessary fields for the library view.
 	const [movesDataRaw, allCategories, [featuredMoveRaw]] = (await Promise.all([
 		(db as any)
 			.select({
 				id: moves.id,
 				name: moves.name,
-				description: moves.description,
 				imageUrl: moves.imageUrl,
-				videoUrl: moves.videoUrl,
 				level: moves.level,
-				contributorName: moves.contributorName,
-				categoryId: categories.id,
-				categoryName: categories.name
+				categoryId: moves.categoryId
 			})
 			.from(moves)
-			.innerJoin(categories, eq(moves.categoryId, categories.id))
 			.where(conditions.length > 0 ? and(...conditions) : undefined)
 			.orderBy(moves.name),
 
@@ -54,32 +47,34 @@ export const load: PageServerLoad = async (event) => {
 			.select({
 				id: moves.id,
 				name: moves.name,
-				description: moves.description,
 				imageUrl: moves.imageUrl,
-				videoUrl: moves.videoUrl,
 				level: moves.level,
-				contributorName: moves.contributorName,
-				categoryId: categories.id,
-				categoryName: categories.name
+				categoryId: moves.categoryId
 			})
 			.from(moves)
-			.innerJoin(categories, eq(moves.categoryId, categories.id))
 			.where(isNotNull(moves.imageUrl))
 			.orderBy(desc(moves.createdAt))
 			.limit(1)
-	])) as [MoveWithCategoryRaw[], (typeof categories.$inferSelect)[], MoveWithCategoryRaw[]];
+	])) as [
+		(typeof moves.$inferSelect)[],
+		(typeof categories.$inferSelect)[],
+		(typeof moves.$inferSelect)[]
+	];
+
+	// Performance: Map categories in memory to avoid redundant SQL JOINs and reduce data transfer
+	const categoryMap = new Map(allCategories.map((cat) => [cat.id, cat.name]));
 
 	const movesData = movesDataRaw.map((move) => ({
 		id: move.id,
 		name: move.name,
-		description: move.description,
+		description: null, // Not used in Library view
 		imageUrl: move.imageUrl,
-		videoUrl: move.videoUrl,
+		videoUrl: null, // Not used in Library view
 		level: move.level,
-		contributorName: move.contributorName,
+		contributorName: null, // Not used in Library view
 		category: {
 			id: move.categoryId,
-			name: move.categoryName
+			name: categoryMap.get(move.categoryId) || 'Unknown'
 		}
 	}));
 
@@ -87,14 +82,14 @@ export const load: PageServerLoad = async (event) => {
 		? {
 				id: featuredMoveRaw.id,
 				name: featuredMoveRaw.name,
-				description: featuredMoveRaw.description,
+				description: null, // Not used in HeroBanner
 				imageUrl: featuredMoveRaw.imageUrl,
-				videoUrl: featuredMoveRaw.videoUrl,
+				videoUrl: null, // Not used in HeroBanner
 				level: featuredMoveRaw.level,
-				contributorName: featuredMoveRaw.contributorName,
+				contributorName: null, // Not used in HeroBanner
 				category: {
 					id: featuredMoveRaw.categoryId,
-					name: featuredMoveRaw.categoryName
+					name: categoryMap.get(featuredMoveRaw.categoryId) || 'Unknown'
 				}
 			}
 		: null;
