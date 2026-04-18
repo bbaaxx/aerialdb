@@ -21,3 +21,9 @@
 **Vulnerability:** Admin form actions (POST requests) were not protected by authentication checks, despite the routes being under a layout with an authentication guard. Attackers could directly POST to these actions (e.g., to create categories or delete moves) without being logged in.
 **Learning:** SvelteKit layout `load` functions only run during page loads (GET requests) or client-side navigation. Form actions (`actions` in `+page.server.ts`) execute independently and do not inherit the protection of a layout's `load` function.
 **Prevention:** Always explicitly verify `event.locals.user` at the beginning of sensitive form actions, even if the route is nested under a protected layout.
+
+## 2026-04-12 - [Open Redirect Bypass via Backslashes]
+
+**Vulnerability:** The `isValidRedirect` utility was only checking for `//` to prevent protocol-relative URL bypasses. Attackers could use `/\\` (a leading slash followed by a backslash) which many browsers interpret as a protocol-relative URL (equivalent to `//`), allowing redirects to external domains.
+**Learning:** Redirect validation that only checks for leading double slashes is insufficient. Backslashes and control characters can be used to bypass simple string-based checks in various browser environments.
+**Prevention:** Use a more robust validation that blocks backslashes immediately after the leading slash, filters out control characters/whitespace, and ideally uses the `URL` constructor with a fixed base to ensure the resulting URL is truly relative to the same origin.
