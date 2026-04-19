@@ -16,6 +16,8 @@
 	"menu_profile": "Profile",
 	"menu_my_library": "My Library",
 	"menu_sign_out": "Sign Out",
+	"nav_account_menu_label": "Account menu",
+	"nav_mobile_menu_label": "Mobile menu",
 	"coming_soon_title": "Coming Soon",
 	"coming_soon_message": "This page is under construction. Check back soon!",
 	"back_to_library": "Back to Library"

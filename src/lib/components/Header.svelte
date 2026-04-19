@@ -2,6 +2,7 @@
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
 	import { m } from '$lib/paraglide/messages.js';
+	import { fade, slide } from 'svelte/transition';
 	import { Search, X, Upload, User, LogOut, BookOpen, Menu, ChevronRight } from 'lucide-svelte';
 
 	interface Props {
@@ -196,6 +197,7 @@
 							bind:this={accountButton}
 							onclick={toggleAccount}
 							class="rounded-lg p-2 text-on-surface-variant transition hover:bg-surface-container-high/50 hover:text-on-surface"
+							aria-label={m.nav_account_menu_label()}
 							aria-haspopup="true"
 							aria-expanded={accountOpen}
 						>
@@ -205,6 +207,7 @@
 						<!-- Account dropdown -->
 						{#if accountOpen}
 							<div
+								transition:fade={{ duration: 150 }}
 								bind:this={dropdownRef}
 								class="absolute right-0 mt-2 w-48 overflow-hidden rounded-xl py-1 shadow-lg"
 								style="background: rgba(42,45,62,0.95); backdrop-filter: blur(16px);"
@@ -257,7 +260,7 @@
 					type="button"
 					onclick={() => (mobileMenuOpen = !mobileMenuOpen)}
 					class="rounded-lg p-2 text-on-surface-variant transition hover:bg-surface-container-high/50 hover:text-on-surface lg:hidden"
-					aria-label="Menu"
+					aria-label={m.nav_mobile_menu_label()}
 					aria-expanded={mobileMenuOpen}
 				>
 					<Menu size={20} />
@@ -267,7 +270,7 @@
 
 		<!-- Inline search bar (expandable) -->
 		{#if searchOpen}
-			<div class="mt-3">
+			<div class="mt-3" transition:slide>
 				<div class="relative">
 					<div
 						class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-on-surface-variant"
@@ -303,6 +306,7 @@
 		<!-- Mobile nav panel -->
 		{#if mobileMenuOpen}
 			<nav
+				transition:slide
 				class="mt-3 border-t border-outline-variant/15 pt-3 lg:hidden"
 				aria-label="Mobile navigation"
 			>
