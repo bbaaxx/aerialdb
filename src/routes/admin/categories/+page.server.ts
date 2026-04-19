@@ -22,24 +22,26 @@ type CategoryWithMoveCount = {
 export const load: PageServerLoad = async (event) => {
 	const db = getDb(event);
 
-	// Fetch all categories
-	const allCategories = await (db as any)
-		.select({
-			id: categories.id,
-			name: categories.name,
-			createdAt: categories.createdAt
-		})
-		.from(categories)
-		.orderBy(categories.name);
+	// Performance: Fetch categories and move counts in parallel to reduce TTFB.
+	// Expected impact: Reduces database latency component of TTFB by ~50% (from sequential to concurrent execution).
+	const [allCategories, moveCountsRaw] = await Promise.all([
+		(db as any)
+			.select({
+				id: categories.id,
+				name: categories.name,
+				createdAt: categories.createdAt
+			})
+			.from(categories)
+			.orderBy(categories.name),
 
-	// Get move counts per category using raw SQL count
-	const moveCountsRaw = await (db as any)
-		.select({
-			categoryId: moves.categoryId,
-			count: sql`count(*)`.as('count')
-		})
-		.from(moves)
-		.groupBy(moves.categoryId);
+		(db as any)
+			.select({
+				categoryId: moves.categoryId,
+				count: sql`count(*)`.as('count')
+			})
+			.from(moves)
+			.groupBy(moves.categoryId)
+	]);
 
 	// Create a map for faster lookup
 	const moveCountMap = new Map<string, number>(
