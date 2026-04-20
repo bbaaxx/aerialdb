@@ -92,11 +92,11 @@
 				<span class="mb-3 text-sm font-medium tracking-wide text-teal-400"> Move of the Day </span>
 
 				<!-- Title -->
-				<h2
+				<h1
 					class="mb-4 font-serif text-2xl leading-tight font-bold text-white sm:mb-6 sm:text-4xl md:text-5xl"
 				>
 					{move.name}
-				</h2>
+				</h1>
 
 				<!-- Badges -->
 				<div class="mb-5 flex flex-wrap items-end gap-3 sm:mb-8 sm:gap-4">
@@ -139,11 +139,11 @@
 					Welcome to AerialDB
 				</span>
 
-				<h2
+				<h1
 					class="mb-4 font-serif text-2xl leading-tight font-bold text-white sm:mb-6 sm:text-4xl md:text-5xl"
 				>
 					Explore Aerial Moves
-				</h2>
+				</h1>
 
 				<p class="mb-5 max-w-md text-sm text-primary-light sm:mb-8 sm:text-base">
 					Discover a curated library of aerial acrobatics moves, from beginner to professional

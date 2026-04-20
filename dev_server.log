@@ -1,0 +1,32 @@
+
+> aerialdb@0.0.1 dev /app
+> vite dev
+
+(node:89017) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ [paraglide-js] Compilation complete (locale-modules)
+Port 5173 is in use, trying another one...
+
+  VITE v7.3.2  ready in 4248 ms
+
+  ➜  Local:   http://localhost:5174/
+  ➜  Network: use --host to expose
+12:38:17 AM [vite-plugin-svelte] src/routes/+page.svelte:13:51 This reference only captures the initial value of `data`. Did you mean to reference it inside a derived instead?
+https://svelte.dev/e/state_referenced_locally
+12:38:17 AM [vite-plugin-svelte] src/routes/+page.svelte:14:43 This reference only captures the initial value of `data`. Did you mean to reference it inside a derived instead?
+https://svelte.dev/e/state_referenced_locally
+12:39:10 AM [vite] (ssr) page reload src/lib/components/HeroBanner.svelte
+12:39:19 AM [vite] (ssr) page reload .svelte-kit/generated/server/internal.js
+12:39:19 AM [vite] (ssr) page reload .svelte-kit/generated/root.svelte
+12:39:19 AM [vite] (ssr) page reload .svelte-kit/generated/root.js
+12:39:20 AM [vite] (ssr) page reload src/lib/paraglide/runtime.js
+12:39:20 AM [vite] (ssr) page reload src/lib/paraglide/messages.js
+12:39:20 AM [vite] (ssr) page reload src/lib/paraglide/server.js
+12:39:20 AM [vite] (ssr) page reload src/lib/paraglide/messages/_index.js
+12:39:20 AM [vite] (ssr) page reload src/lib/paraglide/messages/en.js
+12:39:20 AM [vite] (ssr) page reload src/lib/paraglide/messages/es.js
+12:42:50 AM [vite-plugin-svelte] src/routes/+page.svelte:13:51 This reference only captures the initial value of `data`. Did you mean to reference it inside a derived instead?
+https://svelte.dev/e/state_referenced_locally
+12:42:50 AM [vite-plugin-svelte] src/routes/+page.svelte:14:43 This reference only captures the initial value of `data`. Did you mean to reference it inside a derived instead?
+https://svelte.dev/e/state_referenced_locally
+ ELIFECYCLE  Command failed.

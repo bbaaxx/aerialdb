@@ -27,7 +27,9 @@ export const load: PageServerLoad = async (event) => {
 		conditions.push(eq(moves.level, levelFilter));
 	}
 
-	// Performance: Fetch moves, categories, and featured move in parallel to reduce TTFB
+	// Performance: Fetch moves, categories, and featured move in parallel to reduce TTFB.
+	// Optimization: Categories are already fetched in full, so we use an in-memory map
+	// instead of SQL joins to resolve category names, reducing redundant data transfer.
 	// Type assertion needed: getDb() returns a union type (D1 | libsql)
 	// that breaks .select({fields}) overload resolution
 	const [movesDataRaw, allCategories, [featuredMoveRaw]] = (await Promise.all([
@@ -40,11 +42,9 @@ export const load: PageServerLoad = async (event) => {
 				videoUrl: moves.videoUrl,
 				level: moves.level,
 				contributorName: moves.contributorName,
-				categoryId: categories.id,
-				categoryName: categories.name
+				categoryId: moves.categoryId
 			})
 			.from(moves)
-			.innerJoin(categories, eq(moves.categoryId, categories.id))
 			.where(conditions.length > 0 ? and(...conditions) : undefined)
 			.orderBy(moves.name),
 
@@ -59,15 +59,20 @@ export const load: PageServerLoad = async (event) => {
 				videoUrl: moves.videoUrl,
 				level: moves.level,
 				contributorName: moves.contributorName,
-				categoryId: categories.id,
-				categoryName: categories.name
+				categoryId: moves.categoryId
 			})
 			.from(moves)
-			.innerJoin(categories, eq(moves.categoryId, categories.id))
 			.where(isNotNull(moves.imageUrl))
 			.orderBy(desc(moves.createdAt))
 			.limit(1)
-	])) as [MoveWithCategoryRaw[], (typeof categories.$inferSelect)[], MoveWithCategoryRaw[]];
+	])) as [
+		Omit<MoveWithCategoryRaw, 'categoryName'>[],
+		(typeof categories.$inferSelect)[],
+		Omit<MoveWithCategoryRaw, 'categoryName'>[]
+	];
+
+	// Create category lookup map for O(1) in-memory resolution
+	const categoryMap = new Map(allCategories.map((c) => [c.id, c.name]));
 
 	const movesData = movesDataRaw.map((move) => ({
 		id: move.id,
@@ -79,7 +84,7 @@ export const load: PageServerLoad = async (event) => {
 		contributorName: move.contributorName,
 		category: {
 			id: move.categoryId,
-			name: move.categoryName
+			name: categoryMap.get(move.categoryId) || 'Unknown'
 		}
 	}));
 
@@ -94,7 +99,7 @@ export const load: PageServerLoad = async (event) => {
 				contributorName: featuredMoveRaw.contributorName,
 				category: {
 					id: featuredMoveRaw.categoryId,
-					name: featuredMoveRaw.categoryName
+					name: categoryMap.get(featuredMoveRaw.categoryId) || 'Unknown'
 				}
 			}
 		: null;

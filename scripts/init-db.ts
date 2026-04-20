@@ -58,6 +58,7 @@ async function initDatabase() {
 			description TEXT,
 			image_url TEXT,
 			video_url TEXT,
+			level TEXT,
 			contributor_name TEXT,
 			created_by TEXT NOT NULL,
 			created_at INTEGER NOT NULL,
