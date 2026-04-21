@@ -56,12 +56,17 @@
 		<button
 			type="button"
 			onclick={handleFavoriteClick}
-			class="absolute bottom-3 left-1/2 flex -translate-x-1/2 items-center gap-1.5 rounded-full bg-black/50 px-4 py-2 text-sm text-white opacity-0 backdrop-blur-sm transition-all duration-200 group-focus-within:opacity-100 group-hover:opacity-100 hover:scale-105 focus:opacity-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-white active:scale-95 {isFavorited
-				? 'text-purple-400'
-				: ''}"
+			class="absolute bottom-3 left-1/2 flex -translate-x-1/2 items-center gap-1.5 rounded-full bg-black/60 px-4 py-2 text-sm text-white backdrop-blur-md transition-all duration-300 group-focus-within:opacity-100 group-hover:opacity-100 focus-visible:opacity-100 active:scale-95 {isFavorited
+				? 'text-accent-purple opacity-100 shadow-[0_0_15px_rgba(138,99,248,0.4)]'
+				: 'opacity-0'}"
 			aria-label={isFavorited ? 'Remove from favorites' : 'Save to favorites'}
+			aria-pressed={isFavorited}
 		>
-			<Heart size={14} fill={isFavorited ? 'currentColor' : 'none'} />
+			<Heart
+				size={14}
+				fill={isFavorited ? 'currentColor' : 'none'}
+				class="transition-transform duration-300 {isFavorited ? 'scale-110' : ''}"
+			/>
 			<span>{isFavorited ? 'Saved to Favorites' : 'Save to Favorites'}</span>
 		</button>
 	</div>

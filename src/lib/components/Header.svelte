@@ -3,6 +3,7 @@
 	import { goto } from '$app/navigation';
 	import { m } from '$lib/paraglide/messages.js';
 	import { fade, slide } from 'svelte/transition';
+
 	import { Search, X, Upload, User, LogOut, BookOpen, Menu, ChevronRight } from 'lucide-svelte';
 
 	interface Props {
