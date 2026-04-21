@@ -58,6 +58,7 @@ async function initDatabase() {
 			description TEXT,
 			image_url TEXT,
 			video_url TEXT,
+			level TEXT,
 			contributor_name TEXT,
 			created_by TEXT NOT NULL,
 			created_at INTEGER NOT NULL,
@@ -130,8 +131,8 @@ async function initDatabase() {
 		await client.execute({
 			sql: `INSERT INTO moves (
 				id, name, category_id, description, image_url, video_url,
-				contributor_name, created_by, created_at, updated_at
-			) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+				level, contributor_name, created_by, created_at, updated_at
+			) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
 			args: [
 				moveId,
 				toonMove.figura,
@@ -139,6 +140,7 @@ async function initDatabase() {
 				toonMove.descripcion,
 				toonMove.image,
 				toonMove.video,
+				null, // level
 				toonMove.contributor,
 				adminUserId,
 				Date.now(),
