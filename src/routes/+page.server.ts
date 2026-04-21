@@ -27,9 +27,9 @@ export const load: PageServerLoad = async (event) => {
 		conditions.push(eq(moves.level, levelFilter));
 	}
 
-	// Performance: Fetch moves, categories, and featured move in parallel to reduce TTFB
-	// Type assertion needed: getDb() returns a union type (D1 | libsql)
-	// that breaks .select({fields}) overload resolution
+	// Performance: Fetch moves, categories, and featured move in parallel to reduce TTFB.
+	// Optimization: Categories are fetched in full and resolved in-memory using a Map,
+	// avoiding SQL JOIN overhead and redundant category name data transfer.
 	const [movesDataRaw, allCategories, [featuredMoveRaw]] = (await Promise.all([
 		(db as any)
 			.select({
@@ -40,15 +40,13 @@ export const load: PageServerLoad = async (event) => {
 				videoUrl: moves.videoUrl,
 				level: moves.level,
 				contributorName: moves.contributorName,
-				categoryId: categories.id,
-				categoryName: categories.name
+				categoryId: moves.categoryId
 			})
 			.from(moves)
-			.innerJoin(categories, eq(moves.categoryId, categories.id))
 			.where(conditions.length > 0 ? and(...conditions) : undefined)
 			.orderBy(moves.name),
 
-		db.select().from(categories).orderBy(categories.name),
+		(db as any).select().from(categories).orderBy(categories.name),
 
 		(db as any)
 			.select({
@@ -59,15 +57,20 @@ export const load: PageServerLoad = async (event) => {
 				videoUrl: moves.videoUrl,
 				level: moves.level,
 				contributorName: moves.contributorName,
-				categoryId: categories.id,
-				categoryName: categories.name
+				categoryId: moves.categoryId
 			})
 			.from(moves)
-			.innerJoin(categories, eq(moves.categoryId, categories.id))
 			.where(isNotNull(moves.imageUrl))
 			.orderBy(desc(moves.createdAt))
 			.limit(1)
-	])) as [MoveWithCategoryRaw[], (typeof categories.$inferSelect)[], MoveWithCategoryRaw[]];
+	])) as [
+		(typeof moves.$inferSelect)[],
+		(typeof categories.$inferSelect)[],
+		(typeof moves.$inferSelect)[]
+	];
+
+	// Build in-memory category lookup for O(1) resolution
+	const categoryMap = new Map(allCategories.map((c) => [c.id, c.name]));
 
 	const movesData = movesDataRaw.map((move) => ({
 		id: move.id,
@@ -79,7 +82,7 @@ export const load: PageServerLoad = async (event) => {
 		contributorName: move.contributorName,
 		category: {
 			id: move.categoryId,
-			name: move.categoryName
+			name: categoryMap.get(move.categoryId) ?? 'Unknown'
 		}
 	}));
 
@@ -94,7 +97,7 @@ export const load: PageServerLoad = async (event) => {
 				contributorName: featuredMoveRaw.contributorName,
 				category: {
 					id: featuredMoveRaw.categoryId,
-					name: featuredMoveRaw.categoryName
+					name: categoryMap.get(featuredMoveRaw.categoryId) ?? 'Unknown'
 				}
 			}
 		: null;
