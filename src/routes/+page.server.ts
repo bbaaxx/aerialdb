@@ -1,5 +1,4 @@
 import { getDb } from '$lib/server/db';
-import { type MoveWithCategoryRaw } from '$lib/server/db/types';
 import { moves, categories } from '$lib/server/db/schema';
 import { desc, eq, isNotNull, like, and } from 'drizzle-orm';
 import type { PageServerLoad } from './$types';
