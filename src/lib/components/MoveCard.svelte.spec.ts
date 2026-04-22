@@ -55,6 +55,8 @@ describe('MoveCard', () => {
 			expect(img?.getAttribute('src')).toBe('https://example.com/star.jpg');
 			expect(img?.getAttribute('loading')).toBe('lazy');
 			expect(img?.getAttribute('decoding')).toBe('async');
+			expect(img?.getAttribute('class')).toContain('transition-transform');
+			expect(img?.getAttribute('class')).toContain('group-hover:scale-105');
 		});
 
 		it('renders placeholder when imageUrl is null', async () => {
