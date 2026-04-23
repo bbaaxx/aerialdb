@@ -44,20 +44,20 @@ export const actions: Actions = {
 		const results = await db.select().from(table.user).where(eq(table.user.username, username));
 
 		const existingUser = results.at(0);
-		if (!existingUser) {
+
+		// Use a dummy hash for non-existent users to prevent timing attacks (user enumeration)
+		// This ensures that verifyPassword is always called and takes a similar amount of time.
+		const dummyHash = '+J6mAU4gdBajcPCY/n3Gsw==:pVit99yFbG/spnoO0FTSSWz5uMOSCDS9ZQWqmIR7AVE=';
+		const validPassword = await verifyPassword(
+			existingUser ? existingUser.passwordHash : dummyHash,
+			password
+		);
+
+		if (!existingUser || !validPassword) {
 			return fail(400, {
-				message: 'Account not found. Please check your username or create a new account.',
+				message: 'Invalid username or password. Please try again or create a new account.',
 				username: typeof username === 'string' ? username : '',
 				showSignupLink: true
-			});
-		}
-
-		const validPassword = await verifyPassword(existingUser.passwordHash, password);
-		if (!validPassword) {
-			return fail(400, {
-				message: 'Incorrect password. Please try again.',
-				username: typeof username === 'string' ? username : '',
-				showSignupLink: false
 			});
 		}
 

@@ -27,3 +27,9 @@
 **Vulnerability:** Redirect validation only checked for `//` prefix, allowing bypasses using control characters, whitespace, or backslashes (e.g., `/\example.com`) which some browsers might interpret as external URLs.
 **Learning:** Simple string prefix checks are insufficient for URL validation; the `URL` constructor with a controlled base is more reliable for detecting origin changes.
 **Prevention:** Use a combination of character blocklists (whitespace/control chars) and the `URL` constructor to ensure redirect targets remain within the expected origin.
+
+## 2026-04-21 - [User Enumeration and Timing Attacks]
+
+**Vulnerability:** The login flow returned different error messages for existent vs. non-existent users and skipped the computationally expensive password hashing if the user was not found, allowing attackers to identify valid usernames through error messages and response timing.
+**Learning:** Security-focused custom auth flows must treat "user not found" and "incorrect password" identically in both UI feedback and server processing time.
+**Prevention:** Return generic error messages and always perform a "dummy" password verification with a pre-calculated hash when a user record is missing.
