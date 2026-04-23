@@ -8,6 +8,13 @@ import { randomBytes } from '@noble/hashes/utils.js';
 import { encodeBase64, decodeBase64 } from '@oslojs/encoding';
 
 /**
+ * Dummy hash used to mitigate timing attacks by performing a fake verification
+ * when a user is not found.
+ */
+export const dummyPasswordHash =
+	'Vt3YfpHilRAHxeCnmdqk7Q==:b+jvCaSk7N4a0qT4glCxj44wAujtWN8nuk48Vlnxuws=';
+
+/**
  * Hash a password using Scrypt
  * Format: base64(salt):base64(hash)
  */

@@ -1,4 +1,4 @@
-import { verifyPassword } from '$lib/server/password';
+import { verifyPassword, dummyPasswordHash } from '$lib/server/password';
 import { fail, redirect } from '@sveltejs/kit';
 import { eq } from 'drizzle-orm';
 import * as auth from '$lib/server/auth';
@@ -44,20 +44,16 @@ export const actions: Actions = {
 		const results = await db.select().from(table.user).where(eq(table.user.username, username));
 
 		const existingUser = results.at(0);
-		if (!existingUser) {
-			return fail(400, {
-				message: 'Account not found. Please check your username or create a new account.',
-				username: typeof username === 'string' ? username : '',
-				showSignupLink: true
-			});
-		}
 
-		const validPassword = await verifyPassword(existingUser.passwordHash, password);
-		if (!validPassword) {
+		// Mitigate timing attacks by always performing a password verification, even if the user is not found.
+		// Use a generic error message to prevent user enumeration.
+		const passwordHash = existingUser ? existingUser.passwordHash : dummyPasswordHash;
+		const validPassword = await verifyPassword(passwordHash, password);
+
+		if (!existingUser || !validPassword) {
 			return fail(400, {
-				message: 'Incorrect password. Please try again.',
-				username: typeof username === 'string' ? username : '',
-				showSignupLink: false
+				message: 'Invalid username or password',
+				username: typeof username === 'string' ? username : ''
 			});
 		}
 

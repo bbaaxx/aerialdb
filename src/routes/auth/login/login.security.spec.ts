@@ -39,7 +39,8 @@ describe('Login Open Redirect Security Test', () => {
 		}));
 
 		vi.mock('$lib/server/password', () => ({
-			verifyPassword: vi.fn().mockResolvedValue(true)
+			verifyPassword: vi.fn().mockResolvedValue(true),
+			dummyPasswordHash: 'dummy_hash'
 		}));
 
 		vi.mock('$lib/server/auth', () => ({
@@ -73,6 +74,75 @@ describe('Login Open Redirect Security Test', () => {
 				throw e;
 			}
 		}
+	});
+
+	it('action returns generic error message for non-existent user to prevent enumeration', async () => {
+		// Mock dependencies to return no user
+		const { getDb } = await import('$lib/server/db');
+		vi.mocked(getDb).mockReturnValue({
+			select: vi.fn().mockReturnThis(),
+			from: vi.fn().mockReturnThis(),
+			where: vi.fn().mockReturnThis(),
+			at: vi.fn().mockReturnValue(undefined)
+		} as any);
+
+		const formData = new FormData();
+		formData.append('username', 'nonexistentuser');
+		formData.append('password', 'password123');
+
+		const event = {
+			request: {
+				formData: async () => formData
+			},
+			url: new URL('http://localhost/auth/login'),
+			locals: {},
+			cookies: { get: vi.fn(), set: vi.fn(), delete: vi.fn() }
+		} as any;
+
+		// @ts-expect-error - action is default
+		const result = await actions.default(event);
+
+		expect(result.status).toBe(400);
+		expect(result.data.message).toBe('Invalid username or password');
+		// Ensure showSignupLink is NOT present
+		expect(result.data.showSignupLink).toBeUndefined();
+	});
+
+	it('action returns generic error message for incorrect password to prevent enumeration', async () => {
+		// Mock dependencies to return a user but incorrect password
+		const { getDb } = await import('$lib/server/db');
+		vi.mocked(getDb).mockReturnValue({
+			select: vi.fn().mockReturnThis(),
+			from: vi.fn().mockReturnThis(),
+			where: vi.fn().mockReturnThis(),
+			at: vi.fn().mockReturnValue({
+				id: '1',
+				username: 'testuser',
+				passwordHash: 'hashed_password'
+			})
+		} as any);
+
+		const { verifyPassword } = await import('$lib/server/password');
+		vi.mocked(verifyPassword).mockResolvedValue(false);
+
+		const formData = new FormData();
+		formData.append('username', 'testuser');
+		formData.append('password', 'wrongpassword');
+
+		const event = {
+			request: {
+				formData: async () => formData
+			},
+			url: new URL('http://localhost/auth/login'),
+			locals: {},
+			cookies: { get: vi.fn(), set: vi.fn(), delete: vi.fn() }
+		} as any;
+
+		// @ts-expect-error - action is default
+		const result = await actions.default(event);
+
+		expect(result.status).toBe(400);
+		expect(result.data.message).toBe('Invalid username or password');
 	});
 
 	it('load function accepts valid internal redirect', async () => {
