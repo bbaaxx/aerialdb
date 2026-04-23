@@ -22,24 +22,29 @@ type CategoryWithMoveCount = {
 export const load: PageServerLoad = async (event) => {
 	const db = getDb(event);
 
-	// Fetch all categories
-	const allCategories = await (db as any)
-		.select({
-			id: categories.id,
-			name: categories.name,
-			createdAt: categories.createdAt
-		})
-		.from(categories)
-		.orderBy(categories.name);
+	// Performance: Fetch categories and move counts in parallel to reduce TTFB.
+	// This reduces the server response time by avoiding sequential database round-trips.
+	const [allCategories, moveCountsRaw] = (await Promise.all([
+		(db as any)
+			.select({
+				id: categories.id,
+				name: categories.name,
+				createdAt: categories.createdAt
+			})
+			.from(categories)
+			.orderBy(categories.name),
 
-	// Get move counts per category using raw SQL count
-	const moveCountsRaw = await (db as any)
-		.select({
-			categoryId: moves.categoryId,
-			count: sql`count(*)`.as('count')
-		})
-		.from(moves)
-		.groupBy(moves.categoryId);
+		(db as any)
+			.select({
+				categoryId: moves.categoryId,
+				count: sql`count(*)`.as('count')
+			})
+			.from(moves)
+			.groupBy(moves.categoryId)
+	])) as [
+		{ id: string; name: string; createdAt: Date }[],
+		{ categoryId: string; count: number }[]
+	];
 
 	// Create a map for faster lookup
 	const moveCountMap = new Map<string, number>(
