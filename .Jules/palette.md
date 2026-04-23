@@ -22,3 +22,7 @@
 
 **Learning:** Implementing keyboard shortcuts like `/` for search significantly improves power-user UX, but it must be guarded against triggering when the user is already focused on an input or content-editable element. Using `type="search"` on inputs provides a better mobile experience (e.g., "Search" button on keyboard). Dynamic content like search result counts should use `aria-live="polite"` to ensure screen reader users are notified of updates without being interrupted.
 **Action:** Add keyboard shortcut hints to `aria-label` for discoverability. Use `type="search"` for search inputs and `aria-live` for dynamic status indicators. Guard shortcuts against `isContentEditable` elements.
+
+## 2026-04-22 - [Native Sharing Experience with Web Share API]
+**Learning:** Using the Web Share API (`navigator.share`) provides a significantly better UX on mobile devices by opening the native share sheet, while a clipboard fallback ensures functionality on desktop and older browsers. Localizing the share titles and text further improves the experience.
+**Action:** Always prefer `navigator.share` for sharing actions, providing a `navigator.clipboard` fallback and handling `AbortError` gracefully.
