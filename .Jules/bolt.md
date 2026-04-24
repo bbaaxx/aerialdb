@@ -12,3 +12,8 @@
 
 **Learning:** Fetching entire database rows for listing pages (like Home or Search) is inefficient when only a subset of fields (e.g., name, image) is displayed. Large text fields like `description` significantly increase database I/O and network payload size. Using Drizzle's `.select({ fields })` to fetch only required data reduces TTFB and memory pressure on both server and client.
 **Action:** Define explicit "Lean" types for common listing views and use selective field fetching in server-side load functions and API endpoints to minimize data transfer.
+
+## 2026-04-23 - [Parallelizing Independent Admin Queries]
+
+**Learning:** Admin listing pages often require multiple independent database queries (e.g., fetching categories and calculating aggregate move counts). Executing these sequentially increases TTFB. Parallelizing them with `Promise.all` optimizes server response time by leveraging the database's ability to handle concurrent requests.
+**Action:** Audit admin and dashboard routes for sequential `await` calls of independent queries and refactor them to use `Promise.all`.
