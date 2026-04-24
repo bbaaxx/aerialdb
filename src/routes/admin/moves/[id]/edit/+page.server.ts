@@ -54,19 +54,31 @@ export const actions = {
 
 		// Handle new category creation
 		if (newCategoryName) {
-			// Generate ID helper (same as in new move)
-			const generateId = (length: number = 10): string => {
-				const bytes = crypto.getRandomValues(new Uint8Array(length));
-				return encodeBase32LowerCaseNoPadding(bytes);
-			};
+			const name = newCategoryName.trim();
+			if (name.length > 100) {
+				return fail(400, { error: 'Category name must be 100 characters or less' });
+			}
 
-			const newCategoryId = generateId(10);
-			await db.insert(categories).values({
-				id: newCategoryId,
-				name: newCategoryName,
-				createdAt: new Date()
-			});
-			categoryId = newCategoryId;
+			// Check if category already exists
+			const existing = await db.select().from(categories).where(eq(categories.name, name)).get();
+
+			if (existing) {
+				categoryId = existing.id;
+			} else {
+				// Generate ID helper (same as in new move)
+				const generateId = (length: number = 10): string => {
+					const bytes = crypto.getRandomValues(new Uint8Array(length));
+					return encodeBase32LowerCaseNoPadding(bytes);
+				};
+
+				const newCategoryId = generateId(10);
+				await db.insert(categories).values({
+					id: newCategoryId,
+					name,
+					createdAt: new Date()
+				});
+				categoryId = newCategoryId;
+			}
 		}
 
 		if (!categoryId) {

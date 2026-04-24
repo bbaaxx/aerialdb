@@ -1,5 +1,6 @@
 import { getDb } from '$lib/server/db';
 import { moves, categories } from '$lib/server/db/schema';
+import { eq } from 'drizzle-orm';
 import { redirect, fail } from '@sveltejs/kit';
 import { encodeBase32LowerCaseNoPadding } from '@oslojs/encoding';
 import type { Actions, PageServerLoad } from './$types';
@@ -37,13 +38,25 @@ export const actions = {
 
 		// Handle new category creation
 		if (newCategoryName) {
-			const newCategoryId = generateId(10);
-			await db.insert(categories).values({
-				id: newCategoryId,
-				name: newCategoryName,
-				createdAt: new Date()
-			});
-			categoryId = newCategoryId;
+			const name = newCategoryName.trim();
+			if (name.length > 100) {
+				return fail(400, { error: 'Category name must be 100 characters or less' });
+			}
+
+			// Check if category already exists
+			const existing = await db.select().from(categories).where(eq(categories.name, name)).get();
+
+			if (existing) {
+				categoryId = existing.id;
+			} else {
+				const newCategoryId = generateId(10);
+				await db.insert(categories).values({
+					id: newCategoryId,
+					name,
+					createdAt: new Date()
+				});
+				categoryId = newCategoryId;
+			}
 		}
 
 		if (!categoryId) {
