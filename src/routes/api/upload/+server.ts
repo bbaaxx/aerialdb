@@ -26,7 +26,21 @@ export const POST: RequestHandler = async ({ request, platform, locals }) => {
 	}
 
 	// Generate unique filename
-	const ext = file.name.split('.').pop();
+	// SECURITY: Use a server-defined mapping of MIME types to extensions.
+	// This prevents extension spoofing by ignoring the client-provided filename.
+	const mimeToExt: Record<string, string> = {
+		'image/jpeg': 'jpg',
+		'image/png': 'png',
+		'image/webp': 'webp'
+	};
+	const ext = mimeToExt[file.type];
+
+	// SECURITY: Ensure we have a valid extension for the validated MIME type.
+	// This provides a fallback if a type bypasses the initial 'allowedTypes' check.
+	if (!ext) {
+		return json({ error: 'Unsupported image format' }, { status: 400 });
+	}
+
 	const filename = `${crypto.randomUUID()}.${ext}`;
 
 	// Check if we're in Cloudflare environment
