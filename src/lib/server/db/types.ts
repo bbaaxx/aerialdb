@@ -38,6 +38,23 @@ export type MoveWithCategoryRawFull = MoveWithCategoryRaw & {
 	updatedAt: Date | null;
 };
 
+/**
+ * Lean representation of a move for the Admin Dashboard table.
+ * Includes a boolean flag for description presence instead of full text.
+ */
+export type AdminLeanMove = {
+	id: string;
+	name: string;
+	categoryId: string;
+	categoryName: string;
+	hasDescription: boolean;
+	imageUrl: string | null;
+	videoUrl: string | null;
+	contributorName: string | null;
+	createdAt: Date | null;
+	updatedAt: Date | null;
+};
+
 export type SessionWithUser = {
 	user: { id: string; username: string };
 	session: {

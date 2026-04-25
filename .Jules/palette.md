@@ -24,5 +24,6 @@
 **Action:** Add keyboard shortcut hints to `aria-label` for discoverability. Use `type="search"` for search inputs and `aria-live` for dynamic status indicators. Guard shortcuts against `isContentEditable` elements.
 
 ## 2026-04-22 - [Native Sharing Experience with Web Share API]
+
 **Learning:** Using the Web Share API (`navigator.share`) provides a significantly better UX on mobile devices by opening the native share sheet, while a clipboard fallback ensures functionality on desktop and older browsers. Localizing the share titles and text further improves the experience.
 **Action:** Always prefer `navigator.share` for sharing actions, providing a `navigator.clipboard` fallback and handling `AbortError` gracefully.
