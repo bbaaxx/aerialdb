@@ -38,6 +38,35 @@ export type MoveWithCategoryRawFull = MoveWithCategoryRaw & {
 	updatedAt: Date | null;
 };
 
+/**
+ * Lean representation of a move for the Admin Dashboard.
+ * Optimized to use existence flags for media and description instead of fetching content.
+ */
+export type AdminLeanMoveRaw = {
+	id: string;
+	name: string;
+	categoryId: string;
+	hasDescription: number;
+	hasImageUrl: number;
+	hasVideoUrl: number;
+	contributorName: string | null;
+	createdAt: Date | null;
+	updatedAt: Date | null;
+};
+
+export type AdminLeanMove = {
+	id: string;
+	name: string;
+	categoryId: string;
+	description: boolean;
+	imageUrl: boolean;
+	videoUrl: boolean;
+	contributorName: string | null;
+	categoryName: string;
+	createdAt: Date | null;
+	updatedAt: Date | null;
+};
+
 export type SessionWithUser = {
 	user: { id: string; username: string };
 	session: {

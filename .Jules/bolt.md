@@ -12,3 +12,7 @@
 
 **Learning:** Fetching entire database rows for listing pages (like Home or Search) is inefficient when only a subset of fields (e.g., name, image) is displayed. Large text fields like `description` significantly increase database I/O and network payload size. Using Drizzle's `.select({ fields })` to fetch only required data reduces TTFB and memory pressure on both server and client.
 **Action:** Define explicit "Lean" types for common listing views and use selective field fetching in server-side load functions and API endpoints to minimize data transfer.
+
+## 2026-04-26 - [Lean Queries and Relational Lookups]
+**Learning:** Optimizing Admin listing pages by replacing SQL JOINs with in-memory Map-based lookups for small reference tables (like categories) reduces database load and eliminates redundant data transfer. Additionally, using `sql` computed booleans for large text fields (e.g., `description`) allows for presence indicators in the UI without fetching the full content. However, "Lean" representations must still preserve metadata fields like `createdAt` and `updatedAt` to avoid breaking existing UI dependencies or causing perceived regressions.
+**Action:** Use selective field fetching with computed booleans for large text, and prefer in-memory resolution for small relational datasets. Always verify UI dependency on metadata before excluding it from Lean types.
