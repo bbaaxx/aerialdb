@@ -161,6 +161,9 @@
 					onclick={toggleSearch}
 					class="group relative rounded-lg p-2 text-on-surface-variant transition hover:bg-surface-container-high/50 hover:text-on-surface focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
 					aria-label={m.nav_search_toggle_label()}
+					aria-keyshortcuts="/"
+					aria-expanded={searchOpen}
+					aria-controls="global-search-bar"
 				>
 					{#if searchOpen}
 						<X size={20} />
@@ -197,7 +200,7 @@
 							type="button"
 							bind:this={accountButton}
 							onclick={toggleAccount}
-							class="rounded-lg p-2 text-on-surface-variant transition hover:bg-surface-container-high/50 hover:text-on-surface"
+							class="rounded-lg p-2 text-on-surface-variant transition hover:bg-surface-container-high/50 hover:text-on-surface focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
 							aria-label={m.nav_account_menu_label()}
 							aria-haspopup="true"
 							aria-expanded={accountOpen}
@@ -260,7 +263,7 @@
 				<button
 					type="button"
 					onclick={() => (mobileMenuOpen = !mobileMenuOpen)}
-					class="rounded-lg p-2 text-on-surface-variant transition hover:bg-surface-container-high/50 hover:text-on-surface lg:hidden"
+					class="rounded-lg p-2 text-on-surface-variant transition hover:bg-surface-container-high/50 hover:text-on-surface focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none lg:hidden"
 					aria-label={m.nav_mobile_menu_label()}
 					aria-expanded={mobileMenuOpen}
 				>
@@ -271,7 +274,7 @@
 
 		<!-- Inline search bar (expandable) -->
 		{#if searchOpen}
-			<div class="mt-3" transition:slide>
+			<div id="global-search-bar" class="mt-3" transition:slide>
 				<div class="relative">
 					<div
 						class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-on-surface-variant"
@@ -283,6 +286,7 @@
 						bind:this={searchInput}
 						value={searchQuery}
 						placeholder={m.nav_search_placeholder()}
+						aria-label={m.nav_search_placeholder()}
 						oninput={(e: Event) => handleSearchInput((e.target as HTMLInputElement).value)}
 						onkeydown={handleSearchKeydown}
 						class="w-full rounded-lg border border-outline-variant/15 bg-surface-container py-2 pr-10 pl-10 text-sm text-on-surface placeholder-on-surface-variant focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none"

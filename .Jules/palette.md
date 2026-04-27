@@ -24,5 +24,11 @@
 **Action:** Add keyboard shortcut hints to `aria-label` for discoverability. Use `type="search"` for search inputs and `aria-live` for dynamic status indicators. Guard shortcuts against `isContentEditable` elements.
 
 ## 2026-04-22 - [Native Sharing Experience with Web Share API]
+
 **Learning:** Using the Web Share API (`navigator.share`) provides a significantly better UX on mobile devices by opening the native share sheet, while a clipboard fallback ensures functionality on desktop and older browsers. Localizing the share titles and text further improves the experience.
 **Action:** Always prefer `navigator.share` for sharing actions, providing a `navigator.clipboard` fallback and handling `AbortError` gracefully.
+
+## 2027-04-27 - [Semantic Search and Navigation Feedback]
+
+**Learning:** Assistive technologies require explicit signals for dynamic UI components like expandable search bars. Combining `aria-expanded`, `aria-controls`, and `aria-keyshortcuts` provides a robust semantic bridge between a toggle and its target. Furthermore, ensuring consistent high-contrast focus indicators (`focus-visible:ring-2`) across all header actions (Search, Account, Mobile Menu) maintains a predictable and accessible navigation experience.
+**Action:** Always link expandable components with `aria-controls` and `aria-expanded`. Explicitly declare keyboard shortcuts with `aria-keyshortcuts` when implementing global listeners. Ensure all interactive elements in navigation bars have consistent focus styles.

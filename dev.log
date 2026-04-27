@@ -1,0 +1,21 @@
+
+> aerialdb@0.0.1 dev /app
+> vite dev --port 5173
+
+(node:92519) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ [paraglide-js] Compilation complete (locale-modules)
+
+  VITE v7.3.2  ready in 6046 ms
+
+  ➜  Local:   http://localhost:5173/
+  ➜  Network: use --host to expose
+
+[1;31m[500] GET /[0m
+Error: Failed query: select "id", "name", "image_url", "level", "category_id" from "moves" order by "moves"."name"
+params:
+    at LibSQLPreparedQuery.queryWithCache (file:/app/node_modules/.pnpm/drizzle-orm@0.44.7_@cloudflare+workers-types@4.20260426.1_@libsql+client@0.15.15_kysely@0.28.16/node_modules/drizzle-orm/sqlite-core/session.js:43:15)
+    at async LibSQLPreparedQuery.values (file:/app/node_modules/.pnpm/drizzle-orm@0.44.7_@cloudflare+workers-types@4.20260426.1_@libsql+client@0.15.15_kysely@0.28.16/node_modules/drizzle-orm/libsql/session.js:193:12)
+    at async LibSQLPreparedQuery.all (file:/app/node_modules/.pnpm/drizzle-orm@0.44.7_@cloudflare+workers-types@4.20260426.1_@libsql+client@0.15.15_kysely@0.28.16/node_modules/drizzle-orm/libsql/session.js:136:18)
+    at async Promise.all (index 0)
+    at async load (src/routes/+page.server.ts:35:60)
