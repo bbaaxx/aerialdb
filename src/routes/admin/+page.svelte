@@ -21,7 +21,7 @@
 		withImage: data.moves.filter((m) => m.imageUrl).length,
 		withVideo: data.moves.filter((m) => m.videoUrl).length,
 		needsMedia: data.moves.filter((m) => !m.imageUrl && !m.videoUrl).length,
-		complete: data.moves.filter((m) => m.imageUrl && m.videoUrl && m.description).length
+		complete: data.moves.filter((m) => m.imageUrl && m.videoUrl && m.hasDescription).length
 	});
 </script>
 
@@ -171,10 +171,10 @@
 									{#if move.videoUrl}
 										<span class="text-lg" title="Has video">🎥</span>
 									{/if}
-									{#if move.description}
+									{#if move.hasDescription}
 										<span class="text-lg" title="Has description">📝</span>
 									{/if}
-									{#if !move.imageUrl && !move.videoUrl && !move.description}
+									{#if !move.imageUrl && !move.videoUrl && !move.hasDescription}
 										<span class="text-on-surface-variant">—</span>
 									{/if}
 								</div>
