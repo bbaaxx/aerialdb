@@ -56,6 +56,7 @@ export const handleSecurityHeaders: Handle = async ({ event, resolve }) => {
 		'Permissions-Policy',
 		'geolocation=(), camera=(), microphone=(), payment=()'
 	);
+
 	// CSP removed - was blocking SvelteKit hydration inline scripts
 	// Uncomment if needed for production:
 	// response.headers.set('Content-Security-Policy', [...]);
