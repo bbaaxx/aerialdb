@@ -25,8 +25,14 @@ export const POST: RequestHandler = async ({ request, platform, locals }) => {
 		return json({ error: 'Invalid file type (JPEG, PNG, WebP only)' }, { status: 400 });
 	}
 
-	// Generate unique filename
-	const ext = file.name.split('.').pop();
+	// SECURITY: Map MIME type to safe extension to prevent extension spoofing
+	// We ignore the user-provided filename extension and use one derived from the validated MIME type.
+	const mimeToExt: Record<string, string> = {
+		'image/jpeg': 'jpg',
+		'image/png': 'png',
+		'image/webp': 'webp'
+	};
+	const ext = mimeToExt[file.type];
 	const filename = `${crypto.randomUUID()}.${ext}`;
 
 	// Check if we're in Cloudflare environment
