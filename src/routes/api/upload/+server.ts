@@ -31,7 +31,6 @@ export const POST: RequestHandler = async ({ request, platform, locals }) => {
 	if (!ext) {
 		return json({ error: 'Invalid file type (JPEG, PNG, WebP only)' }, { status: 400 });
 	}
-
 	// Generate unique filename using safe extension
 	const filename = `${crypto.randomUUID()}.${ext}`;
 

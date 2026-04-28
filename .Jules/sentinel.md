@@ -33,3 +33,9 @@
 **Vulnerability:** The login flow returned different error messages for existent vs. non-existent users and skipped the computationally expensive password hashing if the user was not found, allowing attackers to identify valid usernames through error messages and response timing.
 **Learning:** Security-focused custom auth flows must treat "user not found" and "incorrect password" identically in both UI feedback and server processing time.
 **Prevention:** Return generic error messages and always perform a "dummy" password verification with a pre-calculated hash when a user record is missing.
+
+## 2025-05-15 - [File Extension Spoofing Prevention]
+
+**Vulnerability:** The file upload endpoint derived the storage filename extension from the client-provided filename. An attacker could bypass extension-based security filters by providing a mismatched extension (e.g., uploading a JPEG with a .php extension).
+**Learning:** Even when MIME type is validated, trusting the filename extension for storage can lead to vulnerabilities if the serving infrastructure (R2/CDN) respects that extension.
+**Prevention:** Always derive the storage file extension from the validated MIME type using a whitelist mapping, ignoring the client-provided extension entirely.
