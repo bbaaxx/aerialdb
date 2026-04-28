@@ -61,7 +61,7 @@ export const handleSecurityHeaders: Handle = async ({ event, resolve }) => {
 	// Uncomment if needed for production:
 	// response.headers.set('Content-Security-Policy', [...]);
 
-	// Enable HSTS in production
+	// SECURITY: Enable HSTS in production to ensure secure connections
 	if (import.meta.env.PROD) {
 		response.headers.set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
 	}
