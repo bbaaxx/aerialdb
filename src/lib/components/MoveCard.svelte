@@ -34,9 +34,8 @@
 	}
 </script>
 
-<a
-	href="/moves/{move.id}"
-	class="group block rounded-xl bg-surface-container p-3 transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_10px_25px_-5px_rgba(0,0,0,0.5)]"
+<div
+	class="group relative flex flex-col rounded-xl bg-surface-container p-3 transition-all duration-200 focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2 focus-within:ring-offset-surface-container-low hover:-translate-y-1 hover:shadow-[0_10px_25px_-5px_rgba(0,0,0,0.5)]"
 >
 	<div class="relative aspect-video overflow-hidden rounded-lg bg-gray-800">
 		{#if move.imageUrl}
@@ -56,7 +55,7 @@
 		<button
 			type="button"
 			onclick={handleFavoriteClick}
-			class="absolute bottom-3 left-1/2 flex -translate-x-1/2 items-center gap-1.5 rounded-full bg-black/60 px-4 py-2 text-sm text-white backdrop-blur-md transition-all duration-300 group-focus-within:opacity-100 group-hover:opacity-100 focus-visible:opacity-100 active:scale-95 {isFavorited
+			class="absolute bottom-3 left-1/2 z-20 flex -translate-x-1/2 items-center gap-1.5 rounded-full bg-black/60 px-4 py-2 text-sm text-white backdrop-blur-md transition-all duration-300 group-focus-within:opacity-100 group-hover:opacity-100 focus-visible:opacity-100 focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none active:scale-95 {isFavorited
 				? 'text-accent-purple opacity-100 shadow-[0_0_15px_rgba(138,99,248,0.4)]'
 				: 'opacity-0'}"
 			aria-label={isFavorited ? 'Remove from favorites' : 'Save to favorites'}
@@ -72,10 +71,16 @@
 	</div>
 
 	<h3 class="mt-3 mb-2 truncate font-serif text-lg text-gray-200">
-		{move.name}
+		<a
+			href="/moves/{move.id}"
+			class="after:absolute after:inset-0 after:z-10 focus:outline-none"
+			aria-label="View details for {move.name}"
+		>
+			{move.name}
+		</a>
 	</h3>
 
-	<div class="flex items-center justify-between">
+	<div class="mt-auto flex items-center justify-between">
 		<span
 			class="rounded-full bg-surface-container-high px-2.5 py-0.5 text-xs text-on-surface-variant"
 		>
@@ -87,4 +92,4 @@
 			</span>
 		{/if}
 	</div>
-</a>
+</div>

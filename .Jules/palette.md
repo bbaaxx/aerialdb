@@ -27,3 +27,8 @@
 
 **Learning:** Using the Web Share API (`navigator.share`) provides a significantly better UX on mobile devices by opening the native share sheet, while a clipboard fallback ensures functionality on desktop and older browsers. Localizing the share titles and text further improves the experience.
 **Action:** Always prefer `navigator.share` for sharing actions, providing a `navigator.clipboard` fallback and handling `AbortError` gracefully.
+
+## 2025-05-23 - [Stretched Link Pattern for Accessible Cards]
+
+**Learning:** When building interactive cards that contain multiple actions (like a "Favorite" button), the "stretched link" pattern (an `<a>` with an `after` pseudo-element covering the parent) is superior to nesting the entire card in an `<a>`. It avoids invalid HTML (nested interactive elements) and allows for fine-grained control over which elements are clickable. Highlighting the container with a focus-within ring provides clear feedback for keyboard users.
+**Action:** Use the stretched link pattern for interactive cards. Ensure nested buttons have a higher `z-index` than the stretched link. Add `focus-within:ring-2` to the container for unified focus feedback.

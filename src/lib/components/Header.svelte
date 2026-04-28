@@ -183,7 +183,7 @@
 				{#if user}
 					<a
 						href="/upload"
-						class="hidden items-center gap-1.5 rounded-lg bg-primary/15 px-3 py-1.5 text-sm font-medium text-primary transition hover:bg-primary/25 sm:flex"
+						class="hidden items-center gap-1.5 rounded-lg bg-primary/15 px-3 py-1.5 text-sm font-medium text-primary transition hover:bg-primary/25 focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none sm:flex"
 					>
 						<Upload size={16} />
 						<span class="hidden md:inline">{m.nav_upload_move()}</span>
@@ -197,7 +197,7 @@
 							type="button"
 							bind:this={accountButton}
 							onclick={toggleAccount}
-							class="rounded-lg p-2 text-on-surface-variant transition hover:bg-surface-container-high/50 hover:text-on-surface"
+							class="rounded-lg p-2 text-on-surface-variant transition hover:bg-surface-container-high/50 hover:text-on-surface focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
 							aria-label={m.nav_account_menu_label()}
 							aria-haspopup="true"
 							aria-expanded={accountOpen}
@@ -260,7 +260,7 @@
 				<button
 					type="button"
 					onclick={() => (mobileMenuOpen = !mobileMenuOpen)}
-					class="rounded-lg p-2 text-on-surface-variant transition hover:bg-surface-container-high/50 hover:text-on-surface lg:hidden"
+					class="rounded-lg p-2 text-on-surface-variant transition hover:bg-surface-container-high/50 hover:text-on-surface focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none lg:hidden"
 					aria-label={m.nav_mobile_menu_label()}
 					aria-expanded={mobileMenuOpen}
 				>
@@ -294,8 +294,8 @@
 								searchQuery = '';
 								searchInput?.focus();
 							}}
-							class="absolute inset-y-0 right-0 flex items-center pr-3 text-on-surface-variant transition hover:text-on-surface"
-							aria-label="Clear search"
+							class="absolute inset-y-0 right-0 flex items-center pr-3 text-on-surface-variant transition hover:text-on-surface focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
+							aria-label={m.nav_search_clear()}
 						>
 							<X size={16} />
 						</button>

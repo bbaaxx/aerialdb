@@ -19,20 +19,19 @@ export const POST: RequestHandler = async ({ request, platform, locals }) => {
 		return json({ error: 'File too large (max 5MB)' }, { status: 400 });
 	}
 
-	// Validate type
-	const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
-	if (!allowedTypes.includes(file.type)) {
-		return json({ error: 'Invalid file type (JPEG, PNG, WebP only)' }, { status: 400 });
-	}
-
-	// SECURITY: Map MIME type to safe extension to prevent extension spoofing
-	// We ignore the user-provided filename extension and use one derived from the validated MIME type.
-	const mimeToExt: Record<string, string> = {
+	// Validate type and map to safe extensions
+	const typeToExt: Record<string, string> = {
 		'image/jpeg': 'jpg',
 		'image/png': 'png',
 		'image/webp': 'webp'
 	};
-	const ext = mimeToExt[file.type];
+
+	const ext = typeToExt[file.type];
+
+	if (!ext) {
+		return json({ error: 'Invalid file type (JPEG, PNG, WebP only)' }, { status: 400 });
+	}
+	// Generate unique filename using safe extension
 	const filename = `${crypto.randomUUID()}.${ext}`;
 
 	// Check if we're in Cloudflare environment
