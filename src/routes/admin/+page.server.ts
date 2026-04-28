@@ -1,30 +1,35 @@
 import { getDb } from '$lib/server/db';
 import { type AdminLeanMoveRaw, type AdminLeanMove } from '$lib/server/db/types';
 import { moves, categories } from '$lib/server/db/schema';
-import { eq, sql } from 'drizzle-orm';
+import { sql } from 'drizzle-orm';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async (event) => {
 	const db = getDb(event);
 
-	// Performance: Load moves and categories in parallel to reduce TTFB.
-	// Optimization: Categories are fetched in full and resolved in-memory using a Map,
-	// avoiding SQL JOIN overhead and redundant category name data transfer.
-	// Lean Query: Using sql`CASE WHEN ...` to check for description presence without
-	// fetching large text data, significantly reducing database I/O and payload size.
+	// Performance: Fetch moves and categories in parallel to reduce TTFB.
+	// Selective Field Fetching: Using computed booleans for presence indicators instead of fetching large text fields.
+	// Optimization: Categories are resolved in-memory using a Map to avoid SQL JOIN overhead.
 	// Type assertion needed: getDb() returns a union type (D1 | libsql)
 	// that breaks .select({fields}) overload resolution
-	const [allMovesRaw, allCategories] = (await Promise.all([
+	const [movesDataRaw, allCategories] = (await Promise.all([
 		(db as any)
 			.select({
 				id: moves.id,
 				name: moves.name,
 				categoryId: moves.categoryId,
-				hasDescription: sql<boolean>`CASE WHEN ${moves.description} IS NOT NULL AND ${moves.description} != '' THEN 1 ELSE 0 END`.as(
-					'has_description'
-				),
-				imageUrl: moves.imageUrl,
-				videoUrl: moves.videoUrl,
+				hasDescription:
+					sql<boolean>`CASE WHEN ${moves.description} IS NOT NULL AND ${moves.description} != '' THEN 1 ELSE 0 END`.as(
+						'has_description'
+					),
+				hasImage:
+					sql<boolean>`CASE WHEN ${moves.imageUrl} IS NOT NULL AND ${moves.imageUrl} != '' THEN 1 ELSE 0 END`.as(
+						'has_image'
+					),
+				hasVideo:
+					sql<boolean>`CASE WHEN ${moves.videoUrl} IS NOT NULL AND ${moves.videoUrl} != '' THEN 1 ELSE 0 END`.as(
+						'has_video'
+					),
 				contributorName: moves.contributorName,
 				createdAt: moves.createdAt,
 				updatedAt: moves.updatedAt
@@ -38,13 +43,17 @@ export const load: PageServerLoad = async (event) => {
 	// Build in-memory category lookup for O(1) resolution
 	const categoryMap = new Map(allCategories.map((c) => [c.id, c.name]));
 
-	const allMoves: AdminLeanMove[] = allMovesRaw.map((move) => ({
+	const movesData: AdminLeanMove[] = movesDataRaw.map((move) => ({
 		...move,
-		categoryName: categoryMap.get(move.categoryId) ?? 'Unknown'
+		categoryName: categoryMap.get(move.categoryId) ?? 'Uncategorized',
+		// SQLite returns 0/1 for computed booleans, convert to boolean for consistency
+		hasDescription: !!move.hasDescription,
+		hasImage: !!move.hasImage,
+		hasVideo: !!move.hasVideo
 	}));
 
 	return {
-		moves: allMoves,
+		moves: movesData,
 		categories: allCategories
 	};
 };

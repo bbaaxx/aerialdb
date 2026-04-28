@@ -18,10 +18,10 @@
 	// Statistics
 	let stats = $derived({
 		total: data.moves.length,
-		withImage: data.moves.filter((m) => m.imageUrl).length,
-		withVideo: data.moves.filter((m) => m.videoUrl).length,
-		needsMedia: data.moves.filter((m) => !m.imageUrl && !m.videoUrl).length,
-		complete: data.moves.filter((m) => m.imageUrl && m.videoUrl && m.hasDescription).length
+		withImage: data.moves.filter((m) => m.hasImage).length,
+		withVideo: data.moves.filter((m) => m.hasVideo).length,
+		needsMedia: data.moves.filter((m) => !m.hasImage && !m.hasVideo).length,
+		complete: data.moves.filter((m) => m.hasImage && m.hasVideo && m.hasDescription).length
 	});
 </script>
 
@@ -165,16 +165,16 @@
 							</td>
 							<td class="hidden px-4 py-3 text-center md:table-cell">
 								<div class="flex items-center justify-center gap-2">
-									{#if move.imageUrl}
+									{#if move.hasImage}
 										<span class="text-lg" title="Has image">📷</span>
 									{/if}
-									{#if move.videoUrl}
+									{#if move.hasVideo}
 										<span class="text-lg" title="Has video">🎥</span>
 									{/if}
 									{#if move.hasDescription}
 										<span class="text-lg" title="Has description">📝</span>
 									{/if}
-									{#if !move.imageUrl && !move.videoUrl && !move.hasDescription}
+									{#if !move.hasImage && !move.hasVideo && !move.hasDescription}
 										<span class="text-on-surface-variant">—</span>
 									{/if}
 								</div>

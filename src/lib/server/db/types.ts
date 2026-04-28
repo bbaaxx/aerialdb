@@ -22,26 +22,6 @@ export type LeanMoveRaw = {
 	categoryId: string;
 };
 
-/**
- * Optimized representation for the Admin Dashboard listing.
- * Replaces large text fields with presence indicators to reduce data transfer.
- */
-export type AdminLeanMoveRaw = {
-	id: string;
-	name: string;
-	categoryId: string;
-	hasDescription: boolean;
-	imageUrl: string | null;
-	videoUrl: string | null;
-	contributorName: string | null;
-	createdAt: Date | null;
-	updatedAt: Date | null;
-};
-
-export type AdminLeanMove = AdminLeanMoveRaw & {
-	categoryName: string;
-};
-
 export type LeanMove = {
 	id: string;
 	name: string;
@@ -54,6 +34,35 @@ export type LeanMove = {
 };
 
 export type MoveWithCategoryRawFull = MoveWithCategoryRaw & {
+	createdAt: Date | null;
+	updatedAt: Date | null;
+};
+
+/**
+ * Lean representation of a move for Admin dashboard.
+ * Optimized to exclude large text fields while providing presence indicators.
+ */
+export type AdminLeanMoveRaw = {
+	id: string;
+	name: string;
+	categoryId: string;
+	hasDescription: boolean;
+	hasImage: boolean;
+	hasVideo: boolean;
+	contributorName: string | null;
+	createdAt: Date | null;
+	updatedAt: Date | null;
+};
+
+export type AdminLeanMove = {
+	id: string;
+	name: string;
+	categoryId: string;
+	categoryName: string;
+	hasDescription: boolean;
+	hasImage: boolean;
+	hasVideo: boolean;
+	contributorName: string | null;
 	createdAt: Date | null;
 	updatedAt: Date | null;
 };
