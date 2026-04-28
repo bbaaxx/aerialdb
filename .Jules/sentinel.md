@@ -21,3 +21,15 @@
 **Vulnerability:** Admin form actions (POST requests) were not protected by authentication checks, despite the routes being under a layout with an authentication guard. Attackers could directly POST to these actions (e.g., to create categories or delete moves) without being logged in.
 **Learning:** SvelteKit layout `load` functions only run during page loads (GET requests) or client-side navigation. Form actions (`actions` in `+page.server.ts`) execute independently and do not inherit the protection of a layout's `load` function.
 **Prevention:** Always explicitly verify `event.locals.user` at the beginning of sensitive form actions, even if the route is nested under a protected layout.
+
+## 2026-04-20 - [Hardened Open Redirect Prevention]
+
+**Vulnerability:** Redirect validation only checked for `//` prefix, allowing bypasses using control characters, whitespace, or backslashes (e.g., `/\example.com`) which some browsers might interpret as external URLs.
+**Learning:** Simple string prefix checks are insufficient for URL validation; the `URL` constructor with a controlled base is more reliable for detecting origin changes.
+**Prevention:** Use a combination of character blocklists (whitespace/control chars) and the `URL` constructor to ensure redirect targets remain within the expected origin.
+
+## 2026-04-21 - [User Enumeration and Timing Attacks]
+
+**Vulnerability:** The login flow returned different error messages for existent vs. non-existent users and skipped the computationally expensive password hashing if the user was not found, allowing attackers to identify valid usernames through error messages and response timing.
+**Learning:** Security-focused custom auth flows must treat "user not found" and "incorrect password" identically in both UI feedback and server processing time.
+**Prevention:** Return generic error messages and always perform a "dummy" password verification with a pre-calculated hash when a user record is missing.

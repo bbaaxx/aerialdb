@@ -1,5 +1,5 @@
 import { getDb } from '$lib/server/db';
-import { type MoveWithCategoryRaw } from '$lib/server/db/types';
+import { type LeanMoveRaw, type LeanMove } from '$lib/server/db/types';
 import { moves, categories } from '$lib/server/db/schema';
 import { desc, eq, isNotNull, like, and } from 'drizzle-orm';
 import type { PageServerLoad } from './$types';
@@ -27,74 +27,63 @@ export const load: PageServerLoad = async (event) => {
 		conditions.push(eq(moves.level, levelFilter));
 	}
 
-	// Performance: Fetch moves, categories, and featured move in parallel to reduce TTFB
-	// Type assertion needed: getDb() returns a union type (D1 | libsql)
-	// that breaks .select({fields}) overload resolution
+	// Performance: Fetch moves, categories, and featured move in parallel to reduce TTFB.
+	// Optimization: Categories are fetched in full and resolved in-memory using a Map,
+	// avoiding SQL JOIN overhead and redundant category name data transfer.
+	// Lean Query: Selecting only the fields needed for the home page (cards + hero)
+	// to reduce database transfer and memory usage.
 	const [movesDataRaw, allCategories, [featuredMoveRaw]] = (await Promise.all([
 		(db as any)
 			.select({
 				id: moves.id,
 				name: moves.name,
-				description: moves.description,
 				imageUrl: moves.imageUrl,
-				videoUrl: moves.videoUrl,
 				level: moves.level,
-				contributorName: moves.contributorName,
-				categoryId: categories.id,
-				categoryName: categories.name
+				categoryId: moves.categoryId
 			})
 			.from(moves)
-			.innerJoin(categories, eq(moves.categoryId, categories.id))
 			.where(conditions.length > 0 ? and(...conditions) : undefined)
 			.orderBy(moves.name),
 
-		db.select().from(categories).orderBy(categories.name),
+		(db as any).select().from(categories).orderBy(categories.name),
 
 		(db as any)
 			.select({
 				id: moves.id,
 				name: moves.name,
-				description: moves.description,
 				imageUrl: moves.imageUrl,
-				videoUrl: moves.videoUrl,
 				level: moves.level,
-				contributorName: moves.contributorName,
-				categoryId: categories.id,
-				categoryName: categories.name
+				categoryId: moves.categoryId
 			})
 			.from(moves)
-			.innerJoin(categories, eq(moves.categoryId, categories.id))
 			.where(isNotNull(moves.imageUrl))
 			.orderBy(desc(moves.createdAt))
 			.limit(1)
-	])) as [MoveWithCategoryRaw[], (typeof categories.$inferSelect)[], MoveWithCategoryRaw[]];
+	])) as [LeanMoveRaw[], (typeof categories.$inferSelect)[], LeanMoveRaw[]];
 
-	const movesData = movesDataRaw.map((move) => ({
+	// Build in-memory category lookup for O(1) resolution
+	const categoryMap = new Map(allCategories.map((c) => [c.id, c.name]));
+
+	const movesData: LeanMove[] = movesDataRaw.map((move) => ({
 		id: move.id,
 		name: move.name,
-		description: move.description,
 		imageUrl: move.imageUrl,
-		videoUrl: move.videoUrl,
 		level: move.level,
-		contributorName: move.contributorName,
 		category: {
 			id: move.categoryId,
-			name: move.categoryName
+			name: categoryMap.get(move.categoryId) ?? 'Unknown'
 		}
 	}));
 
-	const featuredMove = featuredMoveRaw
+	const featuredMove: LeanMove | null = featuredMoveRaw
 		? {
 				id: featuredMoveRaw.id,
 				name: featuredMoveRaw.name,
-				description: featuredMoveRaw.description,
 				imageUrl: featuredMoveRaw.imageUrl,
-				videoUrl: featuredMoveRaw.videoUrl,
 				level: featuredMoveRaw.level,
-				contributorName: featuredMoveRaw.contributorName,
 				category: {
 					id: featuredMoveRaw.categoryId,
-					name: featuredMoveRaw.categoryName
+					name: categoryMap.get(featuredMoveRaw.categoryId) ?? 'Unknown'
 				}
 			}
 		: null;

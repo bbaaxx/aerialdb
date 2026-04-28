@@ -43,7 +43,7 @@
 			<img
 				src={move.imageUrl}
 				alt={move.name}
-				class="h-full w-full object-cover"
+				class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
 				loading="lazy"
 				decoding="async"
 			/>
@@ -56,7 +56,7 @@
 		<button
 			type="button"
 			onclick={handleFavoriteClick}
-			class="absolute bottom-3 left-1/2 flex -translate-x-1/2 items-center gap-1.5 rounded-full bg-black/60 px-4 py-2 text-sm text-white backdrop-blur-md transition-all duration-300 active:scale-95 group-hover:opacity-100 group-focus-within:opacity-100 focus-visible:opacity-100 {isFavorited
+			class="absolute bottom-3 left-1/2 flex -translate-x-1/2 items-center gap-1.5 rounded-full bg-black/60 px-4 py-2 text-sm text-white backdrop-blur-md transition-all duration-300 group-focus-within:opacity-100 group-hover:opacity-100 focus-visible:opacity-100 active:scale-95 {isFavorited
 				? 'text-accent-purple opacity-100 shadow-[0_0_15px_rgba(138,99,248,0.4)]'
 				: 'opacity-0'}"
 			aria-label={isFavorited ? 'Remove from favorites' : 'Save to favorites'}

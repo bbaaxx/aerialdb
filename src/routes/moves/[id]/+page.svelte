@@ -1,17 +1,36 @@
 <script lang="ts">
 	import type { PageData } from './$types';
 	import { ChevronLeft, Pencil, ImageOff, Share2, Check } from 'lucide-svelte';
+	import { m } from '$lib/paraglide/messages.js';
 
 	let { data }: { data: PageData } = $props();
 	let copied = $state(false);
 
+	/**
+	 * Handles sharing the move using the Web Share API if available,
+	 * otherwise falls back to copying the URL to the clipboard.
+	 * This provides a native sharing experience on mobile devices.
+	 */
 	async function handleShare() {
+		const shareData = {
+			title: `${data.move.name} - AerialDB`,
+			text: data.move.description || `Learn the ${data.move.name} aerial move`,
+			url: window.location.href
+		};
+
 		try {
-			await navigator.clipboard.writeText(window.location.href);
-			copied = true;
-			setTimeout(() => (copied = false), 2000);
+			if (navigator.share && navigator.canShare?.(shareData)) {
+				await navigator.share(shareData);
+			} else {
+				await navigator.clipboard.writeText(window.location.href);
+				copied = true;
+				setTimeout(() => (copied = false), 2000);
+			}
 		} catch (err) {
-			console.error('Failed to copy: ', err);
+			// Fail silently if user cancelled share sheet, or fallback to clipboard
+			if (err instanceof Error && err.name !== 'AbortError') {
+				console.error('Failed to share: ', err);
+			}
 		}
 	}
 
@@ -49,21 +68,21 @@
 				class="inline-flex items-center gap-2 rounded-lg px-3 py-2 text-base font-medium text-on-surface-variant transition-all hover:bg-surface-container hover:text-on-surface focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none active:scale-95"
 			>
 				<ChevronLeft size={20} aria-hidden="true" />
-				Back
+				{m.move_back()}
 			</a>
 
 			<button
 				type="button"
 				onclick={handleShare}
 				class="inline-flex items-center gap-2 rounded-lg px-3 py-2 text-base font-medium text-on-surface-variant transition-all hover:bg-surface-container hover:text-on-surface focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none active:scale-95"
-				aria-label={copied ? 'Copied to clipboard' : 'Share this move'}
+				aria-label={copied ? m.move_copied_aria() : m.move_share_aria()}
 			>
 				{#if copied}
 					<Check size={20} class="text-teal-400" aria-hidden="true" />
-					<span class="text-teal-400">Copied!</span>
+					<span class="text-teal-400">{m.move_copied()}</span>
 				{:else}
 					<Share2 size={20} aria-hidden="true" />
-					<span>Share</span>
+					<span>{m.move_share()}</span>
 				{/if}
 			</button>
 		</div>
@@ -88,7 +107,8 @@
 
 			{#if data.move.contributorName}
 				<p class="text-sm text-on-surface-variant">
-					Contributor: <span class="font-medium text-on-surface">{data.move.contributorName}</span>
+					{m.move_contributor()}:
+					<span class="font-medium text-on-surface">{data.move.contributorName}</span>
 				</p>
 			{/if}
 		</div>
@@ -130,7 +150,7 @@
 				<div class="flex aspect-video items-center justify-center rounded-lg bg-surface-container">
 					<div class="text-center">
 						<ImageOff size={64} class="mx-auto text-on-surface-variant" aria-hidden="true" />
-						<p class="mt-2 text-sm text-on-surface-variant">No media available</p>
+						<p class="mt-2 text-sm text-on-surface-variant">{m.move_no_media()}</p>
 					</div>
 				</div>
 			{/if}
@@ -138,7 +158,7 @@
 
 		<!-- Description Section -->
 		<div class="rounded-lg bg-surface-container p-6">
-			<h2 class="mb-4 text-lg font-semibold text-on-surface">Description</h2>
+			<h2 class="mb-4 text-lg font-semibold text-on-surface">{m.move_description_title()}</h2>
 
 			{#if data.move.description}
 				<div class="prose max-w-none prose-invert">
@@ -146,7 +166,7 @@
 				</div>
 			{:else}
 				<p class="text-sm text-on-surface-variant italic">
-					No description available yet. Check back later!
+					{m.move_description_empty()}
 				</p>
 			{/if}
 		</div>
@@ -158,7 +178,7 @@
 				class="inline-flex items-center gap-2 rounded-lg px-4 py-3 text-base font-medium text-primary transition-all hover:bg-primary/10 focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none active:scale-95"
 			>
 				<Pencil size={20} aria-hidden="true" />
-				Edit this move
+				{m.move_edit()}
 			</a>
 		</div>
 	</main>

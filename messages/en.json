@@ -16,7 +16,19 @@
 	"menu_profile": "Profile",
 	"menu_my_library": "My Library",
 	"menu_sign_out": "Sign Out",
+	"nav_account_menu_label": "Account menu",
+	"nav_mobile_menu_label": "Mobile menu",
 	"coming_soon_title": "Coming Soon",
 	"coming_soon_message": "This page is under construction. Check back soon!",
-	"back_to_library": "Back to Library"
+	"back_to_library": "Back to Library",
+	"move_back": "Back",
+	"move_share": "Share",
+	"move_share_aria": "Share this move",
+	"move_copied": "Copied!",
+	"move_copied_aria": "Copied to clipboard",
+	"move_contributor": "Contributor",
+	"move_description_title": "Description",
+	"move_description_empty": "No description available yet. Check back later!",
+	"move_no_media": "No media available",
+	"move_edit": "Edit this move"
 }

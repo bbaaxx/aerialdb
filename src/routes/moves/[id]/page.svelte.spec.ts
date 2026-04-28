@@ -2,6 +2,7 @@ import { page } from 'vitest/browser';
 import { describe, expect, it, vi } from 'vitest';
 import { render } from 'vitest-browser-svelte';
 import MoveDetailPage from './+page.svelte';
+import { m } from '$lib/paraglide/messages.js';
 
 const mockMove = {
 	id: '04aa596e0421344f95c4dabb165d9053',
@@ -25,23 +26,45 @@ describe('moves/[id]/+page.svelte', () => {
 		await expect.element(page.getByText('Test Category')).toBeVisible();
 	});
 
-	it('should have a share button that copies to clipboard', async () => {
+	it('should have a share button that copies to clipboard when Web Share API is unavailable', async () => {
 		const writeTextMock = vi.fn().mockResolvedValue(undefined);
 		vi.stubGlobal('navigator', {
 			clipboard: {
 				writeText: writeTextMock
-			}
+			},
+			share: undefined
 		});
 
 		render(MoveDetailPage, { data: mockData });
 
-		const shareButton = page.getByRole('button', { name: 'Share this move' });
+		const shareButton = page.getByRole('button', { name: m.move_share_aria() });
 		await expect.element(shareButton).toBeVisible();
 
 		await shareButton.click();
 
-		expect(writeTextMock).toHaveBeenCalled();
-		await expect.element(page.getByText('Copied!')).toBeVisible();
+		expect(writeTextMock).toHaveBeenCalledWith(window.location.href);
+		await expect.element(page.getByText(m.move_copied())).toBeVisible();
+	});
+
+	it('should use Web Share API when available', async () => {
+		const shareMock = vi.fn().mockResolvedValue(undefined);
+		const canShareMock = vi.fn().mockReturnValue(true);
+
+		vi.stubGlobal('navigator', {
+			share: shareMock,
+			canShare: canShareMock
+		});
+
+		render(MoveDetailPage, { data: mockData });
+
+		const shareButton = page.getByRole('button', { name: m.move_share_aria() });
+		await shareButton.click();
+
+		expect(shareMock).toHaveBeenCalledWith({
+			title: 'Test Move - AerialDB',
+			text: 'Test Description',
+			url: window.location.href
+		});
 	});
 
 	it('should show no media message when no image or video', async () => {

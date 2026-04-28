@@ -16,7 +16,19 @@
 	"menu_profile": "Perfil",
 	"menu_my_library": "Mi Biblioteca",
 	"menu_sign_out": "Cerrar Sesión",
+	"nav_account_menu_label": "Menú de cuenta",
+	"nav_mobile_menu_label": "Menú móvil",
 	"coming_soon_title": "Próximamente",
 	"coming_soon_message": "Esta página está en construcción. ¡Vuelve pronto!",
-	"back_to_library": "Volver a la Biblioteca"
+	"back_to_library": "Volver a la Biblioteca",
+	"move_back": "Volver",
+	"move_share": "Compartir",
+	"move_share_aria": "Compartir este movimiento",
+	"move_copied": "¡Copiado!",
+	"move_copied_aria": "Copiado al portapapeles",
+	"move_contributor": "Contribuidor",
+	"move_description_title": "Descripción",
+	"move_description_empty": "No hay descripción disponible todavía. ¡Vuelve pronto!",
+	"move_no_media": "No hay medios disponibles",
+	"move_edit": "Editar este movimiento"
 }
