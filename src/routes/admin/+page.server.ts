@@ -10,15 +10,26 @@ export const load: PageServerLoad = async (event) => {
 	// Performance: Fetch moves and categories in parallel to reduce TTFB.
 	// Selective Field Fetching: Using computed booleans for presence indicators instead of fetching large text fields.
 	// Optimization: Categories are resolved in-memory using a Map to avoid SQL JOIN overhead.
+	// Type assertion needed: getDb() returns a union type (D1 | libsql)
+	// that breaks .select({fields}) overload resolution
 	const [movesDataRaw, allCategories] = (await Promise.all([
 		(db as any)
 			.select({
 				id: moves.id,
 				name: moves.name,
 				categoryId: moves.categoryId,
-				hasDescription: sql<boolean>`CASE WHEN description IS NOT NULL AND description != '' THEN 1 ELSE 0 END`,
-				hasImage: sql<boolean>`CASE WHEN image_url IS NOT NULL AND image_url != '' THEN 1 ELSE 0 END`,
-				hasVideo: sql<boolean>`CASE WHEN video_url IS NOT NULL AND video_url != '' THEN 1 ELSE 0 END`,
+				hasDescription:
+					sql<boolean>`CASE WHEN ${moves.description} IS NOT NULL AND ${moves.description} != '' THEN 1 ELSE 0 END`.as(
+						'has_description'
+					),
+				hasImage:
+					sql<boolean>`CASE WHEN ${moves.imageUrl} IS NOT NULL AND ${moves.imageUrl} != '' THEN 1 ELSE 0 END`.as(
+						'has_image'
+					),
+				hasVideo:
+					sql<boolean>`CASE WHEN ${moves.videoUrl} IS NOT NULL AND ${moves.videoUrl} != '' THEN 1 ELSE 0 END`.as(
+						'has_video'
+					),
 				contributorName: moves.contributorName,
 				createdAt: moves.createdAt,
 				updatedAt: moves.updatedAt

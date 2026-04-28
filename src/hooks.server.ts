@@ -56,10 +56,15 @@ export const handleSecurityHeaders: Handle = async ({ event, resolve }) => {
 		'Permissions-Policy',
 		'geolocation=(), camera=(), microphone=(), payment=()'
 	);
+
 	// CSP removed - was blocking SvelteKit hydration inline scripts
 	// Uncomment if needed for production:
 	// response.headers.set('Content-Security-Policy', [...]);
-	// response.headers.set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+
+	// SECURITY: Enable HSTS in production to ensure secure connections
+	if (import.meta.env.PROD) {
+		response.headers.set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+	}
 
 	return response;
 };
