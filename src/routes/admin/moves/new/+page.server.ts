@@ -14,8 +14,18 @@ function generateId(length: number = 10): string {
 // Load categories for dropdown
 export const load: PageServerLoad = async (event) => {
 	const db = getDb(event);
-	const allCategories = await db.select().from(categories).orderBy(categories.name);
-	return { categories: allCategories };
+
+	// Selective Field Fetching: Only fetch fields needed for the category dropdown to minimize data transfer.
+	// Note: using any to bypass Drizzle's complex union types for getDb() results
+	const allCategories = await (db as any)
+		.select({
+			id: categories.id,
+			name: categories.name
+		})
+		.from(categories)
+		.orderBy(categories.name);
+
+	return { categories: allCategories as { id: string; name: string }[] };
 };
 
 export const actions = {
