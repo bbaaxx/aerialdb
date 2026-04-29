@@ -235,15 +235,17 @@
 									<BookOpen size={14} />
 									{m.menu_my_library()}
 								</a>
-								<a
-									href="/auth/logout"
-									class="flex items-center gap-2 px-4 py-2 text-sm text-on-surface-variant transition hover:bg-surface-container-high/50 hover:text-on-surface"
-									role="menuitem"
-									onclick={() => (accountOpen = false)}
-								>
-									<LogOut size={14} />
-									{m.menu_sign_out()}
-								</a>
+								<form method="POST" action="/auth/logout" class="block">
+									<button
+										type="submit"
+										class="flex w-full items-center gap-2 px-4 py-2 text-sm text-on-surface-variant transition hover:bg-surface-container-high/50 hover:text-on-surface"
+										role="menuitem"
+										onclick={() => (accountOpen = false)}
+									>
+										<LogOut size={14} />
+										{m.menu_sign_out()}
+									</button>
+								</form>
 							</div>
 						{/if}
 					</div>
