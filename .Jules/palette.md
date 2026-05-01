@@ -32,3 +32,8 @@
 
 **Learning:** When building interactive cards that contain multiple actions (like a "Favorite" button), the "stretched link" pattern (an `<a>` with an `after` pseudo-element covering the parent) is superior to nesting the entire card in an `<a>`. It avoids invalid HTML (nested interactive elements) and allows for fine-grained control over which elements are clickable. Highlighting the container with a focus-within ring provides clear feedback for keyboard users.
 **Action:** Use the stretched link pattern for interactive cards. Ensure nested buttons have a higher `z-index` than the stretched link. Add `focus-within:ring-2` to the container for unified focus feedback.
+
+## 2025-04-14 - [Foundational Accessibility: Skip to Content]
+
+**Learning:** In applications with sticky headers and complex navigation, keyboard users must tab through every link before reaching the main content. A "Skip to Content" link is a foundational accessibility requirement. Wrapping the `{@render children()}` snippet in a container with `id="main-content"`, `tabindex="-1"`, and `outline-none` allows the skip link to programmatically move focus to the start of the content area without creating an unwanted persistent focus ring.
+**Action:** Always include a "Skip to Content" link as the first interactive element in the root layout, targeting a main content container with `tabindex="-1"`.
