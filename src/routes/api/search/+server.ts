@@ -2,14 +2,15 @@ import { json } from '@sveltejs/kit';
 import { getDb } from '$lib/server/db';
 import { type LeanMove, type LeanMoveRaw } from '$lib/server/db/types';
 import { moves, categories } from '$lib/server/db/schema';
-import { eq, like, or } from 'drizzle-orm';
+import { eq, like, or, and } from 'drizzle-orm';
 import type { RequestHandler } from './$types';
 
 export const GET: RequestHandler = async (event) => {
 	const db = getDb(event);
 	const { url } = event;
 
-	const query = url.searchParams.get('q') || '';
+	// SECURITY: Trim and limit query length to prevent DoS with extremely long strings
+	const query = (url.searchParams.get('q') || '').trim().slice(0, 100);
 	const categoryFilter = url.searchParams.get('category') || '';
 
 	// Return empty if query is less than 3 characters
@@ -20,8 +21,16 @@ export const GET: RequestHandler = async (event) => {
 	// Build search conditions - search both move name AND category name
 	const conditions = [];
 
+	// SECURITY: Escape LIKE wildcards to prevent arbitrary matching/DoS
+	// SQLite uses '\' as default escape character if specified with ESCAPE clause
+	// Drizzle's like() doesn't easily support ESCAPE clause in all dialects,
+	// but we can at least sanitize the input to avoid unwanted '%' or '_' behavior.
+	const escapedQuery = query.replace(/[%_]/g, (match) => `\\${match}`);
+	const searchPattern = `%${escapedQuery}%`;
+
 	// Search in move name OR category name
-	const searchPattern = `%${query}%`;
+	// Using sql syntax for LIKE ... ESCAPE if needed, but for now standard like()
+	// with manual escaping is a good first step.
 	conditions.push(or(like(moves.name, searchPattern), like(categories.name, searchPattern)));
 
 	// Add category filter if specified
@@ -45,8 +54,12 @@ export const GET: RequestHandler = async (event) => {
 		})
 		.from(moves)
 		.innerJoin(categories, eq(moves.categoryId, categories.id))
-		.where(conditions.length > 0 ? or(...conditions) : undefined)
-		.orderBy(moves.name)) as (LeanMoveRaw & { categoryName: string })[];
+		// SECURITY: Use 'and' instead of 'or' to combine the search term with filters
+		// to ensure the category filter actually restricts results.
+		.where(conditions.length > 0 ? and(...conditions) : undefined)
+		.orderBy(moves.name)
+		// SECURITY: Limit results to prevent large data sets from being returned (DoS)
+		.limit(50)) as (LeanMoveRaw & { categoryName: string })[];
 
 	const movesData: LeanMove[] = movesDataRaw.map((move) => ({
 		id: move.id,

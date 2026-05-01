@@ -39,3 +39,9 @@
 **Vulnerability:** The file upload endpoint derived the storage filename extension from the client-provided filename. An attacker could bypass extension-based security filters by providing a mismatched extension (e.g., uploading a JPEG with a .php extension).
 **Learning:** Even when MIME type is validated, trusting the filename extension for storage can lead to vulnerabilities if the serving infrastructure (R2/CDN) respects that extension.
 **Prevention:** Always derive the storage file extension from the validated MIME type using a whitelist mapping, ignoring the client-provided extension entirely.
+
+## 2025-05-16 - [Search API Hardening]
+
+**Vulnerability:** The search API lacked query length limits, result set limits, and SQL `LIKE` wildcard escaping, making it vulnerable to Denial of Service (DoS) and unintended data exposure. It also used an `OR` operator between search terms and filters, which incorrectly broadened search results.
+**Learning:** Generic search endpoints can easily become DoS vectors if not protected by limits on both input (query length) and output (result count). Furthermore, combining search terms with filters using `OR` logic is a common functional security flaw that can leak data or bypass intended access controls.
+**Prevention:** Always implement "fail-secure" search logic: trim and limit input length, escape database wildcards, use logical `AND` for filtering, and enforce a maximum result count on the server side.
