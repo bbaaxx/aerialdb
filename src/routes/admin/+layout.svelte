@@ -49,7 +49,7 @@
 	</header>
 
 	<!-- Main Content -->
-	<main>
+	<div>
 		{@render children()}
-	</main>
+	</div>
 </div>

@@ -89,7 +89,7 @@
 	</header>
 
 	<!-- Main Content -->
-	<main class="mx-auto max-w-4xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
+	<div class="mx-auto max-w-4xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
 		<!-- Move Header (Mobile-Optimized) -->
 		<div class="mb-6 sm:mb-8">
 			<div
@@ -181,5 +181,5 @@
 				{m.move_edit()}
 			</a>
 		</div>
-	</main>
+	</div>
 </div>

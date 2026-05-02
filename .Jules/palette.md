@@ -32,3 +32,8 @@
 
 **Learning:** When building interactive cards that contain multiple actions (like a "Favorite" button), the "stretched link" pattern (an `<a>` with an `after` pseudo-element covering the parent) is superior to nesting the entire card in an `<a>`. It avoids invalid HTML (nested interactive elements) and allows for fine-grained control over which elements are clickable. Highlighting the container with a focus-within ring provides clear feedback for keyboard users.
 **Action:** Use the stretched link pattern for interactive cards. Ensure nested buttons have a higher `z-index` than the stretched link. Add `focus-within:ring-2` to the container for unified focus feedback.
+
+## 2025-06-10 - [Global Skip Link and Semantic HTML]
+
+**Learning:** Implementing a global "Skip to main content" link in the root layout requires a single, well-defined target (e.g., `<main id="main-content">`). To maintain semantic validity, any existing `<main>` tags in individual pages or sub-layouts must be replaced with `<div>` elements to ensure exactly one `<main>` element exists per page.
+**Action:** When adding a global skip link, audit the entire codebase for redundant `<main>` tags and replace them with semantically neutral containers like `<div>`.
