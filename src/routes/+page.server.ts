@@ -1,14 +1,17 @@
 import { getDb } from '$lib/server/db';
 import { type LeanMoveRaw, type LeanMove } from '$lib/server/db/types';
 import { moves, categories } from '$lib/server/db/schema';
-import { desc, eq, isNotNull, like, and } from 'drizzle-orm';
+import { desc, eq, isNotNull, and, sql } from 'drizzle-orm';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async (event) => {
 	const db = getDb(event);
 	const { url } = event;
 
-	const searchQuery = url.searchParams.get('q') || '';
+	const rawSearchQuery = (url.searchParams.get('q') || '').trim();
+	// SECURITY: Limit query length to prevent DoS (extremely slow LIKE queries)
+	const searchQuery = rawSearchQuery.slice(0, 100);
+
 	const categoryFilter = url.searchParams.get('category') || '';
 	const levelFilter = url.searchParams.get('level') || '';
 
@@ -16,7 +19,10 @@ export const load: PageServerLoad = async (event) => {
 	const conditions = [];
 
 	if (searchQuery) {
-		conditions.push(like(moves.name, `%${searchQuery}%`));
+		// SECURITY: Escape SQL LIKE wildcards to prevent "LIKE injection"
+		const escapedQuery = searchQuery.replace(/[%_\\]/g, '\\$&');
+		const searchPattern = `%${escapedQuery}%`;
+		conditions.push(sql`${moves.name} LIKE ${searchPattern} ESCAPE '\\'`);
 	}
 
 	if (categoryFilter) {
