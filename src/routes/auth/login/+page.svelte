@@ -98,13 +98,15 @@
 								validateUsernameClient(username);
 							}
 						}}
-						class="w-full rounded-lg border bg-surface-container px-4 py-3 text-on-surface placeholder-on-surface-variant transition outline-none focus:border-primary focus:ring-1 focus:ring-primary {usernameError
+						aria-invalid={!!usernameError}
+						aria-describedby={usernameError ? 'username-error' : undefined}
+						class="w-full rounded-lg border bg-surface-container px-4 py-3 text-on-surface placeholder-on-surface-variant transition outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none {usernameError
 							? 'border-error bg-error/10'
 							: 'border-outline-variant/15'}"
 						disabled={isSubmitting}
 					/>
 					{#if usernameError}
-						<p class="mt-2 text-sm text-error">{usernameError}</p>
+						<p id="username-error" class="mt-2 text-sm text-error">{usernameError}</p>
 					{/if}
 				</div>
 
@@ -126,13 +128,15 @@
 								validatePasswordClient(password);
 							}
 						}}
-						class="w-full rounded-lg border bg-surface-container px-4 py-3 text-on-surface placeholder-on-surface-variant transition outline-none focus:border-primary focus:ring-1 focus:ring-primary {passwordError
+						aria-invalid={!!passwordError}
+						aria-describedby={passwordError ? 'password-error' : undefined}
+						class="w-full rounded-lg border bg-surface-container px-4 py-3 text-on-surface placeholder-on-surface-variant transition outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none {passwordError
 							? 'border-error bg-error/10'
 							: 'border-outline-variant/15'}"
 						disabled={isSubmitting}
 					/>
 					{#if passwordError}
-						<p class="mt-2 text-sm text-error">{passwordError}</p>
+						<p id="password-error" class="mt-2 text-sm text-error">{passwordError}</p>
 					{/if}
 				</div>
 

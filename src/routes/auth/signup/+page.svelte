@@ -112,21 +112,28 @@
 								validateUsernameClient(username);
 							}
 						}}
-						class="w-full rounded-lg border bg-surface-container px-4 py-3 text-on-surface transition outline-none focus:border-transparent focus:ring-2 focus:ring-primary {usernameError ||
+						aria-invalid={!!(
+							usernameError ||
+							(form && 'field' in form && form.field === 'username')
+						)}
+						aria-describedby="{usernameError ||
+						(form && 'field' in form && form.field === 'username')
+							? 'username-error '
+							: ''}username-hint"
+						class="w-full rounded-lg border bg-surface-container px-4 py-3 text-on-surface transition outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none {usernameError ||
 						(form && 'field' in form && form.field === 'username')
 							? 'border-error bg-error/10'
 							: 'border-outline-variant/15'}"
 						disabled={isSubmitting}
 					/>
 					{#if usernameError}
-						<p class="mt-2 text-sm text-error">{usernameError}</p>
+						<p id="username-error" class="mt-2 text-sm text-error">{usernameError}</p>
 					{:else if form && 'field' in form && form.field === 'username' && form?.message}
-						<p class="mt-2 text-sm text-error">{form.message}</p>
-					{:else}
-						<p class="mt-2 text-xs text-on-surface-variant">
-							3-31 characters, lowercase letters, numbers, hyphens, and underscores only
-						</p>
+						<p id="username-error" class="mt-2 text-sm text-error">{form.message}</p>
 					{/if}
+					<p id="username-hint" class="mt-2 text-xs text-on-surface-variant">
+						3-31 characters, lowercase letters, numbers, hyphens, and underscores only
+					</p>
 				</div>
 
 				<!-- Password Field -->
@@ -150,19 +157,28 @@
 								validateConfirmPasswordClient(confirmPassword);
 							}
 						}}
-						class="w-full rounded-lg border bg-surface-container px-4 py-3 text-on-surface transition outline-none focus:border-transparent focus:ring-2 focus:ring-primary {passwordError ||
+						aria-invalid={!!(
+							passwordError ||
+							(form && 'field' in form && form.field === 'password')
+						)}
+						aria-describedby="{passwordError ||
+						(form && 'field' in form && form.field === 'password')
+							? 'password-error '
+							: ''}password-hint"
+						class="w-full rounded-lg border bg-surface-container px-4 py-3 text-on-surface transition outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none {passwordError ||
 						(form && 'field' in form && form.field === 'password')
 							? 'border-error bg-error/10'
 							: 'border-outline-variant/15'}"
 						disabled={isSubmitting}
 					/>
 					{#if passwordError}
-						<p class="mt-2 text-sm text-error">{passwordError}</p>
+						<p id="password-error" class="mt-2 text-sm text-error">{passwordError}</p>
 					{:else if form && 'field' in form && form.field === 'password' && form?.message}
-						<p class="mt-2 text-sm text-error">{form.message}</p>
-					{:else}
-						<p class="mt-2 text-xs text-on-surface-variant">Minimum 6 characters</p>
+						<p id="password-error" class="mt-2 text-sm text-error">{form.message}</p>
 					{/if}
+					<p id="password-hint" class="mt-2 text-xs text-on-surface-variant">
+						Minimum 6 characters
+					</p>
 				</div>
 
 				<!-- Confirm Password Field -->
@@ -189,16 +205,26 @@
 								validateConfirmPasswordClient(confirmPassword);
 							}
 						}}
-						class="w-full rounded-lg border bg-surface-container px-4 py-3 text-on-surface transition outline-none focus:border-transparent focus:ring-2 focus:ring-primary {confirmPasswordError ||
+						aria-invalid={!!(
+							confirmPasswordError ||
+							(form && 'field' in form && form.field === 'confirmPassword')
+						)}
+						aria-describedby={confirmPasswordError ||
+						(form && 'field' in form && form.field === 'confirmPassword')
+							? 'confirm-password-error'
+							: undefined}
+						class="w-full rounded-lg border bg-surface-container px-4 py-3 text-on-surface transition outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none {confirmPasswordError ||
 						(form && 'field' in form && form.field === 'confirmPassword')
 							? 'border-error bg-error/10'
 							: 'border-outline-variant/15'}"
 						disabled={isSubmitting}
 					/>
 					{#if confirmPasswordError}
-						<p class="mt-2 text-sm text-error">{confirmPasswordError}</p>
+						<p id="confirm-password-error" class="mt-2 text-sm text-error">
+							{confirmPasswordError}
+						</p>
 					{:else if form && 'field' in form && form.field === 'confirmPassword' && form?.message}
-						<p class="mt-2 text-sm text-error">{form.message}</p>
+						<p id="confirm-password-error" class="mt-2 text-sm text-error">{form.message}</p>
 					{/if}
 				</div>
 
