@@ -49,7 +49,7 @@
 	</header>
 
 	<!-- Main Content -->
-	<main>
+	<main id="main-content" tabindex="-1" class="outline-none">
 		{@render children()}
 	</main>
 </div>
