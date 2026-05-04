@@ -39,3 +39,9 @@
 **Vulnerability:** The file upload endpoint derived the storage filename extension from the client-provided filename. An attacker could bypass extension-based security filters by providing a mismatched extension (e.g., uploading a JPEG with a .php extension).
 **Learning:** Even when MIME type is validated, trusting the filename extension for storage can lead to vulnerabilities if the serving infrastructure (R2/CDN) respects that extension.
 **Prevention:** Always derive the storage file extension from the validated MIME type using a whitelist mapping, ignoring the client-provided extension entirely.
+
+## 2025-05-16 - [Hardened Search Against Wildcard Injection and DoS]
+
+**Vulnerability:** Search queries using SQLite `LIKE` did not escape wildcards (`%`, `_`), allowing users to perform unintended broad searches. Additionally, lack of input length and result set limits posed a DoS risk.
+**Learning:** Drizzle's `like()` helper doesn't automatically escape wildcards or add the `ESCAPE` clause in SQLite. Manual escaping and explicit `sql` template literals are required for robust `LIKE` queries.
+**Prevention:** Always trim and limit search query length. Use a dedicated `escapeLike` utility and the `ESCAPE` clause in SQL to safely handle user-provided search patterns.
