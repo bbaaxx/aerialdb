@@ -44,7 +44,7 @@
 	function toggleSearch() {
 		searchOpen = !searchOpen;
 		if (searchOpen) {
-			searchQuery = '';
+			searchQuery = $page.url.searchParams.get('q') || '';
 			// Focus input after DOM update
 			setTimeout(() => searchInput?.focus(), 50);
 		}
@@ -58,15 +58,22 @@
 
 	function submitSearch() {
 		const query = searchQuery.trim();
-		if (!query) return;
 		const pathname = $page.url.pathname;
-		if (pathname === '/') {
-			const params = new URLSearchParams($page.url.search);
+		const params = new URLSearchParams($page.url.search);
+
+		if (query) {
 			params.set('q', query);
-			goto(`/?${params.toString()}`, { replaceState: true, noScroll: true });
 		} else {
-			goto(`/?q=${encodeURIComponent(query)}`);
+			params.delete('q');
 		}
+
+		const qs = params.toString();
+		if (pathname === '/') {
+			goto(qs ? `/?${qs}` : '/', { replaceState: true, noScroll: true });
+		} else {
+			goto(qs ? `/?${qs}` : '/');
+		}
+
 		searchOpen = false;
 		searchQuery = '';
 	}
@@ -161,6 +168,8 @@
 					onclick={toggleSearch}
 					class="group relative rounded-lg p-2 text-on-surface-variant transition hover:bg-surface-container-high/50 hover:text-on-surface focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
 					aria-label={m.nav_search_toggle_label()}
+					aria-expanded={searchOpen}
+					aria-controls="header-search-bar"
 				>
 					{#if searchOpen}
 						<X size={20} />
@@ -273,7 +282,7 @@
 
 		<!-- Inline search bar (expandable) -->
 		{#if searchOpen}
-			<div class="mt-3" transition:slide>
+			<div id="header-search-bar" class="mt-3" transition:slide>
 				<div class="relative">
 					<div
 						class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-on-surface-variant"
