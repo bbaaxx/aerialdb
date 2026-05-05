@@ -23,15 +23,49 @@ export const load: PageServerLoad = async (event) => {
 	const db = getDb(event);
 	const { params } = event;
 
-	const [move] = await db.select().from(moves).where(eq(moves.id, params.id)).limit(1);
+	// Performance: Fetch move and categories in parallel to reduce TTFB.
+	// Selective Field Fetching: Only fetch fields needed for the edit form to minimize data transfer.
+	// Note: using any to bypass Drizzle's complex union types for getDb() results
+	const [movesData, allCategories] = await Promise.all([
+		(db as any)
+			.select({
+				id: moves.id,
+				name: moves.name,
+				categoryId: moves.categoryId,
+				description: moves.description,
+				imageUrl: moves.imageUrl,
+				videoUrl: moves.videoUrl,
+				contributorName: moves.contributorName
+			})
+			.from(moves)
+			.where(eq(moves.id, params.id))
+			.limit(1),
+		(db as any)
+			.select({
+				id: categories.id,
+				name: categories.name
+			})
+			.from(categories)
+			.orderBy(categories.name)
+	]);
+
+	const move = (
+		movesData as {
+			id: string;
+			name: string;
+			categoryId: string;
+			description: string | null;
+			imageUrl: string | null;
+			videoUrl: string | null;
+			contributorName: string | null;
+		}[]
+	)[0];
 
 	if (!move) {
 		throw error(404, 'Move not found');
 	}
 
-	const allCategories = await db.select().from(categories).orderBy(categories.name);
-
-	return { move, categories: allCategories };
+	return { move, categories: allCategories as { id: string; name: string }[] };
 };
 
 export const actions = {
@@ -86,7 +120,12 @@ export const actions = {
 		}
 
 		// Get current move data
-		const [currentMove] = await db.select().from(moves).where(eq(moves.id, params.id)).limit(1);
+		// Optimization: Only fetch imageUrl to check for existing image, reducing data transfer.
+		const [currentMove] = (await (db as any)
+			.select({ imageUrl: moves.imageUrl })
+			.from(moves)
+			.where(eq(moves.id, params.id))
+			.limit(1)) as { imageUrl: string | null }[];
 
 		if (!currentMove) {
 			return fail(404, { error: 'Move not found' });
@@ -155,7 +194,12 @@ export const actions = {
 		const { params, platform } = event;
 
 		// Get move to delete associated image
-		const [move] = await db.select().from(moves).where(eq(moves.id, params.id)).limit(1);
+		// Optimization: Only fetch imageUrl to check for existing image, reducing data transfer.
+		const [move] = (await (db as any)
+			.select({ imageUrl: moves.imageUrl })
+			.from(moves)
+			.where(eq(moves.id, params.id))
+			.limit(1)) as { imageUrl: string | null }[];
 
 		if (move?.imageUrl) {
 			// Delete file from storage (local or R2)

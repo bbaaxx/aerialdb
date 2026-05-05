@@ -17,3 +17,7 @@
 
 **Learning:** Fetching entire database rows for listing pages (like Home or Search) is inefficient when only a subset of fields (e.g., name, image) is displayed. Large text fields like `description` significantly increase database I/O and network payload size. Using Drizzle's `.select({ fields })` to fetch only required data reduces TTFB and memory pressure on both server and client.
 **Action:** Define explicit "Lean" types for common listing views and use selective field fetching in server-side load functions and API endpoints to minimize data transfer.
+
+## 2026-04-29 - [Admin Route Data Fetching Optimization]
+**Learning:** Parallelizing independent queries in SvelteKit load functions with Promise.all and using selective field fetching (Lean Queries) significantly reduces TTFB and memory usage. This is particularly effective in administrative forms where only a subset of fields (like categories or specific move metadata) is required.
+**Action:** Always look for opportunities to parallelize independent database calls and use selective field projection instead of fetching entire rows when only specific fields are needed.
