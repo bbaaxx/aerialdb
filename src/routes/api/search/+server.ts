@@ -2,14 +2,16 @@ import { json } from '@sveltejs/kit';
 import { getDb } from '$lib/server/db';
 import { type LeanMove, type LeanMoveRaw } from '$lib/server/db/types';
 import { moves, categories } from '$lib/server/db/schema';
-import { eq, like, or } from 'drizzle-orm';
+import { eq, or, sql } from 'drizzle-orm';
+import { escapeLike } from '$lib/utils/security';
 import type { RequestHandler } from './$types';
 
 export const GET: RequestHandler = async (event) => {
 	const db = getDb(event);
 	const { url } = event;
 
-	const query = url.searchParams.get('q') || '';
+	// SECURITY: Trim and limit query length to mitigate DoS and unexpected behavior
+	const query = (url.searchParams.get('q') || '').trim().slice(0, 100);
 	const categoryFilter = url.searchParams.get('category') || '';
 
 	// Return empty if query is less than 3 characters
@@ -20,9 +22,16 @@ export const GET: RequestHandler = async (event) => {
 	// Build search conditions - search both move name AND category name
 	const conditions = [];
 
-	// Search in move name OR category name
-	const searchPattern = `%${query}%`;
-	conditions.push(or(like(moves.name, searchPattern), like(categories.name, searchPattern)));
+	// SECURITY: Escape SQLite wildcards to prevent broad/unintended searches
+	const searchPattern = `%${escapeLike(query)}%`;
+
+	// Search in move name OR category name using ESCAPE clause
+	conditions.push(
+		or(
+			sql`${moves.name} LIKE ${searchPattern} ESCAPE '\\'`,
+			sql`${categories.name} LIKE ${searchPattern} ESCAPE '\\'`
+		)
+	);
 
 	// Add category filter if specified
 	if (categoryFilter) {
@@ -46,7 +55,8 @@ export const GET: RequestHandler = async (event) => {
 		.from(moves)
 		.innerJoin(categories, eq(moves.categoryId, categories.id))
 		.where(conditions.length > 0 ? or(...conditions) : undefined)
-		.orderBy(moves.name)) as (LeanMoveRaw & { categoryName: string })[];
+		.orderBy(moves.name)
+		.limit(50)) as (LeanMoveRaw & { categoryName: string })[];
 
 	const movesData: LeanMove[] = movesDataRaw.map((move) => ({
 		id: move.id,
