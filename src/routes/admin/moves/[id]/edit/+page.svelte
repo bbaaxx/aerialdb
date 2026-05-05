@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { PageData, ActionData } from './$types';
+	import { fade } from 'svelte/transition';
 
 	let { data, form }: { data: PageData; form: ActionData } = $props();
 
@@ -68,7 +69,10 @@
 
 	<!-- Delete Confirmation Modal -->
 	{#if showDeleteConfirm}
-		<div class="bg-opacity-50 fixed inset-0 z-50 flex items-center justify-center bg-black p-4">
+		<div
+			transition:fade={{ duration: 200 }}
+			class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4 backdrop-blur-sm"
+		>
 			<div class="max-w-md rounded-lg bg-surface-container p-6 shadow-xl">
 				<h3 class="mb-4 text-lg font-semibold text-on-surface">
 					Delete "{data.move.name}"?

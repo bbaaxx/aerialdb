@@ -67,7 +67,11 @@
 	}
 </script>
 
-<div class="flex min-h-screen items-center justify-center bg-surface-container-low px-4 py-12">
+<main
+	id="main-content"
+	tabindex="-1"
+	class="flex min-h-screen items-center justify-center bg-surface-container-low px-4 py-12 outline-none"
+>
 	<div class="w-full max-w-md">
 		<div class="rounded-2xl bg-surface-container p-8 shadow-2xl">
 			<!-- Header -->
@@ -258,4 +262,4 @@
 			</div>
 		</div>
 	</div>
-</div>
+</main>
