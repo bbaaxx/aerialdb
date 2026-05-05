@@ -42,10 +42,7 @@ export const load: PageServerLoad = async (event) => {
 			})
 			.from(moves)
 			.groupBy(moves.categoryId)
-	])) as [
-		{ id: string; name: string; createdAt: Date }[],
-		{ categoryId: string; count: number }[]
-	];
+	])) as [{ id: string; name: string; createdAt: Date }[], { categoryId: string; count: number }[]];
 
 	// Create a map for faster lookup
 	const moveCountMap = new Map<string, number>(

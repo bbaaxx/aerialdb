@@ -79,21 +79,19 @@ describe('api/search/+server', () => {
 
 		// Create a proper Drizzle query builder mock
 		function createQueryBuilderMock(result: any[]) {
-			return {
+			const queryBuilder: any = {
 				from: vi.fn().mockReturnThis(),
 				innerJoin: vi.fn().mockReturnThis(),
-				where: vi.fn().mockImplementation(function (this: any) {
-					// Return a thenable that resolves to the result
-					const thenable = {
-						then: (resolve: any) => {
-							return Promise.resolve(result).then(resolve);
-						},
-						orderBy: vi.fn().mockReturnThis()
-					};
-					return thenable;
+				where: vi.fn().mockReturnThis(),
+				orderBy: vi.fn().mockReturnThis(),
+				limit: vi.fn().mockImplementation(function (this: any) {
+					return Promise.resolve(result);
 				}),
-				orderBy: vi.fn().mockReturnThis()
+				then: (resolve: any) => {
+					return Promise.resolve(result).then(resolve);
+				}
 			};
+			return queryBuilder;
 		}
 
 		function setupMockDb(result: any[]) {

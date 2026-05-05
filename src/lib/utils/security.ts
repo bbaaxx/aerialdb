@@ -28,3 +28,11 @@ export function isValidRedirect(url: string | null): url is string {
 		return false;
 	}
 }
+
+/**
+ * Escapes special characters in a string for use in a SQLite LIKE clause.
+ * Standard SQLite escape character is '\'.
+ */
+export function escapeLike(str: string): string {
+	return str.replace(/[%_\\]/g, '\\$&');
+}
