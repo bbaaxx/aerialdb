@@ -32,3 +32,8 @@
 
 **Learning:** When building interactive cards that contain multiple actions (like a "Favorite" button), the "stretched link" pattern (an `<a>` with an `after` pseudo-element covering the parent) is superior to nesting the entire card in an `<a>`. It avoids invalid HTML (nested interactive elements) and allows for fine-grained control over which elements are clickable. Highlighting the container with a focus-within ring provides clear feedback for keyboard users.
 **Action:** Use the stretched link pattern for interactive cards. Ensure nested buttons have a higher `z-index` than the stretched link. Add `focus-within:ring-2` to the container for unified focus feedback.
+
+## 2026-05-05 - [Admin Micro-UX: Standardized Transitions and Focus States]
+
+**Learning:** Administrative interfaces often suffer from a lack of visual feedback during state changes (like appearing modals or inline confirmation toggles). Using standardized Svelte transitions (`fade`, `scale`) combined with Tailwind's `backdrop-blur-sm` provides a more polished and "app-like" feel. Furthermore, using `focus-visible` instead of generic `focus` for accessibility rings ensures that keyboard users have clear visual cues while mouse users are not distracted by persistent outlines.
+**Action:** Apply `transition:fade` and `backdrop-blur-sm` to modal overlays. Use `focus-visible:ring-2` for all interactive elements in admin lists and forms to ensure WCAG-compliant keyboard accessibility.
