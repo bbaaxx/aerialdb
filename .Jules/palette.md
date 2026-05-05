@@ -32,3 +32,8 @@
 
 **Learning:** When building interactive cards that contain multiple actions (like a "Favorite" button), the "stretched link" pattern (an `<a>` with an `after` pseudo-element covering the parent) is superior to nesting the entire card in an `<a>`. It avoids invalid HTML (nested interactive elements) and allows for fine-grained control over which elements are clickable. Highlighting the container with a focus-within ring provides clear feedback for keyboard users.
 **Action:** Use the stretched link pattern for interactive cards. Ensure nested buttons have a higher `z-index` than the stretched link. Add `focus-within:ring-2` to the container for unified focus feedback.
+
+## 2025-05-24 - [Accessible Form Validation and Hints]
+
+**Learning:** For inclusive forms, visual error messages are insufficient. Using 'aria-invalid' signals the state to assistive technology, and 'aria-describedby' programmatically links the input to both dynamic error messages and static helper hints. Careful concatenation in 'aria-describedby' (e.g., handling spaces) ensures that screen readers can discover all relevant descriptions.
+**Action:** Always use 'aria-invalid' on form fields and link them to error/hint IDs via 'aria-describedby'. Ensure IDs are stable and unique.
