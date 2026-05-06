@@ -5,6 +5,7 @@
 
 	let { data }: { data: PageData } = $props();
 	let copied = $state(false);
+	let videoStarted = $state(false);
 
 	/**
 	 * Handles sharing the move using the Web Share API if available,
@@ -121,18 +122,55 @@
 		<div class="mb-6 space-y-4 sm:mb-8 sm:space-y-6">
 			<!-- Video -->
 			{#if youtubeId}
-				<div class="overflow-hidden rounded-lg">
-					<div class="aspect-video">
-						<iframe
-							width="100%"
-							height="100%"
-							src="https://www.youtube.com/embed/{youtubeId}"
-							title={data.move.name}
-							frameborder="0"
-							allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-							allowfullscreen
-							class="h-full w-full"
-						></iframe>
+				<div class="overflow-hidden rounded-lg shadow-lg">
+					<div class="aspect-video bg-black">
+						{#if videoStarted}
+							<iframe
+								width="100%"
+								height="100%"
+								src="https://www.youtube.com/embed/{youtubeId}?autoplay=1"
+								title={data.move.name}
+								frameborder="0"
+								allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+								allowfullscreen
+								class="h-full w-full"
+							></iframe>
+						{:else}
+							<!-- Video Facade: Lazy load YouTube iframe to improve page load performance -->
+							<button
+								type="button"
+								onclick={() => (videoStarted = true)}
+								class="group relative h-full w-full overflow-hidden focus:outline-none"
+								aria-label="Play video"
+							>
+								<img
+									src="https://img.youtube.com/vi/{youtubeId}/maxresdefault.jpg"
+									alt={data.move.name}
+									class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105 group-focus:scale-105"
+									loading="eager"
+								/>
+								<div
+									class="absolute inset-0 flex items-center justify-center bg-black/20 transition-colors group-hover:bg-black/40 group-focus:bg-black/40"
+								>
+									<div
+										class="flex h-16 w-16 items-center justify-center rounded-full bg-primary/90 text-white shadow-xl transition-all duration-300 group-hover:scale-110 group-hover:bg-primary group-focus:scale-110 group-focus:bg-primary"
+									>
+										<svg
+											xmlns="http://www.w3.org/2000/svg"
+											viewBox="0 0 24 24"
+											fill="currentColor"
+											class="h-8 w-8"
+										>
+											<path
+												fill-rule="evenodd"
+												d="M4.5 5.653c0-1.426 1.529-2.33 2.779-1.643l11.54 6.348c1.295.712 1.295 2.573 0 3.285L7.28 19.991c-1.25.687-2.779-.217-2.779-1.643V5.653z"
+												clip-rule="evenodd"
+											/>
+										</svg>
+									</div>
+								</div>
+							</button>
+						{/if}
 					</div>
 				</div>
 			{/if}
