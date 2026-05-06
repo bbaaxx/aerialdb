@@ -38,12 +38,17 @@ export const actions = {
 		const formData = await request.formData();
 
 		// Validate required fields
-		const name = formData.get('name') as string;
+		const name = (formData.get('name') as string | null)?.trim();
 		let categoryId = formData.get('category') as string;
 		const newCategoryName = formData.get('new_category') as string;
 
 		if (!name) {
 			return fail(400, { error: 'Name is required' });
+		}
+
+		// SECURITY: Limit move name length to prevent oversized data storage/DoS
+		if (name.length > 100) {
+			return fail(400, { error: 'Move name must be 100 characters or less' });
 		}
 
 		// Handle new category creation
@@ -96,16 +101,32 @@ export const actions = {
 			}
 		}
 
+		// Validate other fields
+		const description = (formData.get('description') as string | null)?.trim();
+		const videoUrl = (formData.get('video_url') as string | null)?.trim();
+		const contributorName = (formData.get('contributor') as string | null)?.trim();
+
+		// SECURITY: Enforce length limits on all user-provided fields
+		if (description && description.length > 2000) {
+			return fail(400, { error: 'Description must be 2000 characters or less' });
+		}
+		if (videoUrl && videoUrl.length > 255) {
+			return fail(400, { error: 'Video URL must be 255 characters or less' });
+		}
+		if (contributorName && contributorName.length > 100) {
+			return fail(400, { error: 'Contributor name must be 100 characters or less' });
+		}
+
 		// Insert move
 		const moveId = generateId(10);
 		await db.insert(moves).values({
 			id: moveId,
 			name,
 			categoryId,
-			description: (formData.get('description') as string) || null,
+			description: description || null,
 			imageUrl,
-			videoUrl: (formData.get('video_url') as string) || null,
-			contributorName: (formData.get('contributor') as string) || null,
+			videoUrl: videoUrl || null,
+			contributorName: contributorName || null,
 			createdBy: locals.user!.id,
 			createdAt: new Date(),
 			updatedAt: new Date()

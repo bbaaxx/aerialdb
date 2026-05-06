@@ -118,6 +118,7 @@
 					id="name"
 					name="name"
 					required
+					maxlength="100"
 					value={data.move.name}
 					placeholder="e.g., Superman, Angel, Crucifix"
 					class="w-full rounded-lg border border-outline-variant/15 bg-surface-container px-3 py-2 text-on-surface placeholder-on-surface-variant focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none"
@@ -157,6 +158,7 @@
 							id="new-category"
 							name="new_category"
 							required
+							maxlength="100"
 							placeholder="e.g., Floor Work, Dynamic"
 							class="w-full rounded-lg border border-outline-variant/15 bg-surface-container px-3 py-2 text-on-surface placeholder-on-surface-variant focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none"
 						/>
@@ -175,6 +177,7 @@
 					type="text"
 					id="contributor"
 					name="contributor"
+					maxlength="100"
 					value={data.move.contributorName || ''}
 					placeholder="e.g., Fer Medina"
 					class="w-full rounded-lg border border-outline-variant/15 bg-surface-container px-3 py-2 text-on-surface placeholder-on-surface-variant focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none"
@@ -196,6 +199,7 @@
 					id="description"
 					name="description"
 					rows="6"
+					maxlength="2000"
 					placeholder="Describe the move, how to perform it, key points, etc."
 					class="w-full rounded-lg border border-outline-variant/15 bg-surface-container px-3 py-2 text-on-surface placeholder-on-surface-variant focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none"
 					>{data.move.description || ''}</textarea
@@ -254,6 +258,7 @@
 					type="url"
 					id="video_url"
 					name="video_url"
+					maxlength="255"
 					value={data.move.videoUrl || ''}
 					placeholder="https://youtube.com/watch?v=..."
 					class="w-full rounded-lg border border-outline-variant/15 bg-surface-container px-3 py-2 text-on-surface placeholder-on-surface-variant focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none"
