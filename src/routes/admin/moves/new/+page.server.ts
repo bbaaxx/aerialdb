@@ -37,18 +37,41 @@ export const actions = {
 		const { request, locals, fetch } = event;
 		const formData = await request.formData();
 
-		// Validate required fields
-		const name = formData.get('name') as string;
+		// SECURITY: Trim and validate input lengths to prevent DoS and maintain data integrity
+		const name = ((formData.get('name') as string) || '').trim();
+		const description = ((formData.get('description') as string) || '').trim();
+		const videoUrl = ((formData.get('video_url') as string) || '').trim();
+		const contributor = ((formData.get('contributor') as string) || '').trim();
 		let categoryId = formData.get('category') as string;
 		const newCategoryName = formData.get('new_category') as string;
 
+		// Validate required fields and lengths
 		if (!name) {
 			return fail(400, { error: 'Name is required' });
+		}
+
+		if (name.length > 100) {
+			return fail(400, { error: 'Name must be 100 characters or less' });
+		}
+
+		if (description.length > 2000) {
+			return fail(400, { error: 'Description must be 2000 characters or less' });
+		}
+
+		if (videoUrl.length > 255) {
+			return fail(400, { error: 'Video URL must be 255 characters or less' });
+		}
+
+		if (contributor.length > 100) {
+			return fail(400, { error: 'Contributor name must be 100 characters or less' });
 		}
 
 		// Handle new category creation
 		if (newCategoryName) {
 			const name = newCategoryName.trim();
+			if (name.length === 0) {
+				return fail(400, { error: 'Category name is required' });
+			}
 			if (name.length > 100) {
 				return fail(400, { error: 'Category name must be 100 characters or less' });
 			}
@@ -102,10 +125,10 @@ export const actions = {
 			id: moveId,
 			name,
 			categoryId,
-			description: (formData.get('description') as string) || null,
+			description: description || null,
 			imageUrl,
-			videoUrl: (formData.get('video_url') as string) || null,
-			contributorName: (formData.get('contributor') as string) || null,
+			videoUrl: videoUrl || null,
+			contributorName: contributor || null,
 			createdBy: locals.user!.id,
 			createdAt: new Date(),
 			updatedAt: new Date()
