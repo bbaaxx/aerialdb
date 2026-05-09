@@ -45,3 +45,9 @@
 **Vulnerability:** Search queries using SQLite `LIKE` did not escape wildcards (`%`, `_`), allowing users to perform unintended broad searches. Additionally, lack of input length and result set limits posed a DoS risk.
 **Learning:** Drizzle's `like()` helper doesn't automatically escape wildcards or add the `ESCAPE` clause in SQLite. Manual escaping and explicit `sql` template literals are required for robust `LIKE` queries.
 **Prevention:** Always trim and limit search query length. Use a dedicated `escapeLike` utility and the `ESCAPE` clause in SQL to safely handle user-provided search patterns.
+
+## 2025-05-18 - [Input Length and Protocol Validation in Admin Routes]
+
+**Vulnerability:** Administrative routes for move management lacked server-side input length limits and protocol validation for URLs, posing a DoS risk from long strings and potential XSS/misuse via unsafe URL protocols (e.g., `javascript:`).
+**Learning:** Client-side enforcement (like `maxlength`) is insufficient as it is easily bypassed. Server-side validation must redundantly enforce these limits and ensure external data (like video URLs) follows safe schemes.
+**Prevention:** Always implement server-side validation for all user-controllable fields. For URLs, specifically validate protocols against a whitelist (e.g., `['http:', 'https:']`) using the `URL` constructor.

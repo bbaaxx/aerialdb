@@ -37,24 +37,57 @@ export const actions = {
 		const { request, locals, fetch } = event;
 		const formData = await request.formData();
 
-		// Validate required fields
-		const name = formData.get('name') as string;
-		let categoryId = formData.get('category') as string;
-		const newCategoryName = formData.get('new_category') as string;
+		// SECURITY: Trim and validate all user inputs to prevent DoS (long strings)
+		// and ensure data integrity.
+		const name = ((formData.get('name') as string) || '').trim();
+		let categoryId = ((formData.get('category') as string) || '').trim();
+		const newCategoryName = ((formData.get('new_category') as string) || '').trim();
+		const description = ((formData.get('description') as string) || '').trim();
+		const videoUrl = ((formData.get('video_url') as string) || '').trim();
+		const contributorName = ((formData.get('contributor') as string) || '').trim();
 
+		// Validate required fields and lengths
 		if (!name) {
 			return fail(400, { error: 'Name is required' });
+		}
+		if (name.length > 100) {
+			return fail(400, { error: 'Name must be 100 characters or less' });
+		}
+
+		if (description.length > 2000) {
+			return fail(400, { error: 'Description must be 2000 characters or less' });
+		}
+
+		if (contributorName.length > 100) {
+			return fail(400, { error: 'Contributor name must be 100 characters or less' });
+		}
+
+		if (videoUrl.length > 255) {
+			return fail(400, { error: 'Video URL must be 255 characters or less' });
+		}
+		if (videoUrl) {
+			try {
+				const url = new URL(videoUrl);
+				if (url.protocol !== 'http:' && url.protocol !== 'https:') {
+					return fail(400, { error: 'Video URL must use http or https protocol' });
+				}
+			} catch {
+				return fail(400, { error: 'Invalid Video URL format' });
+			}
 		}
 
 		// Handle new category creation
 		if (newCategoryName) {
-			const name = newCategoryName.trim();
-			if (name.length > 100) {
+			if (newCategoryName.length > 100) {
 				return fail(400, { error: 'Category name must be 100 characters or less' });
 			}
 
 			// Check if category already exists
-			const existing = await db.select().from(categories).where(eq(categories.name, name)).get();
+			const existing = await db
+				.select()
+				.from(categories)
+				.where(eq(categories.name, newCategoryName))
+				.get();
 
 			if (existing) {
 				categoryId = existing.id;
@@ -102,10 +135,10 @@ export const actions = {
 			id: moveId,
 			name,
 			categoryId,
-			description: (formData.get('description') as string) || null,
+			description: description || null,
 			imageUrl,
-			videoUrl: (formData.get('video_url') as string) || null,
-			contributorName: (formData.get('contributor') as string) || null,
+			videoUrl: videoUrl || null,
+			contributorName: contributorName || null,
 			createdBy: locals.user!.id,
 			createdAt: new Date(),
 			updatedAt: new Date()
