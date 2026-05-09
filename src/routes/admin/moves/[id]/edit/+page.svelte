@@ -1,14 +1,21 @@
 <script lang="ts">
 	import type { PageData, ActionData } from './$types';
-	import { fade } from 'svelte/transition';
+	import { fade, scale } from 'svelte/transition';
 
 	let { data, form }: { data: PageData; form: ActionData } = $props();
 
-	let imagePreview = $state<string | null>(data.move.imageUrl || null);
+	let imagePreview = $state<string | null>(null);
 	let removeImage = $state(false);
 	let showDeleteConfirm = $state(false);
 	let categoryMode = $state<'existing' | 'new'>('existing');
-	let selectedCategory = $state(data.move.categoryId);
+	let selectedCategory = $state('');
+	let descriptionText = $state('');
+
+	$effect(() => {
+		imagePreview = data.move.imageUrl || null;
+		selectedCategory = data.move.categoryId;
+		descriptionText = data.move.description || '';
+	});
 
 	function handleImageChange(event: Event) {
 		const target = event.target as HTMLInputElement;
@@ -73,7 +80,10 @@
 			transition:fade={{ duration: 200 }}
 			class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4 backdrop-blur-sm"
 		>
-			<div class="max-w-md rounded-lg bg-surface-container p-6 shadow-xl">
+			<div
+				transition:scale={{ duration: 200, start: 0.95 }}
+				class="max-w-md rounded-lg bg-surface-container p-6 shadow-xl"
+			>
 				<h3 class="mb-4 text-lg font-semibold text-on-surface">
 					Delete "{data.move.name}"?
 				</h3>
@@ -119,6 +129,7 @@
 					name="name"
 					required
 					value={data.move.name}
+					maxlength="100"
 					placeholder="e.g., Superman, Angel, Crucifix"
 					class="w-full rounded-lg border border-outline-variant/15 bg-surface-container px-3 py-2 text-on-surface placeholder-on-surface-variant focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none"
 				/>
@@ -133,7 +144,7 @@
 					id="category-select"
 					onchange={handleCategoryChange}
 					bind:value={selectedCategory}
-					class="w-full rounded-lg border border-gray-600 bg-[#242736] px-3 py-2 text-gray-200 focus:border-[#8A63F8] focus:ring-1 focus:ring-[#8A63F8] focus:outline-none"
+					class="w-full rounded-lg border border-outline-variant/15 bg-surface-container px-3 py-2 text-on-surface focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none"
 				>
 					<option value="">Select a base technique</option>
 					{#each data.categories as category (category.id)}
@@ -176,6 +187,7 @@
 					id="contributor"
 					name="contributor"
 					value={data.move.contributorName || ''}
+					maxlength="100"
 					placeholder="e.g., Fer Medina"
 					class="w-full rounded-lg border border-outline-variant/15 bg-surface-container px-3 py-2 text-on-surface placeholder-on-surface-variant focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none"
 				/>
@@ -196,10 +208,23 @@
 					id="description"
 					name="description"
 					rows="6"
+					maxlength="2000"
+					bind:value={descriptionText}
+					aria-describedby="description-counter"
 					placeholder="Describe the move, how to perform it, key points, etc."
 					class="w-full rounded-lg border border-outline-variant/15 bg-surface-container px-3 py-2 text-on-surface placeholder-on-surface-variant focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none"
-					>{data.move.description || ''}</textarea
-				>
+				></textarea>
+				<div class="mt-1 flex justify-end">
+					<span
+						id="description-counter"
+						class="text-xs {descriptionText.length >= 1900
+							? 'text-error'
+							: 'text-on-surface-variant'}"
+						aria-live="polite"
+					>
+						{descriptionText.length} / 2000
+					</span>
+				</div>
 			</div>
 		</div>
 
@@ -255,6 +280,7 @@
 					id="video_url"
 					name="video_url"
 					value={data.move.videoUrl || ''}
+					maxlength="255"
 					placeholder="https://youtube.com/watch?v=..."
 					class="w-full rounded-lg border border-outline-variant/15 bg-surface-container px-3 py-2 text-on-surface placeholder-on-surface-variant focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none"
 				/>

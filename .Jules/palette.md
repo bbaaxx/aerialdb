@@ -37,3 +37,8 @@
 
 **Learning:** For inclusive forms, visual error messages are insufficient. Using 'aria-invalid' signals the state to assistive technology, and 'aria-describedby' programmatically links the input to both dynamic error messages and static helper hints. Careful concatenation in 'aria-describedby' (e.g., handling spaces) ensures that screen readers can discover all relevant descriptions.
 **Action:** Always use 'aria-invalid' on form fields and link them to error/hint IDs via 'aria-describedby'. Ensure IDs are stable and unique.
+
+## 2026-05-15 - [Reactive Form State and Counter UX]
+
+**Learning:** In Svelte 5, using `$state(data.prop)` only captures the initial value. To keep local form state reactive when server-side data updates (e.g., via `invalidateAll`) without a component remount, use an `$effect` to synchronize the state variable with the updated prop. Additionally, including reactive character counters for large `textarea` inputs (like descriptions) improves UX by providing immediate feedback. Linking the counter to the input using `aria-describedby` ensures screen reader support, while using visual cues (e.g., semantic color classes) signals when approaching the character limit.
+**Action:** Use `$effect` for prop-to-state synchronization in Svelte 5. Always pair character-limited inputs with reactive counters and `aria-describedby`.
