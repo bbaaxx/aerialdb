@@ -45,3 +45,9 @@
 **Vulnerability:** Search queries using SQLite `LIKE` did not escape wildcards (`%`, `_`), allowing users to perform unintended broad searches. Additionally, lack of input length and result set limits posed a DoS risk.
 **Learning:** Drizzle's `like()` helper doesn't automatically escape wildcards or add the `ESCAPE` clause in SQLite. Manual escaping and explicit `sql` template literals are required for robust `LIKE` queries.
 **Prevention:** Always trim and limit search query length. Use a dedicated `escapeLike` utility and the `ESCAPE` clause in SQL to safely handle user-provided search patterns.
+
+## 2025-05-17 - [Input Length Limits and Trimming for Data Persistence]
+
+**Vulnerability:** Lack of length limits on user-submitted text fields (names, descriptions, video URLs) in admin actions posed a risk of DoS and database pollution through oversized payloads.
+**Learning:** Even if the database has theoretical limits, explicit server-side validation and frontend `maxlength` attributes are necessary for defense-in-depth and better UX. Trimming inputs ensures that length checks are accurate and prevents storage of unnecessary whitespace.
+**Prevention:** Always trim and enforce strict length limits on all user-provided text inputs in form actions, complementing these with `maxlength` on the client side.

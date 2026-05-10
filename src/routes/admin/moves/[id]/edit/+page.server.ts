@@ -78,23 +78,44 @@ export const actions = {
 		const formData = await request.formData();
 
 		// Validate required fields
-		const name = formData.get('name') as string;
+		// SECURITY: Trim and limit input lengths to prevent DoS and database pollution
+		const name = (formData.get('name') as string | null)?.trim();
+		const description = (formData.get('description') as string | null)?.trim();
+		const videoUrl = (formData.get('video_url') as string | null)?.trim();
+		const contributorName = (formData.get('contributor') as string | null)?.trim();
+
 		let categoryId = formData.get('category') as string;
-		const newCategoryName = formData.get('new_category') as string;
+		const newCategoryName = (formData.get('new_category') as string | null)?.trim();
 
 		if (!name) {
 			return fail(400, { error: 'Name is required' });
 		}
 
+		if (name.length > 100) {
+			return fail(400, { error: 'Name must be 100 characters or less' });
+		}
+
+		if (description && description.length > 2000) {
+			return fail(400, { error: 'Description must be 2000 characters or less' });
+		}
+
+		if (videoUrl && videoUrl.length > 255) {
+			return fail(400, { error: 'Video URL must be 255 characters or less' });
+		}
+
+		if (contributorName && contributorName.length > 100) {
+			return fail(400, { error: 'Contributor name must be 100 characters or less' });
+		}
+
 		// Handle new category creation
 		if (newCategoryName) {
-			const name = newCategoryName.trim();
-			if (name.length > 100) {
+			const catName = newCategoryName.trim();
+			if (catName.length > 100) {
 				return fail(400, { error: 'Category name must be 100 characters or less' });
 			}
 
 			// Check if category already exists
-			const existing = await db.select().from(categories).where(eq(categories.name, name)).get();
+			const existing = await db.select().from(categories).where(eq(categories.name, catName)).get();
 
 			if (existing) {
 				categoryId = existing.id;
@@ -175,10 +196,10 @@ export const actions = {
 			.set({
 				name,
 				categoryId,
-				description: (formData.get('description') as string) || null,
+				description: description || null,
 				imageUrl,
-				videoUrl: (formData.get('video_url') as string) || null,
-				contributorName: (formData.get('contributor') as string) || null,
+				videoUrl: videoUrl || null,
+				contributorName: contributorName || null,
 				updatedAt: new Date()
 			})
 			.where(eq(moves.id, params.id));
