@@ -6,6 +6,7 @@
 	let imagePreview = $state<string | null>(null);
 	let categoryMode = $state<'existing' | 'new'>('existing');
 	let selectedCategory = $state('');
+	let description = $state('');
 
 	function handleImageChange(event: Event) {
 		const target = event.target as HTMLInputElement;
@@ -134,9 +135,25 @@
 					id="description"
 					name="description"
 					rows="6"
+					maxlength="2000"
+					bind:value={description}
+					aria-describedby="description-counter"
 					placeholder="Describe the move, how to perform it, key points, etc."
 					class="w-full rounded-lg border border-outline-variant/15 bg-surface-container px-3 py-2 text-on-surface placeholder-on-surface-variant focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none"
 				></textarea>
+				<div class="mt-2 flex justify-end">
+					<span
+						id="description-counter"
+						class="text-xs {description.length >= 2000
+							? 'font-medium text-error'
+							: description.length >= 1800
+								? 'text-amber-400'
+								: 'text-on-surface-variant'}"
+						aria-live="polite"
+					>
+						{description.length} / 2000 characters
+					</span>
+				</div>
 			</div>
 		</div>
 
