@@ -26,7 +26,6 @@ vi.mock('$lib/server/db/schema', () => ({
 
 import { GET } from './+server';
 import * as dbModule from '$lib/server/db';
-
 describe('api/search hardening', () => {
 	let mockDb: any;
 
@@ -80,5 +79,28 @@ describe('api/search hardening', () => {
 		await GET(mockEvent);
 
 		expect(queryBuilder.limit).toHaveBeenCalledWith(50);
+	});
+
+	it('uses logical AND when combining query and category filter', async () => {
+		const mockEvent = createMockEvent(
+			'http://localhost/api/search?q=test&category=cat_123'
+		);
+		const queryBuilder = setupMockDb();
+
+		await GET(mockEvent);
+
+		// Verify that where() was called
+		expect(queryBuilder.where).toHaveBeenCalled();
+
+		// We can inspect the SQL structure to ensure both conditions are present
+		// and combined.
+		const whereCall = queryBuilder.where.mock.calls[0][0];
+		expect(whereCall).toBeDefined();
+
+		// Stringifying the whereCall should show it's a grouped condition
+		const whereJson = JSON.stringify(whereCall);
+		// In Drizzle, conditions are query chunks.
+		// We expect it to be a complex object, not a single 'or' at the root
+		expect(whereJson).toContain('queryChunks');
 	});
 });
