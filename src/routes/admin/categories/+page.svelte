@@ -17,6 +17,13 @@
 	// New category form state
 	let newCategoryName = $state('');
 
+	// Character count helper
+	function getCountColor(length: number, max: number) {
+		if (length >= max) return 'text-error';
+		if (length >= max * 0.9) return 'text-amber-400';
+		return 'text-on-surface-variant';
+	}
+
 	// Start editing a category
 	function startEdit(id: string, name: string) {
 		editingId = id;
@@ -83,11 +90,21 @@
 					placeholder="Enter category name..."
 					maxlength="100"
 					required
+					aria-describedby="new-category-hint"
 					class="w-full rounded-lg border border-outline-variant/15 bg-surface-container px-4 py-2 text-sm text-on-surface placeholder-on-surface-variant focus:border-primary focus:ring-2 focus:ring-primary focus:outline-none"
 				/>
-				{#if form?.action === 'create' && form?.error}
-					<p class="mt-1 text-sm text-error">{form.error}</p>
-				{/if}
+				<div id="new-category-hint" class="mt-1 flex items-center justify-between px-1">
+					{#if form?.action === 'create' && form?.error}
+						<p class="text-xs text-error">{form.error}</p>
+					{:else}
+						<span></span>
+					{/if}
+					<span
+						class="ml-auto text-[10px] font-medium {getCountColor(newCategoryName.length, 100)}"
+					>
+						{newCategoryName.length}/100
+					</span>
+				</div>
 			</div>
 			<button
 				type="submit"
@@ -155,14 +172,26 @@
 										class="flex items-center gap-2"
 									>
 										<input type="hidden" name="id" value={category.id} />
-										<input
-											type="text"
-											name="name"
-											bind:value={editingName}
-											maxlength="100"
-											required
-											class="flex-1 rounded-lg border border-outline-variant/15 bg-surface-container px-3 py-1.5 text-sm text-on-surface focus:border-primary focus:ring-2 focus:ring-primary focus:outline-none"
-										/>
+										<div class="relative flex-1">
+											<input
+												type="text"
+												name="name"
+												bind:value={editingName}
+												maxlength="100"
+												required
+												aria-describedby="edit-category-hint-{category.id}"
+												class="w-full rounded-lg border border-outline-variant/15 bg-surface-container px-3 py-1.5 pr-16 text-sm text-on-surface focus:border-primary focus:ring-2 focus:ring-primary focus:outline-none"
+											/>
+											<span
+												id="edit-category-hint-{category.id}"
+												class="absolute right-3 bottom-1.5 text-[10px] font-medium {getCountColor(
+													editingName.length,
+													100
+												)}"
+											>
+												{editingName.length}/100
+											</span>
+										</div>
 										<button
 											type="submit"
 											class="rounded-lg bg-purple-600 px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-purple-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1 focus-visible:ring-offset-surface-container-high"
