@@ -19,5 +19,10 @@
 **Action:** Define explicit "Lean" types for common listing views and use selective field fetching in server-side load functions and API endpoints to minimize data transfer.
 
 ## 2026-04-29 - [Admin Route Data Fetching Optimization]
+
 **Learning:** Parallelizing independent queries in SvelteKit load functions with Promise.all and using selective field fetching (Lean Queries) significantly reduces TTFB and memory usage. This is particularly effective in administrative forms where only a subset of fields (like categories or specific move metadata) is required.
 **Action:** Always look for opportunities to parallelize independent database calls and use selective field projection instead of fetching entire rows when only specific fields are needed.
+
+## 2026-05-12 - [YouTube Video Facade for LCP and Bundle Optimization]
+**Learning:** Loading YouTube iframes eagerly significantly degrades LCP and initial page weight due to several hundred kilobytes of third-party assets. Using a 'facade' pattern with a high-priority thumbnail and a play button ensures these assets are only loaded upon user intent, improving both performance and user experience.
+**Action:** Use a video facade for all secondary or non-critical video content to optimize initial page load performance.

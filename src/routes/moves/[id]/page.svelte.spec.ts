@@ -80,4 +80,32 @@ describe('moves/[id]/+page.svelte', () => {
 
 		await expect.element(page.getByText('No media available')).toBeVisible();
 	});
+
+	it('should show video facade initially and load iframe on click', async () => {
+		const { container } = render(MoveDetailPage, { data: mockData });
+
+		// Check for the play button (facade)
+		const playButton = container.querySelector('button[aria-label="Play video"]');
+		expect(playButton).not.toBeNull();
+
+		// Initially, there should be no iframe
+		const iframeBefore = container.querySelector('iframe[title="Test Move"]');
+		expect(iframeBefore).toBeNull();
+
+		// Click the facade
+		const playButtonEl = playButton as HTMLButtonElement;
+		playButtonEl.click();
+
+		// Wait for Svelte to update the DOM
+		await new Promise((resolve) => setTimeout(resolve, 50));
+
+		// Now the iframe should be visible
+		const iframeAfter = container.querySelector('iframe[title="Test Move"]');
+		expect(iframeAfter).not.toBeNull();
+		expect(iframeAfter?.getAttribute('src')).toContain('autoplay=1');
+
+		// Facade should be gone
+		const playButtonAfter = container.querySelector('button[aria-label="Play video"]');
+		expect(playButtonAfter).toBeNull();
+	});
 });
