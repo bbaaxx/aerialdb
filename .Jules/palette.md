@@ -37,3 +37,8 @@
 
 **Learning:** For inclusive forms, visual error messages are insufficient. Using 'aria-invalid' signals the state to assistive technology, and 'aria-describedby' programmatically links the input to both dynamic error messages and static helper hints. Careful concatenation in 'aria-describedby' (e.g., handling spaces) ensures that screen readers can discover all relevant descriptions.
 **Action:** Always use 'aria-invalid' on form fields and link them to error/hint IDs via 'aria-describedby'. Ensure IDs are stable and unique.
+
+## 2025-06-15 - [Preventive Form Feedback with Character Counters]
+
+**Learning:** Relying solely on the `maxlength` attribute creates a "silent failure" UX where users can't type but don't know why. Adding a reactive character counter with semantic color cues (warning at 90%, error at limit) provides real-time guidance and prevents frustration.
+**Action:** Include character counters for all restricted text inputs, using the established color pattern (normal -> amber -> error) and `aria-describedby` for accessibility.
