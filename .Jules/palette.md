@@ -37,3 +37,8 @@
 
 **Learning:** For inclusive forms, visual error messages are insufficient. Using 'aria-invalid' signals the state to assistive technology, and 'aria-describedby' programmatically links the input to both dynamic error messages and static helper hints. Careful concatenation in 'aria-describedby' (e.g., handling spaces) ensures that screen readers can discover all relevant descriptions.
 **Action:** Always use 'aria-invalid' on form fields and link them to error/hint IDs via 'aria-describedby'. Ensure IDs are stable and unique.
+
+## 2026-05-15 - [Inclusive Feedback with Character Counters]
+
+**Learning:** For a better UX and accessibility in forms, include reactive character counters for large `textarea` inputs (like descriptions). Link the counter to the input using `aria-describedby` for screen reader support and use visual cues (e.g., semantic color classes) to signal when approaching the character limit. Use `aria-live="polite"` on the counter to ensure that the updated count is communicated to screen reader users.
+**Action:** Always provide visual and programmatic character counts for limited text inputs. Ensure they use standardized color cues and ARIA attributes for full accessibility.
