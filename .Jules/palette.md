@@ -46,3 +46,8 @@
 
 **Learning:** Administrative interfaces often suffer from a lack of visual feedback during state changes (like appearing modals or inline confirmation toggles). Using standardized Svelte transitions (`fade`, `scale`) combined with Tailwind's `backdrop-blur-sm` provides a more polished and "app-like" feel. Furthermore, using `focus-visible` instead of generic `focus` for accessibility rings ensures that keyboard users have clear visual cues while mouse users are not distracted by persistent outlines.
 **Action:** Apply `transition:fade` and `backdrop-blur-sm` to modal overlays. Use `focus-visible:ring-2` for all interactive elements in admin lists and forms to ensure WCAG-compliant keyboard accessibility.
+
+## 2025-06-15 - [Preventive Form Feedback with Character Counters]
+
+**Learning:** Relying solely on the `maxlength` attribute creates a "silent failure" UX where users can't type but don't know why. Adding a reactive character counter with semantic color cues (warning at 90%, error at limit) provides real-time guidance and prevents frustration.
+**Action:** Include character counters for all restricted text inputs, using the established color pattern (normal -> amber -> error) and `aria-describedby` for accessibility.
