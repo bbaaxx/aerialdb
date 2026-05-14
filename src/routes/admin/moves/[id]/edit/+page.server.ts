@@ -77,10 +77,14 @@ export const actions = {
 		const { request, params, fetch, platform } = event;
 		const formData = await request.formData();
 
-		// Validate required fields
-		const name = formData.get('name') as string;
+		// SECURITY: Trim and limit inputs to prevent DoS and ensure data integrity
+		const name = ((formData.get('name') as string) || '').trim().slice(0, 100);
+		const description = ((formData.get('description') as string) || '').trim().slice(0, 2000);
+		const videoUrl = ((formData.get('video_url') as string) || '').trim().slice(0, 255);
+		const contributor = ((formData.get('contributor') as string) || '').trim().slice(0, 100);
+
 		let categoryId = formData.get('category') as string;
-		const newCategoryName = formData.get('new_category') as string;
+		const newCategoryName = (formData.get('new_category') as string || '').trim().slice(0, 100);
 
 		if (!name) {
 			return fail(400, { error: 'Name is required' });
@@ -88,13 +92,12 @@ export const actions = {
 
 		// Handle new category creation
 		if (newCategoryName) {
-			const name = newCategoryName.trim();
-			if (name.length > 100) {
-				return fail(400, { error: 'Category name must be 100 characters or less' });
-			}
-
 			// Check if category already exists
-			const existing = await db.select().from(categories).where(eq(categories.name, name)).get();
+			const existing = await db
+				.select()
+				.from(categories)
+				.where(eq(categories.name, newCategoryName))
+				.get();
 
 			if (existing) {
 				categoryId = existing.id;
@@ -108,7 +111,7 @@ export const actions = {
 				const newCategoryId = generateId(10);
 				await db.insert(categories).values({
 					id: newCategoryId,
-					name,
+					name: newCategoryName,
 					createdAt: new Date()
 				});
 				categoryId = newCategoryId;
@@ -175,10 +178,10 @@ export const actions = {
 			.set({
 				name,
 				categoryId,
-				description: (formData.get('description') as string) || null,
+				description: description || null,
 				imageUrl,
-				videoUrl: (formData.get('video_url') as string) || null,
-				contributorName: (formData.get('contributor') as string) || null,
+				videoUrl: videoUrl || null,
+				contributorName: contributor || null,
 				updatedAt: new Date()
 			})
 			.where(eq(moves.id, params.id));

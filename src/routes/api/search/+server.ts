@@ -2,7 +2,7 @@ import { json } from '@sveltejs/kit';
 import { getDb } from '$lib/server/db';
 import { type LeanMove, type LeanMoveRaw } from '$lib/server/db/types';
 import { moves, categories } from '$lib/server/db/schema';
-import { eq, or, sql } from 'drizzle-orm';
+import { eq, or, and, sql } from 'drizzle-orm';
 import { escapeLike } from '$lib/utils/security';
 import type { RequestHandler } from './$types';
 
@@ -54,7 +54,7 @@ export const GET: RequestHandler = async (event) => {
 		})
 		.from(moves)
 		.innerJoin(categories, eq(moves.categoryId, categories.id))
-		.where(conditions.length > 0 ? or(...conditions) : undefined)
+		.where(conditions.length > 0 ? and(...conditions) : undefined)
 		.orderBy(moves.name)
 		.limit(50)) as (LeanMoveRaw & { categoryName: string })[];
 
