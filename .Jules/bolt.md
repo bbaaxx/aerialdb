@@ -17,8 +17,3 @@
 
 **Learning:** Parallelizing independent queries in SvelteKit load functions with Promise.all and using selective field fetching (Lean Queries) significantly reduces TTFB and memory usage. This is particularly effective in administrative forms where only a subset of fields (like categories or specific move metadata) is required.
 **Action:** Always look for opportunities to parallelize independent database calls and use selective field projection instead of fetching entire rows when only specific fields are needed.
-
-## 2026-05-20 - [YouTube Video Facade for Page Load Optimization]
-
-**Learning:** Immediate loading of YouTube iframes significantly impacts initial page load weight and delays Time to Interactive (TTI). Using a 'facade' pattern (thumbnail + play button) allows for Largest Contentful Paint (LCP) optimization by using high-priority, eager-loaded images while deferring the heavy iframe and its associated scripts until the user actually intends to watch the video.
-**Action:** Implement video facades for all embedded video content, especially for primary media elements at the top of the viewport, to ensure optimal performance metrics and reduced initial bandwidth consumption.

@@ -26,3 +26,18 @@
 ## 2026-04-22 - [Native Sharing Experience with Web Share API]
 **Learning:** Using the Web Share API (`navigator.share`) provides a significantly better UX on mobile devices by opening the native share sheet, while a clipboard fallback ensures functionality on desktop and older browsers. Localizing the share titles and text further improves the experience.
 **Action:** Always prefer `navigator.share` for sharing actions, providing a `navigator.clipboard` fallback and handling `AbortError` gracefully.
+
+## 2025-05-23 - [Stretched Link Pattern for Accessible Cards]
+
+**Learning:** When building interactive cards that contain multiple actions (like a "Favorite" button), the "stretched link" pattern (an `<a>` with an `after` pseudo-element covering the parent) is superior to nesting the entire card in an `<a>`. It avoids invalid HTML (nested interactive elements) and allows for fine-grained control over which elements are clickable. Highlighting the container with a focus-within ring provides clear feedback for keyboard users.
+**Action:** Use the stretched link pattern for interactive cards. Ensure nested buttons have a higher `z-index` than the stretched link. Add `focus-within:ring-2` to the container for unified focus feedback.
+
+## 2025-05-24 - [Accessible Form Validation and Hints]
+
+**Learning:** For inclusive forms, visual error messages are insufficient. Using 'aria-invalid' signals the state to assistive technology, and 'aria-describedby' programmatically links the input to both dynamic error messages and static helper hints. Careful concatenation in 'aria-describedby' (e.g., handling spaces) ensures that screen readers can discover all relevant descriptions.
+**Action:** Always use 'aria-invalid' on form fields and link them to error/hint IDs via 'aria-describedby'. Ensure IDs are stable and unique.
+
+## 2026-05-15 - [Inclusive Feedback with Character Counters]
+
+**Learning:** For a better UX and accessibility in forms, include reactive character counters for large `textarea` inputs (like descriptions). Link the counter to the input using `aria-describedby` for screen reader support and use visual cues (e.g., semantic color classes) to signal when approaching the character limit. Use `aria-live="polite"` on the counter to ensure that the updated count is communicated to screen reader users.
+**Action:** Always provide visual and programmatic character counts for limited text inputs. Ensure they use standardized color cues and ARIA attributes for full accessibility.
