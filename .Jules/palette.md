@@ -37,3 +37,7 @@
 
 **Learning:** For inclusive forms, visual error messages are insufficient. Using 'aria-invalid' signals the state to assistive technology, and 'aria-describedby' programmatically links the input to both dynamic error messages and static helper hints. Careful concatenation in 'aria-describedby' (e.g., handling spaces) ensures that screen readers can discover all relevant descriptions.
 **Action:** Always use 'aria-invalid' on form fields and link them to error/hint IDs via 'aria-describedby'. Ensure IDs are stable and unique.
+
+## 2025-05-25 - [Visual Consistency for Filter States]
+**Learning:** Matching the visual style of filter controls (like difficulty level chips) with their corresponding result badges (like those on card components) creates a stronger mental model for users and makes the interface feel more intentional. Using subtle background tints and high-contrast text for active states improves visibility without being overwhelming.
+**Action:** Always synchronize the color palette of filter controls with the data representations they affect to reinforce the connection between user actions and results.
