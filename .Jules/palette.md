@@ -41,3 +41,8 @@
 
 **Learning:** For a better UX and accessibility in forms, include reactive character counters for large `textarea` inputs (like descriptions). Link the counter to the input using `aria-describedby` for screen reader support and use visual cues (e.g., semantic color classes) to signal when approaching the character limit. Use `aria-live="polite"` on the counter to ensure that the updated count is communicated to screen reader users.
 **Action:** Always provide visual and programmatic character counts for limited text inputs. Ensure they use standardized color cues and ARIA attributes for full accessibility.
+
+## 2026-05-05 - [Admin Micro-UX: Standardized Transitions and Focus States]
+
+**Learning:** Administrative interfaces often suffer from a lack of visual feedback during state changes (like appearing modals or inline confirmation toggles). Using standardized Svelte transitions (`fade`, `scale`) combined with Tailwind's `backdrop-blur-sm` provides a more polished and "app-like" feel. Furthermore, using `focus-visible` instead of generic `focus` for accessibility rings ensures that keyboard users have clear visual cues while mouse users are not distracted by persistent outlines.
+**Action:** Apply `transition:fade` and `backdrop-blur-sm` to modal overlays. Use `focus-visible:ring-2` for all interactive elements in admin lists and forms to ensure WCAG-compliant keyboard accessibility.
