@@ -38,6 +38,7 @@
 **Learning:** For inclusive forms, visual error messages are insufficient. Using 'aria-invalid' signals the state to assistive technology, and 'aria-describedby' programmatically links the input to both dynamic error messages and static helper hints. Careful concatenation in 'aria-describedby' (e.g., handling spaces) ensures that screen readers can discover all relevant descriptions.
 **Action:** Always use 'aria-invalid' on form fields and link them to error/hint IDs via 'aria-describedby'. Ensure IDs are stable and unique.
 
-## 2025-05-25 - [Visual Consistency for Filter States]
-**Learning:** Matching the visual style of filter controls (like difficulty level chips) with their corresponding result badges (like those on card components) creates a stronger mental model for users and makes the interface feel more intentional. Using subtle background tints and high-contrast text for active states improves visibility without being overwhelming.
-**Action:** Always synchronize the color palette of filter controls with the data representations they affect to reinforce the connection between user actions and results.
+## 2025-05-25 - [Character Counters for Form Inputs]
+
+**Learning:** For a better UX and accessibility in forms, include reactive character counters for large inputs (like descriptions). Linking the counter to the input using `aria-describedby` for screen reader support and using visual cues (e.g., semantic color classes) to signal when approaching the character limit provides helpful guidance and prevents frustration upon submission.
+**Action:** Always pair character-limited fields with a reactive counter, use `aria-describedby` for a11y, and apply visual color thresholds (90% capacity, 100% capacity).

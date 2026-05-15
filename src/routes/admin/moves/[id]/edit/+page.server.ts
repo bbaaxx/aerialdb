@@ -84,7 +84,7 @@ export const actions = {
 		const contributor = ((formData.get('contributor') as string) || '').trim().slice(0, 100);
 
 		let categoryId = formData.get('category') as string;
-		const newCategoryName = (formData.get('new_category') as string || '').trim().slice(0, 100);
+		const newCategoryName = ((formData.get('new_category') as string) || '').trim().slice(0, 100);
 
 		if (!name) {
 			return fail(400, { error: 'Name is required' });

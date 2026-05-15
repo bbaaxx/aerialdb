@@ -3,6 +3,8 @@
 
 	let { data, form }: { data: PageData; form: ActionData } = $props();
 
+	let name = $state('');
+	let description = $state('');
 	let imagePreview = $state<string | null>(null);
 	let categoryMode = $state<'existing' | 'new'>('existing');
 	let selectedCategory = $state('');
@@ -52,15 +54,30 @@
 
 			<!-- Move Name -->
 			<div class="mb-4">
-				<label for="name" class="mb-2 block text-sm font-medium text-on-surface-variant">
-					Move Name <span class="text-red-500">*</span>
-				</label>
+				<div class="mb-2 flex items-center justify-between">
+					<label for="name" class="block text-sm font-medium text-on-surface-variant">
+						Move Name <span class="text-red-500">*</span>
+					</label>
+					<span
+						id="name-counter"
+						class="text-xs {name.length >= 100
+							? 'text-error'
+							: name.length >= 90
+								? 'text-amber-400'
+								: 'text-on-surface-variant'}"
+					>
+						{name.length}/100
+					</span>
+				</div>
 				<input
 					type="text"
 					id="name"
 					name="name"
 					required
+					maxlength="100"
+					bind:value={name}
 					placeholder="e.g., Superman, Angel, Crucifix"
+					aria-describedby="name-counter"
 					class="w-full rounded-lg border border-outline-variant/15 bg-surface-container px-3 py-2 text-on-surface placeholder-on-surface-variant focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none"
 				/>
 			</div>
@@ -127,14 +144,29 @@
 			<h2 class="mb-4 text-lg font-semibold text-on-surface">Description</h2>
 
 			<div>
-				<label for="description" class="mb-2 block text-sm font-medium text-on-surface-variant">
-					Move Description
-				</label>
+				<div class="mb-2 flex items-center justify-between">
+					<label for="description" class="block text-sm font-medium text-on-surface-variant">
+						Move Description
+					</label>
+					<span
+						id="description-counter"
+						class="text-xs {description.length >= 2000
+							? 'text-error'
+							: description.length >= 1800
+								? 'text-amber-400'
+								: 'text-on-surface-variant'}"
+					>
+						{description.length}/2000
+					</span>
+				</div>
 				<textarea
 					id="description"
 					name="description"
 					rows="6"
+					maxlength="2000"
+					bind:value={description}
 					placeholder="Describe the move, how to perform it, key points, etc."
+					aria-describedby="description-counter"
 					class="w-full rounded-lg border border-outline-variant/15 bg-surface-container px-3 py-2 text-on-surface placeholder-on-surface-variant focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none"
 				></textarea>
 			</div>
