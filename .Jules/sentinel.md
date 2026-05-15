@@ -45,3 +45,9 @@
 **Vulnerability:** Search queries using SQLite `LIKE` did not escape wildcards (`%`, `_`), allowing users to perform unintended broad searches. Additionally, lack of input length and result set limits posed a DoS risk.
 **Learning:** Drizzle's `like()` helper doesn't automatically escape wildcards or add the `ESCAPE` clause in SQLite. Manual escaping and explicit `sql` template literals are required for robust `LIKE` queries.
 **Prevention:** Always trim and limit search query length. Use a dedicated `escapeLike` utility and the `ESCAPE` clause in SQL to safely handle user-provided search patterns.
+
+## 2025-05-17 - [Hardened Session Cookies and Cross-Origin Protection]
+
+**Vulnerability:** Session cookies were implicitly relying on SvelteKit defaults, and the app lacked defense against speculative execution attacks or cross-origin window manipulation.
+**Learning:** Explicitly configuring `httpOnly`, `sameSite`, and `secure` flags (conditional on environment) ensures consistent security across different adapters. Adding COOP and CORP headers provides a secondary layer of protection against cross-origin data leaks.
+**Prevention:** Always explicitly define cookie security attributes in the auth provider and implement modern cross-origin isolation headers in the global hooks.
