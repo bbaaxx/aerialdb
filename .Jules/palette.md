@@ -39,5 +39,11 @@
 **Action:** Always use 'aria-invalid' on form fields and link them to error/hint IDs via 'aria-describedby'. Ensure IDs are stable and unique.
 
 ## 2025-05-25 - [Visual Consistency for Filter States]
+
 **Learning:** Matching the visual style of filter controls (like difficulty level chips) with their corresponding result badges (like those on card components) creates a stronger mental model for users and makes the interface feel more intentional. Using subtle background tints and high-contrast text for active states improves visibility without being overwhelming.
 **Action:** Always synchronize the color palette of filter controls with the data representations they affect to reinforce the connection between user actions and results.
+
+## 2025-05-26 - [Delightful Modals and Input Feedback]
+
+**Learning:** Enhancing destructive confirmation modals with a 'scale' transition in addition to a backdrop fade provides a more tactile and polished feel. For forms with length constraints, reactive character counters with color-coded warnings (amber at 90%, error at 100%) prevent user frustration and provide clear affordances before submission.
+**Action:** Combine 'fade' and 'scale' transitions for modals. Implement character counters for all limited text inputs using the standardized color cues and 'aria-describedby'.

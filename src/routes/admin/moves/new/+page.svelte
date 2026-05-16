@@ -7,6 +7,10 @@
 	let categoryMode = $state<'existing' | 'new'>('existing');
 	let selectedCategory = $state('');
 
+	// Form state for character counters
+	let nameValue = $state('');
+	let descriptionValue = $state('');
+
 	function handleImageChange(event: Event) {
 		const target = event.target as HTMLInputElement;
 		const file = target.files?.[0];
@@ -52,14 +56,29 @@
 
 			<!-- Move Name -->
 			<div class="mb-4">
-				<label for="name" class="mb-2 block text-sm font-medium text-on-surface-variant">
-					Move Name <span class="text-red-500">*</span>
-				</label>
+				<div class="mb-2 flex items-center justify-between">
+					<label for="name" class="block text-sm font-medium text-on-surface-variant">
+						Move Name <span class="text-red-500">*</span>
+					</label>
+					<span
+						id="name-counter"
+						class="text-xs {nameValue.length >= 100
+							? 'text-error'
+							: nameValue.length >= 90
+								? 'text-amber-400'
+								: 'text-on-surface-variant'}"
+					>
+						{nameValue.length}/100
+					</span>
+				</div>
 				<input
 					type="text"
 					id="name"
 					name="name"
 					required
+					maxlength="100"
+					bind:value={nameValue}
+					aria-describedby="name-counter"
 					placeholder="e.g., Superman, Angel, Crucifix"
 					class="w-full rounded-lg border border-outline-variant/15 bg-surface-container px-3 py-2 text-on-surface placeholder-on-surface-variant focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none"
 				/>
@@ -124,7 +143,19 @@
 		</div>
 
 		<div class="rounded-lg bg-surface-container p-6 shadow-sm">
-			<h2 class="mb-4 text-lg font-semibold text-on-surface">Description</h2>
+			<div class="mb-4 flex items-center justify-between">
+				<h2 class="text-lg font-semibold text-on-surface">Description</h2>
+				<span
+					id="description-counter"
+					class="text-xs {descriptionValue.length >= 2000
+						? 'text-error'
+						: descriptionValue.length >= 1800
+							? 'text-amber-400'
+							: 'text-on-surface-variant'}"
+				>
+					{descriptionValue.length}/2000
+				</span>
+			</div>
 
 			<div>
 				<label for="description" class="mb-2 block text-sm font-medium text-on-surface-variant">
@@ -134,6 +165,9 @@
 					id="description"
 					name="description"
 					rows="6"
+					maxlength="2000"
+					bind:value={descriptionValue}
+					aria-describedby="description-counter"
 					placeholder="Describe the move, how to perform it, key points, etc."
 					class="w-full rounded-lg border border-outline-variant/15 bg-surface-container px-3 py-2 text-on-surface placeholder-on-surface-variant focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none"
 				></textarea>
