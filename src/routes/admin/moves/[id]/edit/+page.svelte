@@ -9,6 +9,7 @@
 	let showDeleteConfirm = $state(false);
 	let categoryMode = $state<'existing' | 'new'>('existing');
 	let selectedCategory = $state(data.move.categoryId);
+	let name = $state(data.move.name);
 
 	function handleImageChange(event: Event) {
 		const target = event.target as HTMLInputElement;
@@ -110,15 +111,29 @@
 
 			<!-- Move Name -->
 			<div class="mb-4">
-				<label for="name" class="mb-2 block text-sm font-medium text-on-surface-variant">
-					Move Name <span class="text-red-500">*</span>
-				</label>
+				<div class="mb-2 flex items-center justify-between">
+					<label for="name" class="block text-sm font-medium text-on-surface-variant">
+						Move Name <span class="text-red-500">*</span>
+					</label>
+					<span
+						id="name-counter"
+						class="text-xs {name.length >= 100
+							? 'text-error'
+							: name.length >= 90
+								? 'text-amber-400'
+								: 'text-on-surface-variant'}"
+					>
+						{name.length}/100
+					</span>
+				</div>
 				<input
 					type="text"
 					id="name"
 					name="name"
 					required
-					value={data.move.name}
+					maxlength="100"
+					bind:value={name}
+					aria-describedby="name-counter"
 					placeholder="e.g., Superman, Angel, Crucifix"
 					class="w-full rounded-lg border border-outline-variant/15 bg-surface-container px-3 py-2 text-on-surface placeholder-on-surface-variant focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none"
 				/>
