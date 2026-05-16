@@ -24,6 +24,7 @@
 **Action:** Add keyboard shortcut hints to `aria-label` for discoverability. Use `type="search"` for search inputs and `aria-live` for dynamic status indicators. Guard shortcuts against `isContentEditable` elements.
 
 ## 2026-04-22 - [Native Sharing Experience with Web Share API]
+
 **Learning:** Using the Web Share API (`navigator.share`) provides a significantly better UX on mobile devices by opening the native share sheet, while a clipboard fallback ensures functionality on desktop and older browsers. Localizing the share titles and text further improves the experience.
 **Action:** Always prefer `navigator.share` for sharing actions, providing a `navigator.clipboard` fallback and handling `AbortError` gracefully.
 
@@ -37,17 +38,6 @@
 **Learning:** For inclusive forms, visual error messages are insufficient. Using 'aria-invalid' signals the state to assistive technology, and 'aria-describedby' programmatically links the input to both dynamic error messages and static helper hints. Careful concatenation in 'aria-describedby' (e.g., handling spaces) ensures that screen readers can discover all relevant descriptions.
 **Action:** Always use 'aria-invalid' on form fields and link them to error/hint IDs via 'aria-describedby'. Ensure IDs are stable and unique.
 
-## 2026-05-15 - [Inclusive Feedback with Character Counters]
-
-**Learning:** For a better UX and accessibility in forms, include reactive character counters for large `textarea` inputs (like descriptions). Link the counter to the input using `aria-describedby` for screen reader support and use visual cues (e.g., semantic color classes) to signal when approaching the character limit. Use `aria-live="polite"` on the counter to ensure that the updated count is communicated to screen reader users.
-**Action:** Always provide visual and programmatic character counts for limited text inputs. Ensure they use standardized color cues and ARIA attributes for full accessibility.
-
-## 2026-05-05 - [Admin Micro-UX: Standardized Transitions and Focus States]
-
-**Learning:** Administrative interfaces often suffer from a lack of visual feedback during state changes (like appearing modals or inline confirmation toggles). Using standardized Svelte transitions (`fade`, `scale`) combined with Tailwind's `backdrop-blur-sm` provides a more polished and "app-like" feel. Furthermore, using `focus-visible` instead of generic `focus` for accessibility rings ensures that keyboard users have clear visual cues while mouse users are not distracted by persistent outlines.
-**Action:** Apply `transition:fade` and `backdrop-blur-sm` to modal overlays. Use `focus-visible:ring-2` for all interactive elements in admin lists and forms to ensure WCAG-compliant keyboard accessibility.
-
-## 2025-06-15 - [Preventive Form Feedback with Character Counters]
-
-**Learning:** Relying solely on the `maxlength` attribute creates a "silent failure" UX where users can't type but don't know why. Adding a reactive character counter with semantic color cues (warning at 90%, error at limit) provides real-time guidance and prevents frustration.
-**Action:** Include character counters for all restricted text inputs, using the established color pattern (normal -> amber -> error) and `aria-describedby` for accessibility.
+## 2025-05-25 - [Visual Consistency for Filter States]
+**Learning:** Matching the visual style of filter controls (like difficulty level chips) with their corresponding result badges (like those on card components) creates a stronger mental model for users and makes the interface feel more intentional. Using subtle background tints and high-contrast text for active states improves visibility without being overwhelming.
+**Action:** Always synchronize the color palette of filter controls with the data representations they affect to reinforce the connection between user actions and results.

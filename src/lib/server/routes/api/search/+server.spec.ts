@@ -88,11 +88,13 @@ describe('api/search/+server', () => {
 						then: (resolve: any) => {
 							return Promise.resolve(result).then(resolve);
 						},
-						orderBy: vi.fn().mockReturnThis()
+						orderBy: vi.fn().mockReturnThis(),
+						limit: vi.fn().mockReturnThis()
 					};
 					return thenable;
 				}),
-				orderBy: vi.fn().mockReturnThis()
+				orderBy: vi.fn().mockReturnThis(),
+				limit: vi.fn().mockReturnThis()
 			};
 		}
 

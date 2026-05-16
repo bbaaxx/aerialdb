@@ -22,28 +22,31 @@ type CategoryWithMoveCount = {
 export const load: PageServerLoad = async (event) => {
 	const db = getDb(event);
 
-	// Fetch all categories
-	const allCategories = await (db as any)
-		.select({
-			id: categories.id,
-			name: categories.name,
-			createdAt: categories.createdAt
-		})
-		.from(categories)
-		.orderBy(categories.name);
+	// Performance: Fetch categories and move counts in parallel to reduce TTFB.
+	// Type assertion needed: getDb() returns a union type (D1 | libsql)
+	// that breaks .select({fields}) overload resolution
+	const [allCategories, moveCountsRaw] = (await Promise.all([
+		(db as any)
+			.select({
+				id: categories.id,
+				name: categories.name,
+				createdAt: categories.createdAt
+			})
+			.from(categories)
+			.orderBy(categories.name),
 
-	// Get move counts per category using raw SQL count
-	const moveCountsRaw = await (db as any)
-		.select({
-			categoryId: moves.categoryId,
-			count: sql`count(*)`.as('count')
-		})
-		.from(moves)
-		.groupBy(moves.categoryId);
+		(db as any)
+			.select({
+				categoryId: moves.categoryId,
+				count: sql`count(*)`.as('count')
+			})
+			.from(moves)
+			.groupBy(moves.categoryId)
+	])) as [{ id: string; name: string; createdAt: Date }[], { categoryId: string; count: number }[]];
 
 	// Create a map for faster lookup
 	const moveCountMap = new Map<string, number>(
-		moveCountsRaw.map((mc: { categoryId: string; count: number }) => [mc.categoryId, mc.count])
+		moveCountsRaw.map((mc) => [mc.categoryId, mc.count])
 	);
 
 	// Merge categories with their move counts
