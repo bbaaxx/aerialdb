@@ -45,3 +45,9 @@
 **Vulnerability:** Search queries using SQLite `LIKE` did not escape wildcards (`%`, `_`), allowing users to perform unintended broad searches. Additionally, lack of input length and result set limits posed a DoS risk.
 **Learning:** Drizzle's `like()` helper doesn't automatically escape wildcards or add the `ESCAPE` clause in SQLite. Manual escaping and explicit `sql` template literals are required for robust `LIKE` queries.
 **Prevention:** Always trim and limit search query length. Use a dedicated `escapeLike` utility and the `ESCAPE` clause in SQL to safely handle user-provided search patterns.
+
+## 2026-05-16 - [Enhanced Security Headers for Isolation]
+
+**Vulnerability:** Missing modern isolation headers (`COOP`, `CORP`) and presence of outdated browser-side XSS filtering configurations could expose the application to cross-origin attacks or inconsistent security behaviors.
+**Learning:** Modern web security requires explicit resource isolation through headers to mitigate speculative execution attacks and cross-origin information leaks. Outdated `X-XSS-Protection` can sometimes be leveraged for attacks.
+**Prevention:** Always implement `Cross-Origin-Opener-Policy` and `Cross-Origin-Resource-Policy` set to `same-origin`. Disable legacy XSS filters with `X-XSS-Protection: 0` in favor of robust CSP and input validation.
