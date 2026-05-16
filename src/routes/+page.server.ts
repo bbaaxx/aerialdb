@@ -1,14 +1,16 @@
 import { getDb } from '$lib/server/db';
 import { type LeanMoveRaw, type LeanMove } from '$lib/server/db/types';
 import { moves, categories } from '$lib/server/db/schema';
-import { desc, eq, isNotNull, like, and } from 'drizzle-orm';
+import { desc, eq, isNotNull, and, sql } from 'drizzle-orm';
+import { escapeLike } from '$lib/utils/security';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async (event) => {
 	const db = getDb(event);
 	const { url } = event;
 
-	const searchQuery = url.searchParams.get('q') || '';
+	// SECURITY: Trim and limit query length
+	const searchQuery = (url.searchParams.get('q') || '').trim().slice(0, 100);
 	const categoryFilter = url.searchParams.get('category') || '';
 	const levelFilter = url.searchParams.get('level') || '';
 
@@ -16,7 +18,9 @@ export const load: PageServerLoad = async (event) => {
 	const conditions = [];
 
 	if (searchQuery) {
-		conditions.push(like(moves.name, `%${searchQuery}%`));
+		// SECURITY: Escape SQLite wildcards
+		const searchPattern = `%${escapeLike(searchQuery)}%`;
+		conditions.push(sql`${moves.name} LIKE ${searchPattern} ESCAPE '\\'`);
 	}
 
 	if (categoryFilter) {

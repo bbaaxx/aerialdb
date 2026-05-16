@@ -38,6 +38,35 @@ export type MoveWithCategoryRawFull = MoveWithCategoryRaw & {
 	updatedAt: Date | null;
 };
 
+/**
+ * Lean representation of a move for Admin dashboard.
+ * Optimized to exclude large text fields while providing presence indicators.
+ */
+export type AdminLeanMoveRaw = {
+	id: string;
+	name: string;
+	categoryId: string;
+	hasDescription: boolean;
+	hasImage: boolean;
+	hasVideo: boolean;
+	contributorName: string | null;
+	createdAt: Date | null;
+	updatedAt: Date | null;
+};
+
+export type AdminLeanMove = {
+	id: string;
+	name: string;
+	categoryId: string;
+	categoryName: string;
+	hasDescription: boolean;
+	hasImage: boolean;
+	hasVideo: boolean;
+	contributorName: string | null;
+	createdAt: Date | null;
+	updatedAt: Date | null;
+};
+
 export type SessionWithUser = {
 	user: { id: string; username: string };
 	session: {

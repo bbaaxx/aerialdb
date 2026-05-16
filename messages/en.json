@@ -1,6 +1,7 @@
 {
 	"$schema": "https://inlang.com/schema/inlang-message-format",
 	"hello_world": "Hello, {name} from en!",
+	"a11y_skip_to_content": "Skip to content",
 	"baseTechnique": "Base Technique",
 	"allBaseTechniques": "All Base Techniques",
 
@@ -10,6 +11,7 @@
 	"nav_community": "Community",
 	"nav_upload_move": "Upload Move",
 	"nav_search_placeholder": "Search moves, performers, techniques...",
+	"nav_search_clear": "Clear search",
 	"nav_search_toggle_label": "Search (/)",
 	"nav_search_shortcut": "/",
 	"nav_sign_up": "Sign Up",
@@ -22,6 +24,7 @@
 	"coming_soon_message": "This page is under construction. Check back soon!",
 	"back_to_library": "Back to Library",
 	"move_back": "Back",
+	"move_learn_more_aria": "Learn more about {name}",
 	"move_share": "Share",
 	"move_share_aria": "Share this move",
 	"move_copied": "Copied!",

@@ -44,7 +44,7 @@
 	function toggleSearch() {
 		searchOpen = !searchOpen;
 		if (searchOpen) {
-			searchQuery = '';
+			searchQuery = $page.url.searchParams.get('q') || '';
 			// Focus input after DOM update
 			setTimeout(() => searchInput?.focus(), 50);
 		}
@@ -58,15 +58,22 @@
 
 	function submitSearch() {
 		const query = searchQuery.trim();
-		if (!query) return;
 		const pathname = $page.url.pathname;
-		if (pathname === '/') {
-			const params = new URLSearchParams($page.url.search);
+		const params = new URLSearchParams($page.url.search);
+
+		if (query) {
 			params.set('q', query);
-			goto(`/?${params.toString()}`, { replaceState: true, noScroll: true });
 		} else {
-			goto(`/?q=${encodeURIComponent(query)}`);
+			params.delete('q');
 		}
+
+		const qs = params.toString();
+		if (pathname === '/') {
+			goto(qs ? `/?${qs}` : '/', { replaceState: true, noScroll: true });
+		} else {
+			goto(qs ? `/?${qs}` : '/');
+		}
+
 		searchOpen = false;
 		searchQuery = '';
 	}
@@ -161,6 +168,8 @@
 					onclick={toggleSearch}
 					class="group relative rounded-lg p-2 text-on-surface-variant transition hover:bg-surface-container-high/50 hover:text-on-surface focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
 					aria-label={m.nav_search_toggle_label()}
+					aria-expanded={searchOpen}
+					aria-controls="header-search-bar"
 				>
 					{#if searchOpen}
 						<X size={20} />
@@ -183,7 +192,7 @@
 				{#if user}
 					<a
 						href="/upload"
-						class="hidden items-center gap-1.5 rounded-lg bg-primary/15 px-3 py-1.5 text-sm font-medium text-primary transition hover:bg-primary/25 sm:flex"
+						class="hidden items-center gap-1.5 rounded-lg bg-primary/15 px-3 py-1.5 text-sm font-medium text-primary transition hover:bg-primary/25 focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none sm:flex"
 					>
 						<Upload size={16} />
 						<span class="hidden md:inline">{m.nav_upload_move()}</span>
@@ -197,7 +206,7 @@
 							type="button"
 							bind:this={accountButton}
 							onclick={toggleAccount}
-							class="rounded-lg p-2 text-on-surface-variant transition hover:bg-surface-container-high/50 hover:text-on-surface"
+							class="rounded-lg p-2 text-on-surface-variant transition hover:bg-surface-container-high/50 hover:text-on-surface focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
 							aria-label={m.nav_account_menu_label()}
 							aria-haspopup="true"
 							aria-expanded={accountOpen}
@@ -235,15 +244,17 @@
 									<BookOpen size={14} />
 									{m.menu_my_library()}
 								</a>
-								<a
-									href="/auth/logout"
-									class="flex items-center gap-2 px-4 py-2 text-sm text-on-surface-variant transition hover:bg-surface-container-high/50 hover:text-on-surface"
-									role="menuitem"
-									onclick={() => (accountOpen = false)}
-								>
-									<LogOut size={14} />
-									{m.menu_sign_out()}
-								</a>
+								<form method="POST" action="/auth/logout" class="block">
+									<button
+										type="submit"
+										class="flex w-full items-center gap-2 px-4 py-2 text-sm text-on-surface-variant transition hover:bg-surface-container-high/50 hover:text-on-surface"
+										role="menuitem"
+										onclick={() => (accountOpen = false)}
+									>
+										<LogOut size={14} />
+										{m.menu_sign_out()}
+									</button>
+								</form>
 							</div>
 						{/if}
 					</div>
@@ -260,7 +271,7 @@
 				<button
 					type="button"
 					onclick={() => (mobileMenuOpen = !mobileMenuOpen)}
-					class="rounded-lg p-2 text-on-surface-variant transition hover:bg-surface-container-high/50 hover:text-on-surface lg:hidden"
+					class="rounded-lg p-2 text-on-surface-variant transition hover:bg-surface-container-high/50 hover:text-on-surface focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none lg:hidden"
 					aria-label={m.nav_mobile_menu_label()}
 					aria-expanded={mobileMenuOpen}
 				>
@@ -271,7 +282,7 @@
 
 		<!-- Inline search bar (expandable) -->
 		{#if searchOpen}
-			<div class="mt-3" transition:slide>
+			<div id="header-search-bar" class="mt-3" transition:slide>
 				<div class="relative">
 					<div
 						class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-on-surface-variant"
@@ -294,8 +305,8 @@
 								searchQuery = '';
 								searchInput?.focus();
 							}}
-							class="absolute inset-y-0 right-0 flex items-center pr-3 text-on-surface-variant transition hover:text-on-surface"
-							aria-label="Clear search"
+							class="absolute inset-y-0 right-0 flex items-center pr-3 text-on-surface-variant transition hover:text-on-surface focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
+							aria-label={m.nav_search_clear()}
 						>
 							<X size={16} />
 						</button>
