@@ -18,3 +18,7 @@
 **Learning:** Fetching entire database rows for listing pages (like Home or Search) is inefficient when only a subset of fields (e.g., name, image) is displayed. Large text fields like `description` significantly increase database I/O and network payload size. Using Drizzle's `.select({ fields })` to fetch only required data reduces TTFB and memory pressure on both server and client.
 **Action:** Define explicit "Lean" types for common listing views and use selective field fetching in server-side load functions and API endpoints to minimize data transfer.
 
+## 2026-05-17 - [Video Facade for Improved Page Load]
+
+**Learning:** Loading YouTube iframes immediately on page load is a significant performance bottleneck due to large JS payloads and multiple network requests. Using a "facade" (thumbnail + play button) and only loading the iframe on user interaction dramatically improves initial page weight and Lighthouse scores.
+**Action:** Always use a facade pattern for third-party embeds (like YouTube) to keep the initial page load lean. Include a fallback mechanism for thumbnails (e.g., from maxresdefault to hqdefault).

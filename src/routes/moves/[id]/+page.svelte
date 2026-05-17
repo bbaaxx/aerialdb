@@ -1,10 +1,11 @@
 <script lang="ts">
 	import type { PageData } from './$types';
-	import { ChevronLeft, Pencil, ImageOff, Share2, Check } from 'lucide-svelte';
+	import { ChevronLeft, Pencil, ImageOff, Share2, Check, Play } from 'lucide-svelte';
 	import { m } from '$lib/paraglide/messages.js';
 
 	let { data }: { data: PageData } = $props();
 	let copied = $state(false);
+	let videoStarted = $state(false);
 
 	/**
 	 * Handles sharing the move using the Web Share API if available,
@@ -122,17 +123,51 @@
 			<!-- Video -->
 			{#if youtubeId}
 				<div class="overflow-hidden rounded-lg">
-					<div class="aspect-video">
-						<iframe
-							width="100%"
-							height="100%"
-							src="https://www.youtube.com/embed/{youtubeId}"
-							title={data.move.name}
-							frameborder="0"
-							allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-							allowfullscreen
-							class="h-full w-full"
-						></iframe>
+					<div class="aspect-video bg-black">
+						{#if videoStarted}
+							<iframe
+								width="100%"
+								height="100%"
+								src="https://www.youtube.com/embed/{youtubeId}?autoplay=1"
+								title={data.move.name}
+								frameborder="0"
+								allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+								allowfullscreen
+								class="h-full w-full"
+							></iframe>
+						{:else}
+							<!-- Performance: YouTube Video Facade -->
+							<!-- Only load the iframe after user interaction to improve initial page load performance -->
+							<button
+								type="button"
+								id="play-video-button"
+								onclick={() => (videoStarted = true)}
+								class="group relative h-full w-full overflow-hidden transition-transform active:scale-[0.99]"
+								aria-label="Play video"
+							>
+								<img
+									src="https://img.youtube.com/vi/{youtubeId}/maxresdefault.jpg"
+									alt="Video thumbnail"
+									class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+									onerror={(e) => {
+										// Fallback if maxresdefault is not available
+										const target = e.currentTarget as HTMLImageElement;
+										if (!target.src.includes('hqdefault.jpg')) {
+											target.src = `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`;
+										}
+									}}
+								/>
+								<div
+									class="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/10"
+								>
+									<div
+										class="flex h-16 w-16 items-center justify-center rounded-full bg-red-600 text-white shadow-xl transition-all duration-300 group-hover:scale-110 group-hover:bg-red-700"
+									>
+										<Play size={32} fill="currentColor" class="ml-1" />
+									</div>
+								</div>
+							</button>
+						{/if}
 					</div>
 				</div>
 			{/if}

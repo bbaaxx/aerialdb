@@ -80,4 +80,33 @@ describe('moves/[id]/+page.svelte', () => {
 
 		await expect.element(page.getByText('No media available')).toBeVisible();
 	});
+
+	it('should render a video facade initially and load the iframe after click', async () => {
+		const { container } = render(MoveDetailPage, { data: mockData });
+
+		// Initially, the iframe should NOT be present
+		const iframeBefore = container.querySelector('iframe');
+		expect(iframeBefore).toBeNull();
+
+		// Initially, the play button (facade) SHOULD be present
+		const playButton = page.getByRole('button', { name: 'Play video' });
+		await expect.element(playButton).toBeVisible();
+
+		// Click the play button
+		const btn = container.querySelector('#play-video-button') as HTMLButtonElement;
+		btn.click();
+
+		// After click, the iframe SHOULD be present with autoplay=1
+		// We use a polling expect for Vitest Browser to handle reactivity
+		await expect
+			.poll(() => container.querySelector('iframe'), {
+				timeout: 1000,
+				interval: 50
+			})
+			.not.toBeNull();
+
+		const iframeAfter = container.querySelector('iframe');
+		expect(iframeAfter?.src).toContain('autoplay=1');
+		expect(iframeAfter?.src).toContain('dQw4w9WgXcQ');
+	});
 });
