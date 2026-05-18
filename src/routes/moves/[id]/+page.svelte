@@ -1,10 +1,11 @@
 <script lang="ts">
 	import type { PageData } from './$types';
-	import { ChevronLeft, Pencil, ImageOff, Share2, Check } from 'lucide-svelte';
+	import { ChevronLeft, Pencil, ImageOff, Share2, Check, Play } from 'lucide-svelte';
 	import { m } from '$lib/paraglide/messages.js';
 
 	let { data }: { data: PageData } = $props();
 	let copied = $state(false);
+	let videoStarted = $state(false);
 
 	/**
 	 * Handles sharing the move using the Web Share API if available,
@@ -44,6 +45,16 @@
 	}
 
 	const youtubeId = $derived(getYouTubeId(data.move.videoUrl));
+
+	/**
+	 * Performance: YouTube Facade fallback for missing high-res thumbnails.
+	 */
+	function handleThumbError(e: Event) {
+		const img = e.target as HTMLImageElement;
+		if (img.src.includes('maxresdefault.jpg')) {
+			img.src = `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`;
+		}
+	}
 </script>
 
 <svelte:head>
@@ -123,16 +134,43 @@
 			{#if youtubeId}
 				<div class="overflow-hidden rounded-lg">
 					<div class="aspect-video">
-						<iframe
-							width="100%"
-							height="100%"
-							src="https://www.youtube.com/embed/{youtubeId}"
-							title={data.move.name}
-							frameborder="0"
-							allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-							allowfullscreen
-							class="h-full w-full"
-						></iframe>
+						{#if videoStarted}
+							<iframe
+								width="100%"
+								height="100%"
+								src="https://www.youtube.com/embed/{youtubeId}?autoplay=1"
+								title={data.move.name}
+								frameborder="0"
+								allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+								allowfullscreen
+								class="h-full w-full"
+							></iframe>
+						{:else}
+							<button
+								type="button"
+								onclick={() => (videoStarted = true)}
+								class="group relative h-full w-full overflow-hidden"
+								aria-label="Play video"
+							>
+								<img
+									src="https://img.youtube.com/vi/{youtubeId}/maxresdefault.jpg"
+									alt={data.move.name}
+									class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+									onerror={handleThumbError}
+									loading="lazy"
+									decoding="async"
+								/>
+								<div
+									class="absolute inset-0 flex items-center justify-center bg-black/20 transition-colors group-hover:bg-black/40"
+								>
+									<div
+										class="flex h-16 w-16 items-center justify-center rounded-full bg-primary text-white shadow-xl transition-transform group-hover:scale-110"
+									>
+										<Play size={32} fill="currentColor" class="ml-1" />
+									</div>
+								</div>
+							</button>
+						{/if}
 					</div>
 				</div>
 			{/if}

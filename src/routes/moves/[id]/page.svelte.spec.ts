@@ -80,4 +80,29 @@ describe('moves/[id]/+page.svelte', () => {
 
 		await expect.element(page.getByText('No media available')).toBeVisible();
 	});
+
+	it('should render YouTube facade and load iframe on click', async () => {
+		// Use data with only videoUrl to avoid ambiguity with imageUrl
+		const videoOnlyData = {
+			move: {
+				...mockMove,
+				imageUrl: null
+			}
+		};
+		const { container } = render(MoveDetailPage, { data: videoOnlyData });
+
+		// Check if facade is rendered (play button)
+		const playButton = page.getByRole('button', { name: 'Play video' });
+		await expect.element(playButton).toBeVisible();
+
+		// Click play button directly on the element for more reliable state change in Svelte 5 tests
+		const btn = container.querySelector('button[aria-label="Play video"]') as HTMLButtonElement;
+		btn.click();
+
+		// Verify iframe is now rendered
+		await expect.poll(() => container.querySelector('iframe[title="Test Move"]')).toBeTruthy();
+
+		const iframe = page.getByTitle('Test Move');
+		await expect.element(iframe).toHaveAttribute('src', expect.stringContaining('autoplay=1'));
+	});
 });
