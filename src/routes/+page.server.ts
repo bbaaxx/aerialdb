@@ -11,8 +11,12 @@ export const load: PageServerLoad = async (event) => {
 
 	// SECURITY: Trim and limit query length
 	const searchQuery = (url.searchParams.get('q') || '').trim().slice(0, 100);
-	const categoryFilter = url.searchParams.get('category') || '';
-	const levelFilter = url.searchParams.get('level') || '';
+	const categoryFilter = (url.searchParams.get('category') || '').trim().slice(0, 100);
+	const levelFilterRaw = (url.searchParams.get('level') || '').trim().slice(0, 100);
+
+	// SECURITY: Whitelist validation for level parameter
+	const allowedLevels = ['beginner', 'intermediate', 'advanced', 'professional'];
+	const levelFilter = allowedLevels.includes(levelFilterRaw) ? levelFilterRaw : '';
 
 	// Build query conditions
 	const conditions = [];

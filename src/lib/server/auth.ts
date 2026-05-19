@@ -72,6 +72,9 @@ export async function invalidateSession(sessionId: string, db: Database) {
 
 export function setSessionTokenCookie(event: RequestEvent, token: string, expiresAt: Date) {
 	event.cookies.set(sessionCookieName, token, {
+		httpOnly: true,
+		sameSite: 'lax',
+		secure: import.meta.env.PROD,
 		expires: expiresAt,
 		path: '/'
 	});
