@@ -31,6 +31,7 @@ export async function seedDatabase() {
 		id: adminUserId,
 		username: 'admin',
 		passwordHash,
+		role: 'admin',
 		age: null
 	});
 

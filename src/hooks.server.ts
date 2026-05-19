@@ -38,9 +38,16 @@ const handleAuth: Handle = async ({ event, resolve }) => {
 
 export const handleAdminGuard: Handle = async ({ event, resolve }) => {
 	// Protect all routes starting with /admin
-	if (event.url.pathname.startsWith('/admin') && !event.locals.user) {
-		const redirectTo = encodeURIComponent(event.url.pathname + event.url.search);
-		throw redirect(302, `/auth/login?redirectTo=${redirectTo}`);
+	if (event.url.pathname.startsWith('/admin')) {
+		if (!event.locals.user) {
+			const redirectTo = encodeURIComponent(event.url.pathname + event.url.search);
+			throw redirect(302, `/auth/login?redirectTo=${redirectTo}`);
+		}
+
+		// SECURITY: Verify user has 'admin' role to access administrative routes
+		if (event.locals.user.role !== 'admin') {
+			return new Response('Forbidden: Admin access required', { status: 403 });
+		}
 	}
 
 	return resolve(event);
