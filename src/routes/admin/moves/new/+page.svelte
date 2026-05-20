@@ -7,6 +7,7 @@
 	let categoryMode = $state<'existing' | 'new'>('existing');
 	let selectedCategory = $state('');
 	let name = $state('');
+	let description = $state('');
 
 	function handleImageChange(event: Event) {
 		const target = event.target as HTMLInputElement;
@@ -90,7 +91,7 @@
 					id="category-select"
 					onchange={handleCategoryChange}
 					bind:value={selectedCategory}
-					class="w-full rounded-lg border border-gray-600 bg-[#242736] px-3 py-2 text-gray-200 focus:border-[#8A63F8] focus:ring-1 focus:ring-[#8A63F8] focus:outline-none"
+					class="w-full rounded-lg border border-outline-variant/30 bg-surface-container px-3 py-2 text-on-surface focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none"
 				>
 					<option value="">Select a base technique</option>
 					{#each data.categories as category (category.id)}
@@ -133,14 +134,26 @@
 					placeholder="e.g., Fer Medina"
 					class="w-full rounded-lg border border-outline-variant/15 bg-surface-container px-3 py-2 text-on-surface placeholder-on-surface-variant focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none"
 				/>
-				<p class="mt-1 text-xs text-[#A0A5C0]">
+				<p class="mt-1 text-xs text-on-surface-variant">
 					The person who originally created or popularized this move
 				</p>
 			</div>
 		</div>
 
 		<div class="rounded-lg bg-surface-container p-6 shadow-sm">
-			<h2 class="mb-4 text-lg font-semibold text-on-surface">Description</h2>
+			<div class="mb-4 flex items-center justify-between">
+				<h2 class="text-lg font-semibold text-on-surface">Description</h2>
+				<span
+					id="description-counter"
+					class="text-xs {description.length >= 2000
+						? 'text-error'
+						: description.length >= 1800
+							? 'text-amber-400'
+							: 'text-on-surface-variant'}"
+				>
+					{description.length}/2000
+				</span>
+			</div>
 
 			<div>
 				<label for="description" class="mb-2 block text-sm font-medium text-on-surface-variant">
@@ -149,6 +162,9 @@
 				<textarea
 					id="description"
 					name="description"
+					bind:value={description}
+					maxlength="2000"
+					aria-describedby="description-counter"
 					rows="6"
 					placeholder="Describe the move, how to perform it, key points, etc."
 					class="w-full rounded-lg border border-outline-variant/15 bg-surface-container px-3 py-2 text-on-surface placeholder-on-surface-variant focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none"
@@ -202,7 +218,7 @@
 		<div class="flex gap-4">
 			<button
 				type="submit"
-				class="rounded-lg bg-gradient-to-r from-purple-500 to-indigo-500 px-6 py-2.5 text-sm font-medium text-white shadow-[0_0_15px_rgba(138,99,248,0.5)] transition hover:shadow-[0_0_20px_rgba(138,99,248,0.6)] focus:ring-2 focus:ring-[#8A63F8] focus:ring-offset-2 focus:outline-none"
+				class="rounded-lg bg-gradient-to-r from-purple-500 to-indigo-500 px-6 py-2.5 text-sm font-medium text-white shadow-[0_0_15px_rgba(138,99,248,0.5)] transition hover:shadow-[0_0_20px_rgba(138,99,248,0.6)] focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:outline-none"
 			>
 				Create Move
 			</button>
