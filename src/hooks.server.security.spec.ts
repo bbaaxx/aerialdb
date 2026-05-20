@@ -73,4 +73,30 @@ describe('hooks.server admin guard', () => {
 			expect(e.location).toBe('/auth/login?redirectTo=%2Fadmin%2Fmoves');
 		}
 	});
+
+	it('denies access to non-admin users with 403', async () => {
+		const event = {
+			url: new URL('http://localhost/admin/moves'),
+			locals: { user: { id: 'user-1', username: 'user', role: 'user' } }
+		} as any;
+		const resolve = vi.fn();
+
+		const response = await handleAdminGuard({ event, resolve });
+		expect(response.status).toBe(403);
+		const body = await response.text();
+		expect(body).toContain('Forbidden: Admin role required');
+	});
+
+	it('allows access to admin users', async () => {
+		const event = {
+			url: new URL('http://localhost/admin/moves'),
+			locals: { user: { id: 'admin-1', username: 'admin', role: 'admin' } }
+		} as any;
+		const resolve = vi.fn().mockResolvedValue(new Response('Admin Content'));
+
+		const response = await handleAdminGuard({ event, resolve });
+		expect(response.status).toBe(200);
+		const body = await response.text();
+		expect(body).toBe('Admin Content');
+	});
 });

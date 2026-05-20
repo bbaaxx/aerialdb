@@ -31,7 +31,8 @@ export async function seedDatabase() {
 		id: adminUserId,
 		username: 'admin',
 		passwordHash,
-		age: null
+		age: null,
+		role: 'admin'
 	});
 
 	console.log('✅ Admin user created (username: admin, password: admin123)');

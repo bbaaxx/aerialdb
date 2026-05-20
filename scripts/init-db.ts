@@ -75,8 +75,8 @@ async function initDatabase() {
 	const passwordHash = await hashPassword('admin123');
 
 	await client.execute({
-		sql: 'INSERT INTO user (id, username, password_hash, age) VALUES (?, ?, ?, ?)',
-		args: [adminUserId, 'admin', passwordHash, null]
+		sql: 'INSERT INTO user (id, username, password_hash, age, role) VALUES (?, ?, ?, ?, ?)',
+		args: [adminUserId, 'admin', passwordHash, null, 'admin']
 	});
 
 	console.log('✅ Admin user created (username: admin, password: admin123)');
