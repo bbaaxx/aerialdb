@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { PageData } from './$types';
 	import { ChevronLeft, Pencil, ImageOff, Share2, Check } from 'lucide-svelte';
+	import YouTubeFacade from '$lib/components/YouTubeFacade.svelte';
 	import { m } from '$lib/paraglide/messages.js';
 
 	let { data }: { data: PageData } = $props();
@@ -122,18 +123,7 @@
 			<!-- Video -->
 			{#if youtubeId}
 				<div class="overflow-hidden rounded-lg">
-					<div class="aspect-video">
-						<iframe
-							width="100%"
-							height="100%"
-							src="https://www.youtube.com/embed/{youtubeId}"
-							title={data.move.name}
-							frameborder="0"
-							allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-							allowfullscreen
-							class="h-full w-full"
-						></iframe>
-					</div>
+					<YouTubeFacade {youtubeId} title={data.move.name} />
 				</div>
 			{/if}
 
