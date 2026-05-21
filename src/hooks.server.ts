@@ -1,6 +1,6 @@
 import { sequence } from '@sveltejs/kit/hooks';
 import * as auth from '$lib/server/auth';
-import { type Handle, redirect } from '@sveltejs/kit';
+import { type Handle, redirect, error } from '@sveltejs/kit';
 import { paraglideMiddleware } from '$lib/paraglide/server';
 import { getDb } from '$lib/server/db';
 
@@ -38,9 +38,15 @@ const handleAuth: Handle = async ({ event, resolve }) => {
 
 export const handleAdminGuard: Handle = async ({ event, resolve }) => {
 	// Protect all routes starting with /admin
-	if (event.url.pathname.startsWith('/admin') && !event.locals.user) {
-		const redirectTo = encodeURIComponent(event.url.pathname + event.url.search);
-		throw redirect(302, `/auth/login?redirectTo=${redirectTo}`);
+	if (event.url.pathname.startsWith('/admin')) {
+		if (!event.locals.user) {
+			const redirectTo = encodeURIComponent(event.url.pathname + event.url.search);
+			throw redirect(302, `/auth/login?redirectTo=${redirectTo}`);
+		}
+
+		if (event.locals.user.role !== 'admin') {
+			throw error(403, 'Forbidden: Admin access required');
+		}
 	}
 
 	return resolve(event);
