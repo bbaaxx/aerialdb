@@ -14,7 +14,11 @@ describe('api/upload/+server', () => {
 			};
 		});
 
-		function createMockEvent(platform: any, body?: BodyInit, user: any = { id: 'user-1' }) {
+		function createMockEvent(
+			platform: any,
+			body?: BodyInit,
+			user: any = { id: 'admin-1', role: 'admin' }
+		) {
 			return {
 				request: new Request('http://localhost/api/upload', {
 					method: 'POST',
@@ -223,8 +227,22 @@ describe('api/upload/+server', () => {
 			const body = await response.json();
 
 			// Assert
-			expect(response.status).toBe(401);
-			expect(body.error).toBe('Unauthorized: Authentication required');
+			expect(response.status).toBe(403);
+			expect(body.error).toBe('Forbidden: Admin access required');
+		});
+
+		it('rejects non-admin requests', async () => {
+			// Arrange
+			const formData = new FormData();
+			const mockEvent = createMockEvent(mockPlatform, formData, { id: 'user-1', role: 'user' });
+
+			// Act
+			const response = await POST(mockEvent as any);
+			const body = await response.json();
+
+			// Assert
+			expect(response.status).toBe(403);
+			expect(body.error).toBe('Forbidden: Admin access required');
 		});
 	});
 });

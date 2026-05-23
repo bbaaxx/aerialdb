@@ -68,7 +68,7 @@ export type AdminLeanMove = {
 };
 
 export type SessionWithUser = {
-	user: { id: string; username: string };
+	user: { id: string; username: string; role: 'user' | 'admin' };
 	session: {
 		id: string;
 		userId: string;

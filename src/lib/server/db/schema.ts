@@ -5,7 +5,10 @@ export const user = sqliteTable('user', {
 	id: text('id').primaryKey(),
 	age: integer('age'),
 	username: text('username').notNull().unique(),
-	passwordHash: text('password_hash').notNull()
+	passwordHash: text('password_hash').notNull(),
+	role: text('role', { enum: ['user', 'admin'] })
+		.notNull()
+		.default('user')
 });
 
 export const session = sqliteTable('session', {
