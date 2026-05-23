@@ -42,3 +42,8 @@
 
 **Learning:** Matching the visual style of filter controls (like difficulty level chips) with their corresponding result badges (like those on card components) creates a stronger mental model for users and makes the interface feel more intentional. Using subtle background tints and high-contrast text for active states improves visibility without being overwhelming.
 **Action:** Always synchronize the color palette of filter controls with the data representations they affect to reinforce the connection between user actions and results.
+
+## 2025-05-26 - [Svelte 5 Form State Synchronization]
+
+**Learning:** In Svelte 5, local state initialized directly from props (e.g., `$state(data.move.name)`) captures only the initial value. In a SvelteKit app where users navigate between similar edit pages (e.g., different moves), this local state will not update unless explicitly synchronized. Using an `$effect` to re-assign local state variables when the `data` prop changes ensures a consistent UI and prevents stale data entry.
+**Action:** Always use an `$effect` to synchronize local form state with server-provided `data` props in Svelte 5 to handle client-side navigation and updates correctly.
