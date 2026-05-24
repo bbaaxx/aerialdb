@@ -51,3 +51,9 @@
 **Vulnerability:** Missing modern isolation headers (`COOP`, `CORP`) and presence of outdated browser-side XSS filtering configurations could expose the application to cross-origin attacks or inconsistent security behaviors.
 **Learning:** Modern web security requires explicit resource isolation through headers to mitigate speculative execution attacks and cross-origin information leaks. Outdated `X-XSS-Protection` can sometimes be leveraged for attacks.
 **Prevention:** Always implement `Cross-Origin-Opener-Policy` and `Cross-Origin-Resource-Policy` set to `same-origin`. Disable legacy XSS filters with `X-XSS-Protection: 0` in favor of robust CSP and input validation.
+
+## 2026-05-20 - [Implementation of RBAC for Administrative Routes]
+
+**Vulnerability:** Administrative routes under `/admin` were protected only by authentication (checking if a user is logged in), but not by authorization (checking if the user has the 'admin' role). This allowed any registered user to access the administrative dashboard and perform management actions.
+**Learning:** Documentation (AGENTS.md) and architectural expectations can sometimes drift from the actual implementation. Relying on layout guards or global hooks that only check for "any" authenticated user is insufficient when multiple user levels exist.
+**Prevention:** Always implement explicit role checks in security middleware (hooks) and ensure the database schema supports the necessary authorization metadata. Verify that both unauthenticated (redirect) and unauthorized (403) states are handled correctly.

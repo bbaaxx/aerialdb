@@ -54,7 +54,7 @@ export const actions: Actions = {
 
 		try {
 			const db = getDb(event);
-			await db.insert(table.user).values({ id: userId, username, passwordHash });
+			await db.insert(table.user).values({ id: userId, username, passwordHash, role: 'user' });
 
 			const sessionToken = auth.generateSessionToken();
 			const session = await auth.createSession(sessionToken, userId, db);
