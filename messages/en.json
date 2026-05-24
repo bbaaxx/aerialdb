@@ -14,6 +14,8 @@
 	"nav_search_clear": "Clear search",
 	"nav_search_toggle_label": "Search (/)",
 	"nav_search_shortcut": "/",
+	"auth_show_password": "Show password",
+	"auth_hide_password": "Hide password",
 	"nav_sign_up": "Sign Up",
 	"menu_profile": "Profile",
 	"menu_my_library": "My Library",
