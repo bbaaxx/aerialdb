@@ -29,7 +29,8 @@ async function initDatabase() {
 			id TEXT PRIMARY KEY NOT NULL,
 			age INTEGER,
 			username TEXT NOT NULL UNIQUE,
-			password_hash TEXT NOT NULL
+			password_hash TEXT NOT NULL,
+			role TEXT NOT NULL DEFAULT 'user'
 		)
 	`);
 
@@ -75,8 +76,8 @@ async function initDatabase() {
 	const passwordHash = await hashPassword('admin123');
 
 	await client.execute({
-		sql: 'INSERT INTO user (id, username, password_hash, age) VALUES (?, ?, ?, ?)',
-		args: [adminUserId, 'admin', passwordHash, null]
+		sql: 'INSERT INTO user (id, username, password_hash, age, role) VALUES (?, ?, ?, ?, ?)',
+		args: [adminUserId, 'admin', passwordHash, null, 'admin']
 	});
 
 	console.log('✅ Admin user created (username: admin, password: admin123)');
