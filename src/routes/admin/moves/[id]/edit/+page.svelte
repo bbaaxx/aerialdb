@@ -10,6 +10,13 @@
 	let categoryMode = $state<'existing' | 'new'>('existing');
 	let selectedCategory = $state(data.move.categoryId);
 	let name = $state(data.move.name);
+	let description = $state(data.move.description || '');
+
+	// Keep local state in sync when server data updates (e.g. navigation between moves)
+	$effect(() => {
+		name = data.move.name;
+		description = data.move.description || '';
+	});
 
 	function handleImageChange(event: Event) {
 		const target = event.target as HTMLInputElement;
@@ -148,7 +155,7 @@
 					id="category-select"
 					onchange={handleCategoryChange}
 					bind:value={selectedCategory}
-					class="w-full rounded-lg border border-gray-600 bg-[#242736] px-3 py-2 text-gray-200 focus:border-[#8A63F8] focus:ring-1 focus:ring-[#8A63F8] focus:outline-none"
+					class="w-full rounded-lg border border-outline-variant/30 bg-surface-container px-3 py-2 text-on-surface focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none"
 				>
 					<option value="">Select a base technique</option>
 					{#each data.categories as category (category.id)}
@@ -201,7 +208,19 @@
 		</div>
 
 		<div class="rounded-lg bg-surface-container p-6 shadow-sm">
-			<h2 class="mb-4 text-lg font-semibold text-on-surface">Description</h2>
+			<div class="mb-4 flex items-center justify-between">
+				<h2 class="text-lg font-semibold text-on-surface">Description</h2>
+				<span
+					id="description-counter"
+					class="text-xs {description.length >= 2000
+						? 'text-error'
+						: description.length >= 1800
+							? 'text-amber-400'
+							: 'text-on-surface-variant'}"
+				>
+					{description.length}/2000
+				</span>
+			</div>
 
 			<div>
 				<label for="description" class="mb-2 block text-sm font-medium text-on-surface-variant">
@@ -210,11 +229,13 @@
 				<textarea
 					id="description"
 					name="description"
+					bind:value={description}
+					maxlength="2000"
+					aria-describedby="description-counter"
 					rows="6"
 					placeholder="Describe the move, how to perform it, key points, etc."
 					class="w-full rounded-lg border border-outline-variant/15 bg-surface-container px-3 py-2 text-on-surface placeholder-on-surface-variant focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none"
-					>{data.move.description || ''}</textarea
-				>
+				></textarea>
 			</div>
 		</div>
 
