@@ -2,6 +2,7 @@
 	import type { PageData } from './$types';
 	import { ChevronLeft, Pencil, ImageOff, Share2, Check } from 'lucide-svelte';
 	import { m } from '$lib/paraglide/messages.js';
+	import YouTubeFacade from '$lib/components/YouTubeFacade.svelte';
 
 	let { data }: { data: PageData } = $props();
 	let copied = $state(false);
@@ -119,22 +120,9 @@
 
 		<!-- Media Section -->
 		<div class="mb-6 space-y-4 sm:mb-8 sm:space-y-6">
-			<!-- Video -->
+			<!-- Video (Optimized with Facade Pattern) -->
 			{#if youtubeId}
-				<div class="overflow-hidden rounded-lg">
-					<div class="aspect-video">
-						<iframe
-							width="100%"
-							height="100%"
-							src="https://www.youtube.com/embed/{youtubeId}"
-							title={data.move.name}
-							frameborder="0"
-							allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-							allowfullscreen
-							class="h-full w-full"
-						></iframe>
-					</div>
-				</div>
+				<YouTubeFacade videoId={youtubeId} title={data.move.name} />
 			{/if}
 
 			<!-- Image -->
