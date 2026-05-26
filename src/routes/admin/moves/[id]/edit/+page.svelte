@@ -16,6 +16,9 @@
 	$effect(() => {
 		name = data.move.name;
 		description = data.move.description || '';
+		selectedCategory = data.move.categoryId;
+		imagePreview = data.move.imageUrl || null;
+		removeImage = false;
 	});
 
 	function handleImageChange(event: Event) {
