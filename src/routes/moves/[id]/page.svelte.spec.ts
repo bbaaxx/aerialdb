@@ -80,4 +80,31 @@ describe('moves/[id]/+page.svelte', () => {
 
 		await expect.element(page.getByText('No media available')).toBeVisible();
 	});
+
+	it('should lazy-load the YouTube iframe after clicking the facade', async () => {
+		const { container } = render(MoveDetailPage, { data: mockData });
+
+		// Facade should be visible initially
+		const playButton = container.querySelector('button[aria-label="Play video for Test Move"]');
+		expect(playButton).not.toBeNull();
+
+		// Click the play button
+		await (playButton as HTMLButtonElement).click();
+
+		// Wait for state transition and re-render
+		await new Promise((r) => setTimeout(r, 100));
+
+		// Play button should be removed from container
+		const playButtonAfter = container.querySelector(
+			'button[aria-label="Play video for Test Move"]'
+		);
+		expect(playButtonAfter).toBeNull();
+
+		// Iframe should now be in the container
+		const iframe = container.querySelector('iframe');
+		expect(iframe).not.toBeNull();
+		expect(iframe?.getAttribute('src')).toBe(
+			'https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1'
+		);
+	});
 });

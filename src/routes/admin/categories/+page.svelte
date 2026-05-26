@@ -2,6 +2,7 @@
 	import type { PageData, ActionData } from './$types';
 	import { enhance } from '$app/forms';
 	import { invalidateAll } from '$app/navigation';
+	import { fade } from 'svelte/transition';
 
 	let { data, form }: { data: PageData; form: ActionData } = $props();
 
@@ -15,6 +16,13 @@
 
 	// New category form state
 	let newCategoryName = $state('');
+
+	// Character count helper
+	function getCountColor(length: number, max: number) {
+		if (length >= max) return 'text-error';
+		if (length >= max * 0.9) return 'text-amber-400';
+		return 'text-on-surface-variant';
+	}
 
 	// Start editing a category
 	function startEdit(id: string, name: string) {
@@ -82,15 +90,25 @@
 					placeholder="Enter category name..."
 					maxlength="100"
 					required
+					aria-describedby="new-category-hint"
 					class="w-full rounded-lg border border-outline-variant/15 bg-surface-container px-4 py-2 text-sm text-on-surface placeholder-on-surface-variant focus:border-primary focus:ring-2 focus:ring-primary focus:outline-none"
 				/>
-				{#if form?.action === 'create' && form?.error}
-					<p class="mt-1 text-sm text-error">{form.error}</p>
-				{/if}
+				<div id="new-category-hint" class="mt-1 flex items-center justify-between px-1">
+					{#if form?.action === 'create' && form?.error}
+						<p class="text-xs text-error">{form.error}</p>
+					{:else}
+						<span></span>
+					{/if}
+					<span
+						class="ml-auto text-[10px] font-medium {getCountColor(newCategoryName.length, 100)}"
+					>
+						{newCategoryName.length}/100
+					</span>
+				</div>
 			</div>
 			<button
 				type="submit"
-				class="inline-flex items-center justify-center rounded-lg bg-gradient-to-r from-purple-500 to-indigo-500 px-6 py-2.5 text-sm font-medium text-white shadow-[0_0_15px_rgba(138,99,248,0.5)] transition-all hover:shadow-[0_0_20px_rgba(138,99,248,0.6)] focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:outline-none"
+				class="inline-flex items-center justify-center rounded-lg bg-gradient-to-r from-purple-500 to-indigo-500 px-6 py-2.5 text-sm font-medium text-white shadow-[0_0_15px_rgba(138,99,248,0.5)] transition-all hover:shadow-[0_0_20px_rgba(138,99,248,0.6)] focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-surface-container"
 			>
 				Add Category
 			</button>
@@ -154,24 +172,36 @@
 										class="flex items-center gap-2"
 									>
 										<input type="hidden" name="id" value={category.id} />
-										<input
-											type="text"
-											name="name"
-											bind:value={editingName}
-											maxlength="100"
-											required
-											class="flex-1 rounded-lg border border-outline-variant/15 bg-surface-container px-3 py-1.5 text-sm text-on-surface focus:border-primary focus:ring-2 focus:ring-primary focus:outline-none"
-										/>
+										<div class="relative flex-1">
+											<input
+												type="text"
+												name="name"
+												bind:value={editingName}
+												maxlength="100"
+												required
+												aria-describedby="edit-category-hint-{category.id}"
+												class="w-full rounded-lg border border-outline-variant/15 bg-surface-container px-3 py-1.5 pr-16 text-sm text-on-surface focus:border-primary focus:ring-2 focus:ring-primary focus:outline-none"
+											/>
+											<span
+												id="edit-category-hint-{category.id}"
+												class="absolute right-3 bottom-1.5 text-[10px] font-medium {getCountColor(
+													editingName.length,
+													100
+												)}"
+											>
+												{editingName.length}/100
+											</span>
+										</div>
 										<button
 											type="submit"
-											class="rounded-lg bg-purple-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-purple-700"
+											class="rounded-lg bg-purple-600 px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-purple-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1 focus-visible:ring-offset-surface-container-high"
 										>
 											Save
 										</button>
 										<button
 											type="button"
 											onclick={cancelEdit}
-											class="rounded-lg border border-outline-variant/15 px-3 py-1.5 text-sm font-medium text-on-surface-variant hover:bg-surface-container-high"
+											class="rounded-lg border border-outline-variant/15 px-3 py-1.5 text-sm font-medium text-on-surface-variant transition-colors hover:bg-surface-container-high focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1 focus-visible:ring-offset-surface-container-high"
 										>
 											Cancel
 										</button>
@@ -193,7 +223,10 @@
 							<td class="px-4 py-3 text-right">
 								{#if deletingId === category.id}
 									<!-- Delete Confirmation -->
-									<div class="flex items-center justify-end gap-2">
+									<div
+										transition:fade={{ duration: 150 }}
+										class="flex items-center justify-end gap-2"
+									>
 										<span class="text-sm text-on-surface-variant">
 											{#if deleteMoveCount > 0}
 												{deleteMoveCount} move{deleteMoveCount === 1 ? '' : 's'} linked
@@ -218,7 +251,7 @@
 											<input type="hidden" name="id" value={category.id} />
 											<button
 												type="submit"
-												class="rounded-lg bg-red-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-red-700"
+												class="rounded-lg bg-red-600 px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-red-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-error focus-visible:ring-offset-1 focus-visible:ring-offset-surface-container-high"
 											>
 												Confirm
 											</button>
@@ -226,7 +259,7 @@
 										<button
 											type="button"
 											onclick={cancelDelete}
-											class="rounded-lg border border-outline-variant/15 px-3 py-1.5 text-sm font-medium text-on-surface-variant hover:bg-surface-container-high"
+											class="rounded-lg border border-outline-variant/15 px-3 py-1.5 text-sm font-medium text-on-surface-variant transition-colors hover:bg-surface-container-high focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1 focus-visible:ring-offset-surface-container-high"
 										>
 											Cancel
 										</button>
@@ -239,14 +272,14 @@
 										<button
 											type="button"
 											onclick={() => startEdit(category.id, category.name)}
-											class="rounded-lg bg-purple-600 px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-purple-700"
+											class="rounded-lg bg-purple-600 px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-purple-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1 focus-visible:ring-offset-surface-container-high"
 										>
 											Edit
 										</button>
 										<button
 											type="button"
 											onclick={() => startDelete(category.id, category.moveCount)}
-											class="rounded-lg bg-red-600 px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-red-700"
+											class="rounded-lg bg-red-600 px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-red-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-error focus-visible:ring-offset-1 focus-visible:ring-offset-surface-container-high"
 										>
 											Delete
 										</button>
