@@ -65,8 +65,8 @@ describe('home page search hardening', () => {
 		// Actually, Promise.all is called on the results of the select/from/where chain.
 		// So the chains themselves must return promises that resolve to the expected values.
 
-		// Overwrite setup
-		mockDb.select.mockImplementation((_fields: any) => {
+		// Overwrite setup to return these promises
+		mockDb.select.mockImplementation(() => {
 			const chain: any = {
 				from: vi.fn().mockReturnThis(),
 				where: vi.fn().mockReturnThis(),
