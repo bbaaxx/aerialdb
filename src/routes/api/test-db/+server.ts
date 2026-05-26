@@ -3,9 +3,9 @@ import { getDb } from '$lib/server/db';
 import type { RequestHandler } from './$types';
 
 export const GET: RequestHandler = async (event) => {
-	// Authentication check: Only logged-in users can test the database connection
-	if (!event.locals.user) {
-		return json({ error: 'Unauthorized: Authentication required' }, { status: 401 });
+	// SECURITY: RBAC - Only admins can test the database connection
+	if (!event.locals.user || event.locals.user.role !== 'admin') {
+		return json({ error: 'Forbidden: Admin access required' }, { status: 403 });
 	}
 
 	try {

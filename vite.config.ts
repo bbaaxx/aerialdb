@@ -17,6 +17,9 @@ export default defineConfig({
 	],
 	test: {
 		expect: { requireAssertions: true },
+			optimizeDeps: {
+			include: ['lucide-svelte']
+		},
 		projects: [
 			{
 				extends: './vite.config.ts',

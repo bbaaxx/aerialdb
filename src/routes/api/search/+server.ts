@@ -12,7 +12,7 @@ export const GET: RequestHandler = async (event) => {
 
 	// SECURITY: Trim and limit query length to mitigate DoS and unexpected behavior
 	const query = (url.searchParams.get('q') || '').trim().slice(0, 100);
-	const categoryFilter = url.searchParams.get('category') || '';
+	const categoryFilter = (url.searchParams.get('category') || '').trim().slice(0, 100);
 
 	// Return empty if query is less than 3 characters
 	if (!query || query.length < 3) {

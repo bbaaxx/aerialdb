@@ -2,9 +2,9 @@ import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 
 export const POST: RequestHandler = async ({ request, platform, locals }) => {
-	// Authentication check: Only logged-in users can upload images
-	if (!locals.user) {
-		return json({ error: 'Unauthorized: Authentication required' }, { status: 401 });
+	// SECURITY: RBAC - Only admins can upload images
+	if (!locals.user || locals.user.role !== 'admin') {
+		return json({ error: 'Forbidden: Admin access required' }, { status: 403 });
 	}
 
 	const formData = await request.formData();

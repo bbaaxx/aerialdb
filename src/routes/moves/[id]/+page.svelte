@@ -1,11 +1,11 @@
 <script lang="ts">
 	import type { PageData } from './$types';
-	import { ChevronLeft, Pencil, ImageOff, Share2, Check, Play } from 'lucide-svelte';
+	import { ChevronLeft, Pencil, ImageOff, Share2, Check } from 'lucide-svelte';
 	import { m } from '$lib/paraglide/messages.js';
+	import YouTubeFacade from '$lib/components/YouTubeFacade.svelte';
 
 	let { data }: { data: PageData } = $props();
 	let copied = $state(false);
-	let videoStarted = $state(false);
 
 	/**
 	 * Handles sharing the move using the Web Share API if available,
@@ -120,57 +120,9 @@
 
 		<!-- Media Section -->
 		<div class="mb-6 space-y-4 sm:mb-8 sm:space-y-6">
-			<!-- Video -->
+			<!-- Video (Optimized with Facade Pattern) -->
 			{#if youtubeId}
-				<div class="overflow-hidden rounded-lg shadow-lg">
-					<div class="aspect-video bg-black">
-						{#if !videoStarted}
-							<button
-								type="button"
-								onclick={() => (videoStarted = true)}
-								class="group relative flex h-full w-full items-center justify-center overflow-hidden focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
-								aria-label="Play video for {data.move.name}"
-							>
-								<!-- Performance: Facade thumbnail with high priority for LCP -->
-								<img
-									src="https://img.youtube.com/vi/{youtubeId}/maxresdefault.jpg"
-									alt=""
-									class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-									fetchpriority="high"
-									loading="eager"
-									decoding="async"
-									onerror={(e) => {
-										const img = e.target as HTMLImageElement;
-										if (img.src.includes('maxresdefault')) {
-											img.src = `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`;
-										}
-									}}
-								/>
-								<!-- Play button overlay -->
-								<div
-									class="absolute inset-0 flex items-center justify-center bg-black/20 transition-colors group-hover:bg-black/10"
-								>
-									<div
-										class="flex h-16 w-16 items-center justify-center rounded-full bg-primary/90 text-white shadow-xl transition-all duration-300 group-hover:scale-110 group-hover:bg-primary group-active:scale-95"
-									>
-										<Play size={32} fill="currentColor" class="ml-1" />
-									</div>
-								</div>
-							</button>
-						{:else}
-							<iframe
-								width="100%"
-								height="100%"
-								src="https://www.youtube.com/embed/{youtubeId}?autoplay=1"
-								title={data.move.name}
-								frameborder="0"
-								allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-								allowfullscreen
-								class="h-full w-full"
-							></iframe>
-						{/if}
-					</div>
-				</div>
+				<YouTubeFacade videoId={youtubeId} title={data.move.name} />
 			{/if}
 
 			<!-- Image -->
