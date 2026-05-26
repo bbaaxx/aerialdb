@@ -1,11 +1,14 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import { m } from '$lib/paraglide/messages.js';
+	import { Eye, EyeOff } from 'lucide-svelte';
 	import type { ActionData, PageData } from './$types';
 
 	let { form, data }: { form: ActionData; data: PageData } = $props();
 
 	let username = $state(form?.username || '');
 	let password = $state('');
+	let showPassword = $state(false);
 	let isSubmitting = $state(false);
 
 	// Client-side validation states
@@ -119,26 +122,40 @@
 					<label for="password" class="mb-2 block text-sm font-medium text-on-surface-variant">
 						Password
 					</label>
-					<input
-						id="password"
-						name="password"
-						type="password"
-						autocomplete="current-password"
-						required
-						bind:value={password}
-						onblur={() => validatePasswordClient(password)}
-						oninput={() => {
-							if (passwordError) {
-								validatePasswordClient(password);
-							}
-						}}
-						aria-invalid={!!passwordError}
-						aria-describedby={passwordError ? 'password-error' : undefined}
-						class="w-full rounded-lg border bg-surface-container px-4 py-3 text-on-surface placeholder-on-surface-variant transition outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none {passwordError
-							? 'border-error bg-error/10'
-							: 'border-outline-variant/15'}"
-						disabled={isSubmitting}
-					/>
+					<div class="relative">
+						<input
+							id="password"
+							name="password"
+							type={showPassword ? 'text' : 'password'}
+							autocomplete="current-password"
+							required
+							bind:value={password}
+							onblur={() => validatePasswordClient(password)}
+							oninput={() => {
+								if (passwordError) {
+									validatePasswordClient(password);
+								}
+							}}
+							aria-invalid={!!passwordError}
+							aria-describedby={passwordError ? 'password-error' : undefined}
+							class="w-full rounded-lg border bg-surface-container py-3 pr-12 pl-4 text-on-surface placeholder-on-surface-variant transition outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none {passwordError
+								? 'border-error bg-error/10'
+								: 'border-outline-variant/15'}"
+							disabled={isSubmitting}
+						/>
+						<button
+							type="button"
+							onclick={() => (showPassword = !showPassword)}
+							class="absolute inset-y-0 right-0 flex items-center pr-3 text-on-surface-variant transition-colors hover:text-on-surface focus:outline-none focus-visible:text-primary"
+							aria-label={showPassword ? m.auth_hide_password() : m.auth_show_password()}
+						>
+							{#if showPassword}
+								<EyeOff size={20} />
+							{:else}
+								<Eye size={20} />
+							{/if}
+						</button>
+					</div>
 					{#if passwordError}
 						<p id="password-error" class="mt-2 text-sm text-error">{passwordError}</p>
 					{/if}

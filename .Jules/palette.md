@@ -42,3 +42,7 @@
 
 **Learning:** Matching the visual style of filter controls (like difficulty level chips) with their corresponding result badges (like those on card components) creates a stronger mental model for users and makes the interface feel more intentional. Using subtle background tints and high-contrast text for active states improves visibility without being overwhelming.
 **Action:** Always synchronize the color palette of filter controls with the data representations they affect to reinforce the connection between user actions and results.
+
+## 2026-05-26 - [Password Visibility Toggle Accessibility]
+**Learning:** When implementing a password visibility toggle, using a descriptive `aria-label` that updates (Show/Hide) is crucial for screen readers. In E2E testing (Playwright), locators based on these labels must be re-verified or refreshed after the interaction because the element's accessible name changes.
+**Action:** Ensure password toggle buttons have dynamic ARIA labels and verify state changes in tests by checking for the presence of the updated label.

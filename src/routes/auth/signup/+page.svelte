@@ -1,5 +1,7 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import { m } from '$lib/paraglide/messages.js';
+	import { Eye, EyeOff } from 'lucide-svelte';
 	import type { ActionData } from './$types';
 
 	let { form }: { form: ActionData } = $props();
@@ -7,6 +9,8 @@
 	let username = $state(form?.username || '');
 	let password = $state('');
 	let confirmPassword = $state('');
+	let showPassword = $state(false);
+	let showConfirmPassword = $state(false);
 	let isSubmitting = $state(false);
 
 	// Client-side validation states
@@ -145,36 +149,50 @@
 					<label for="password" class="mb-2 block text-sm font-medium text-on-surface-variant">
 						Password
 					</label>
-					<input
-						id="password"
-						name="password"
-						type="password"
-						autocomplete="new-password"
-						required
-						bind:value={password}
-						onblur={() => validatePasswordClient(password)}
-						oninput={() => {
-							if (passwordError || (form && 'field' in form && form.field === 'password')) {
-								validatePasswordClient(password);
-							}
-							if (confirmPassword) {
-								validateConfirmPasswordClient(confirmPassword);
-							}
-						}}
-						aria-invalid={!!(
-							passwordError ||
+					<div class="relative">
+						<input
+							id="password"
+							name="password"
+							type={showPassword ? 'text' : 'password'}
+							autocomplete="new-password"
+							required
+							bind:value={password}
+							onblur={() => validatePasswordClient(password)}
+							oninput={() => {
+								if (passwordError || (form && 'field' in form && form.field === 'password')) {
+									validatePasswordClient(password);
+								}
+								if (confirmPassword) {
+									validateConfirmPasswordClient(confirmPassword);
+								}
+							}}
+							aria-invalid={!!(
+								passwordError ||
+								(form && 'field' in form && form.field === 'password')
+							)}
+							aria-describedby="{passwordError ||
 							(form && 'field' in form && form.field === 'password')
-						)}
-						aria-describedby="{passwordError ||
-						(form && 'field' in form && form.field === 'password')
-							? 'password-error '
-							: ''}password-hint"
-						class="w-full rounded-lg border bg-surface-container px-4 py-3 text-on-surface transition outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none {passwordError ||
-						(form && 'field' in form && form.field === 'password')
-							? 'border-error bg-error/10'
-							: 'border-outline-variant/15'}"
-						disabled={isSubmitting}
-					/>
+								? 'password-error '
+								: ''}password-hint"
+							class="w-full rounded-lg border bg-surface-container py-3 pr-12 pl-4 text-on-surface transition outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none {passwordError ||
+							(form && 'field' in form && form.field === 'password')
+								? 'border-error bg-error/10'
+								: 'border-outline-variant/15'}"
+							disabled={isSubmitting}
+						/>
+						<button
+							type="button"
+							onclick={() => (showPassword = !showPassword)}
+							class="absolute inset-y-0 right-0 flex items-center pr-3 text-on-surface-variant transition-colors hover:text-on-surface focus:outline-none focus-visible:text-primary"
+							aria-label={showPassword ? m.auth_hide_password() : m.auth_show_password()}
+						>
+							{#if showPassword}
+								<EyeOff size={20} />
+							{:else}
+								<Eye size={20} />
+							{/if}
+						</button>
+					</div>
 					{#if passwordError}
 						<p id="password-error" class="mt-2 text-sm text-error">{passwordError}</p>
 					{:else if form && 'field' in form && form.field === 'password' && form?.message}
@@ -193,36 +211,50 @@
 					>
 						Confirm Password
 					</label>
-					<input
-						id="confirmPassword"
-						name="confirmPassword"
-						type="password"
-						autocomplete="new-password"
-						required
-						bind:value={confirmPassword}
-						onblur={() => validateConfirmPasswordClient(confirmPassword)}
-						oninput={() => {
-							if (
+					<div class="relative">
+						<input
+							id="confirmPassword"
+							name="confirmPassword"
+							type={showConfirmPassword ? 'text' : 'password'}
+							autocomplete="new-password"
+							required
+							bind:value={confirmPassword}
+							onblur={() => validateConfirmPasswordClient(confirmPassword)}
+							oninput={() => {
+								if (
+									confirmPasswordError ||
+									(form && 'field' in form && form.field === 'confirmPassword')
+								) {
+									validateConfirmPasswordClient(confirmPassword);
+								}
+							}}
+							aria-invalid={!!(
 								confirmPasswordError ||
 								(form && 'field' in form && form.field === 'confirmPassword')
-							) {
-								validateConfirmPasswordClient(confirmPassword);
-							}
-						}}
-						aria-invalid={!!(
-							confirmPasswordError ||
+							)}
+							aria-describedby={confirmPasswordError ||
 							(form && 'field' in form && form.field === 'confirmPassword')
-						)}
-						aria-describedby={confirmPasswordError ||
-						(form && 'field' in form && form.field === 'confirmPassword')
-							? 'confirm-password-error'
-							: undefined}
-						class="w-full rounded-lg border bg-surface-container px-4 py-3 text-on-surface transition outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none {confirmPasswordError ||
-						(form && 'field' in form && form.field === 'confirmPassword')
-							? 'border-error bg-error/10'
-							: 'border-outline-variant/15'}"
-						disabled={isSubmitting}
-					/>
+								? 'confirm-password-error'
+								: undefined}
+							class="w-full rounded-lg border bg-surface-container py-3 pr-12 pl-4 text-on-surface transition outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none {confirmPasswordError ||
+							(form && 'field' in form && form.field === 'confirmPassword')
+								? 'border-error bg-error/10'
+								: 'border-outline-variant/15'}"
+							disabled={isSubmitting}
+						/>
+						<button
+							type="button"
+							onclick={() => (showConfirmPassword = !showConfirmPassword)}
+							class="absolute inset-y-0 right-0 flex items-center pr-3 text-on-surface-variant transition-colors hover:text-on-surface focus:outline-none focus-visible:text-primary"
+							aria-label={showConfirmPassword ? m.auth_hide_password() : m.auth_show_password()}
+						>
+							{#if showConfirmPassword}
+								<EyeOff size={20} />
+							{:else}
+								<Eye size={20} />
+							{/if}
+						</button>
+					</div>
 					{#if confirmPasswordError}
 						<p id="confirm-password-error" class="mt-2 text-sm text-error">
 							{confirmPasswordError}
