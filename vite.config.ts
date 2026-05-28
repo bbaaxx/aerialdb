@@ -17,7 +17,7 @@ export default defineConfig({
 	],
 	test: {
 		expect: { requireAssertions: true },
-			optimizeDeps: {
+		optimizeDeps: {
 			include: ['lucide-svelte']
 		},
 		projects: [

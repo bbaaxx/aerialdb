@@ -42,3 +42,8 @@
 
 **Learning:** Matching the visual style of filter controls (like difficulty level chips) with their corresponding result badges (like those on card components) creates a stronger mental model for users and makes the interface feel more intentional. Using subtle background tints and high-contrast text for active states improves visibility without being overwhelming.
 **Action:** Always synchronize the color palette of filter controls with the data representations they affect to reinforce the connection between user actions and results.
+
+## 2026-05-28 - [Search Input Customization]
+
+**Learning:** Using `type="search"` provides better mobile OS integration, but browsers like Chrome/Safari add native clear buttons that can clash with custom UI. Using Tailwind's pseudo-element variants `[&::-webkit-search-cancel-button]:appearance-none` and `[&::-webkit-search-decoration]:appearance-none` allows for full control over the search interface while keeping the semantic benefits of the search type.
+**Action:** Always suppress native search decorations when implementing custom clear buttons on `type="search" icon-only inputs.
