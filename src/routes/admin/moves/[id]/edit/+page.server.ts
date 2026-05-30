@@ -73,6 +73,9 @@ export const actions = {
 		if (!event.locals.user) {
 			throw redirect(302, '/auth/login');
 		}
+		if (event.locals.user.role !== 'admin') {
+			throw error(403, 'Forbidden: Admin access required');
+		}
 		const db = getDb(event);
 		const { request, params, fetch, platform } = event;
 		const formData = await request.formData();
@@ -192,6 +195,9 @@ export const actions = {
 	delete: async (event) => {
 		if (!event.locals.user) {
 			throw redirect(302, '/auth/login');
+		}
+		if (event.locals.user.role !== 'admin') {
+			throw error(403, 'Forbidden: Admin access required');
 		}
 		const db = getDb(event);
 		const { params, platform } = event;

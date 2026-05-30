@@ -60,10 +60,21 @@ describe('Moves Admin Actions Security', () => {
 			await expect(newActions.default(event)).rejects.toSatisfy(isRedirect);
 		});
 
+		it('should return 403 if user is not an admin', async () => {
+			const event = createMockEvent(new FormData(), { id: 'user-1', role: 'user' });
+			try {
+				await newActions.default(event);
+				expect.fail('Should have thrown an error');
+			} catch (e: any) {
+				expect(e.status).toBe(403);
+				expect(e.body.message).toBe('Forbidden: Admin access required');
+			}
+		});
+
 		it('should require a name', async () => {
 			const formData = new FormData();
 			formData.append('name', '   '); // Empty after trim
-			const event = createMockEvent(formData, { id: 'user-1' });
+			const event = createMockEvent(formData, { id: 'admin-1', role: 'admin' });
 			const result: any = await newActions.default(event);
 			expect(result.status).toBe(400);
 			expect(result.data.error).toBe('Name is required');
@@ -75,7 +86,7 @@ describe('Moves Admin Actions Security', () => {
 			formData.append('description', 'a'.repeat(3000));
 			formData.append('category', 'cat-1');
 
-			const event = createMockEvent(formData, { id: 'user-1' });
+			const event = createMockEvent(formData, { id: 'admin-1', role: 'admin' });
 
 			try {
 				await newActions.default(event);
@@ -97,13 +108,24 @@ describe('Moves Admin Actions Security', () => {
 			await expect(editActions.update(event)).rejects.toSatisfy(isRedirect);
 		});
 
+		it('update should return 403 if user is not an admin', async () => {
+			const event = createMockEvent(new FormData(), { id: 'user-1', role: 'user' });
+			try {
+				await editActions.update(event);
+				expect.fail('Should have thrown an error');
+			} catch (e: any) {
+				expect(e.status).toBe(403);
+				expect(e.body.message).toBe('Forbidden: Admin access required');
+			}
+		});
+
 		it('update should trim and limit input lengths', async () => {
 			const formData = new FormData();
 			formData.append('name', '  Updated Name  ');
 			formData.append('description', 'b'.repeat(3000));
 			formData.append('category', 'cat-1');
 
-			const event = createMockEvent(formData, { id: 'user-1' }, { id: 'move-1' });
+			const event = createMockEvent(formData, { id: 'admin-1', role: 'admin' }, { id: 'move-1' });
 
 			// The update action calls db.select().from(moves).where(...).limit(1) as any
 			// which is what getDb() returns.
@@ -129,6 +151,17 @@ describe('Moves Admin Actions Security', () => {
 		it('delete should redirect to login if not authenticated', async () => {
 			const event = createMockEvent(new FormData());
 			await expect(editActions.delete(event)).rejects.toSatisfy(isRedirect);
+		});
+
+		it('delete should return 403 if user is not an admin', async () => {
+			const event = createMockEvent(new FormData(), { id: 'user-1', role: 'user' });
+			try {
+				await editActions.delete(event);
+				expect.fail('Should have thrown an error');
+			} catch (e: any) {
+				expect(e.status).toBe(403);
+				expect(e.body.message).toBe('Forbidden: Admin access required');
+			}
 		});
 	});
 });

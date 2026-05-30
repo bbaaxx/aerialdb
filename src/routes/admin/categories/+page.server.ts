@@ -1,7 +1,7 @@
 import { getDb } from '$lib/server/db';
 import { categories, moves } from '$lib/server/db/schema';
 import { eq, sql } from 'drizzle-orm';
-import { fail, redirect } from '@sveltejs/kit';
+import { fail, redirect, error } from '@sveltejs/kit';
 import type { PageServerLoad, Actions } from './$types';
 
 function generateId(length: number = 10): string {
@@ -67,6 +67,9 @@ export const actions = {
 		if (!event.locals.user) {
 			throw redirect(302, '/auth/login');
 		}
+		if (event.locals.user.role !== 'admin') {
+			throw error(403, 'Forbidden: Admin access required');
+		}
 		const db = getDb(event);
 		const formData = await event.request.formData();
 		const name = (formData.get('name') as string | null)?.trim();
@@ -99,6 +102,9 @@ export const actions = {
 	updateCategory: async (event) => {
 		if (!event.locals.user) {
 			throw redirect(302, '/auth/login');
+		}
+		if (event.locals.user.role !== 'admin') {
+			throw error(403, 'Forbidden: Admin access required');
 		}
 		const db = getDb(event);
 		const formData = await event.request.formData();
@@ -143,6 +149,9 @@ export const actions = {
 	deleteCategory: async (event) => {
 		if (!event.locals.user) {
 			throw redirect(302, '/auth/login');
+		}
+		if (event.locals.user.role !== 'admin') {
+			throw error(403, 'Forbidden: Admin access required');
 		}
 		const db = getDb(event);
 		const formData = await event.request.formData();
