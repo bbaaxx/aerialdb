@@ -1,5 +1,7 @@
 <script lang="ts">
 	import type { PageData } from './$types';
+	import { Search, X } from 'lucide-svelte';
+	import { m } from '$lib/paraglide/messages.js';
 
 	let { data }: { data: PageData } = $props();
 
@@ -70,13 +72,31 @@
 		<!-- Search -->
 		<div class="flex-1">
 			<label for="search" class="sr-only">Search moves</label>
-			<input
-				type="text"
-				id="search"
-				bind:value={searchQuery}
-				placeholder="Search moves..."
-				class="w-full rounded-lg border border-outline-variant/15 bg-surface-container-low px-4 py-2 text-sm text-on-surface placeholder-on-surface-variant focus:border-primary focus:ring-2 focus:ring-primary focus:outline-none"
-			/>
+			<div class="relative">
+				<div
+					class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-on-surface-variant"
+				>
+					<Search size={18} />
+				</div>
+				<input
+					type="search"
+					id="search"
+					bind:value={searchQuery}
+					onkeydown={(e) => e.key === 'Escape' && (searchQuery = '')}
+					placeholder="Search moves..."
+					class="w-full rounded-lg border border-outline-variant/15 bg-surface-container-low py-2 pr-10 pl-10 text-sm text-on-surface placeholder-on-surface-variant focus:border-primary focus:ring-2 focus:ring-primary focus:outline-none [&::-webkit-search-cancel-button]:appearance-none [&::-webkit-search-decoration]:appearance-none"
+				/>
+				{#if searchQuery}
+					<button
+						type="button"
+						onclick={() => (searchQuery = '')}
+						class="absolute inset-y-0 right-0 flex items-center pr-3 text-on-surface-variant transition hover:text-on-surface focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
+						aria-label={m.nav_search_clear()}
+					>
+						<X size={18} />
+					</button>
+				{/if}
+			</div>
 		</div>
 
 		<!-- Base Technique Filter -->
@@ -111,7 +131,7 @@
 
 	<!-- Results Count -->
 	<div class="mb-4">
-		<p class="text-sm text-on-surface-variant">
+		<p class="text-sm text-on-surface-variant" aria-live="polite">
 			Showing {filteredMoves.length} of {data.moves.length} moves
 		</p>
 	</div>
