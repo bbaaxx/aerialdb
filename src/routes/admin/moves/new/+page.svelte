@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { enhance } from '$app/forms';
+	import { Loader2 } from 'lucide-svelte';
 	import type { PageData, ActionData } from './$types';
 
 	let { data, form }: { data: PageData; form: ActionData } = $props();
@@ -8,6 +10,14 @@
 	let selectedCategory = $state('');
 	let name = $state('');
 	let description = $state('');
+	let isSubmitting = $state(false);
+	let newCategoryInput = $state<HTMLInputElement | undefined>(undefined);
+
+	$effect(() => {
+		if (categoryMode === 'new' && newCategoryInput) {
+			newCategoryInput.focus();
+		}
+	});
 
 	function handleImageChange(event: Event) {
 		const target = event.target as HTMLInputElement;
@@ -48,7 +58,18 @@
 		</div>
 	{/if}
 
-	<form method="POST" enctype="multipart/form-data" class="space-y-6">
+	<form
+		method="POST"
+		enctype="multipart/form-data"
+		class="space-y-6"
+		use:enhance={() => {
+			isSubmitting = true;
+			return async ({ update }) => {
+				await update();
+				isSubmitting = false;
+			};
+		}}
+	>
 		<div class="rounded-lg bg-surface-container p-6 shadow-sm">
 			<h2 class="mb-4 text-lg font-semibold text-on-surface">Basic Information</h2>
 
@@ -112,6 +133,7 @@
 							type="text"
 							id="new-category"
 							name="new_category"
+							bind:this={newCategoryInput}
 							required
 							placeholder="e.g., Floor Work, Dynamic"
 							class="w-full rounded-lg border border-outline-variant/15 bg-surface-container px-3 py-2 text-on-surface placeholder-on-surface-variant focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none"
@@ -218,9 +240,15 @@
 		<div class="flex gap-4">
 			<button
 				type="submit"
-				class="rounded-lg bg-gradient-to-r from-purple-500 to-indigo-500 px-6 py-2.5 text-sm font-medium text-white shadow-[0_0_15px_rgba(138,99,248,0.5)] transition hover:shadow-[0_0_20px_rgba(138,99,248,0.6)] focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:outline-none"
+				disabled={isSubmitting}
+				class="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-purple-500 to-indigo-500 px-6 py-2.5 text-sm font-medium text-white shadow-[0_0_15px_rgba(138,99,248,0.5)] transition hover:shadow-[0_0_20px_rgba(138,99,248,0.6)] focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-70"
 			>
-				Create Move
+				{#if isSubmitting}
+					<Loader2 size={18} class="animate-spin" />
+					<span>Creating...</span>
+				{:else}
+					Create Move
+				{/if}
 			</button>
 			<a
 				href="/admin"
