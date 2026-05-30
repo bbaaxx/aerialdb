@@ -1,7 +1,7 @@
 import { getDb } from '$lib/server/db';
 import { moves, categories } from '$lib/server/db/schema';
 import { eq } from 'drizzle-orm';
-import { redirect, fail } from '@sveltejs/kit';
+import { redirect, fail, error } from '@sveltejs/kit';
 import { encodeBase32LowerCaseNoPadding } from '@oslojs/encoding';
 import type { Actions, PageServerLoad } from './$types';
 
@@ -16,8 +16,7 @@ export const load: PageServerLoad = async (event) => {
 	const db = getDb(event);
 
 	// Selective Field Fetching: Only fetch fields needed for the category dropdown to minimize data transfer.
-	// Note: using any to bypass Drizzle's complex union types for getDb() results
-	const allCategories = await (db as any)
+	const allCategories = await db
 		.select({
 			id: categories.id,
 			name: categories.name
@@ -32,6 +31,9 @@ export const actions = {
 	default: async (event) => {
 		if (!event.locals.user) {
 			throw redirect(302, '/auth/login');
+		}
+		if (event.locals.user.role !== 'admin') {
+			throw error(403, 'Forbidden: Admin access required');
 		}
 		const db = getDb(event);
 		const { request, locals, fetch } = event;

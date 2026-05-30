@@ -9,9 +9,7 @@ export const load: PageServerLoad = async (event) => {
 	const db = getDb(event);
 	const { params } = event;
 
-	// Type assertion needed: getDb() returns a union type (D1 | libsql)
-	// that breaks .select({fields}) overload resolution
-	const [moveRaw] = (await (db as any)
+	const [moveRaw] = (await db
 		.select({
 			id: moves.id,
 			name: moves.name,

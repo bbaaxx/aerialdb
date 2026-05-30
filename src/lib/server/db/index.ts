@@ -1,6 +1,7 @@
 import { drizzle as drizzleLibsql } from 'drizzle-orm/libsql';
 import { drizzle as drizzleD1 } from 'drizzle-orm/d1';
 import { createClient } from '@libsql/client';
+import type { BaseSQLiteDatabase } from 'drizzle-orm/sqlite-core';
 import * as schema from './schema';
 import type { RequestEvent } from '@sveltejs/kit';
 
@@ -39,19 +40,24 @@ try {
 const localClient = DATABASE_URL ? createClient({ url: DATABASE_URL }) : null;
 const localDb = localClient ? drizzleLibsql(localClient, { schema }) : null;
 
+// Common base type for both libsql (local) and D1 (Cloudflare) databases.
+// Both extend BaseSQLiteDatabase<'async', ...>, so using any for TRunResult is safe
+// since we only use query builder methods (select/insert/update/delete).
+export type Database = BaseSQLiteDatabase<'async', any, typeof schema>;
+
 /**
  * Get database instance based on environment
  * - In Cloudflare production/preview: Uses D1 from platform.env
  * - In local development: Uses local SQLite
  */
-export function getDb(event?: RequestEvent) {
+export function getDb(event?: RequestEvent): Database {
 	// Check if we're in Cloudflare environment
 	const platform = event?.platform as CloudflarePlatform | undefined;
 	const isCloudflare = platform?.env?.DB && process.env.NODE_ENV !== 'development';
 
 	if (isCloudflare) {
 		// Cloudflare: Use D1 binding
-		return drizzleD1(platform.env.DB, { schema });
+		return drizzleD1(platform.env.DB, { schema }) as unknown as Database;
 	}
 
 	// Development: Use local SQLite
@@ -59,12 +65,9 @@ export function getDb(event?: RequestEvent) {
 		throw new Error('DATABASE_URL is not set for local development');
 	}
 
-	return localDb;
+	return localDb as unknown as Database;
 }
 
 // Export default db for backwards compatibility (local dev only)
 // Note: In Cloudflare, you must use getDb(event) instead
-export const db = localDb!;
-
-// Export Database type
-export type Database = ReturnType<typeof getDb>;
+export const db = localDb as unknown as Database;

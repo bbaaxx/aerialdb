@@ -1,18 +1,32 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { actions } from './+page.server';
-import { isRedirect, type RequestEvent } from '@sveltejs/kit';
+import { isRedirect } from '@sveltejs/kit';
+
+vi.mock('$lib/server/db', () => ({
+	getDb: vi.fn().mockReturnValue({
+		select: vi.fn().mockReturnThis(),
+		from: vi.fn().mockReturnThis(),
+		where: vi.fn().mockReturnThis(),
+		get: vi.fn().mockResolvedValue(null),
+		insert: vi.fn().mockReturnThis(),
+		values: vi.fn().mockResolvedValue({})
+	})
+}));
 
 describe('Categories Admin Actions Security', () => {
-	vi.mock('$lib/server/db', () => ({
-		getDb: vi.fn().mockReturnValue({
-			select: vi.fn().mockReturnThis(),
-			from: vi.fn().mockReturnThis(),
-			where: vi.fn().mockReturnThis(),
-			get: vi.fn().mockResolvedValue(null),
-			insert: vi.fn().mockReturnThis(),
-			values: vi.fn().mockResolvedValue({})
-		})
-	}));
+	beforeEach(() => {
+		vi.clearAllMocks();
+	});
+
+	function createMockEvent(formData: FormData, user: any = null) {
+		return {
+			request: {
+				formData: vi.fn().mockResolvedValue(formData)
+			},
+			locals: { user },
+			url: new URL('http://localhost/admin/categories')
+		} as unknown as RequestEvent;
+	}
 
 	it('createCategory action should throw redirect to /auth/login if user is not authenticated', async () => {
 		expect.hasAssertions();
@@ -28,7 +42,7 @@ describe('Categories Admin Actions Security', () => {
 				user: null
 			},
 			url: new URL('http://localhost/admin/categories')
-		} as unknown as RequestEvent;
+		} as Parameters<typeof actions.createCategory>[0];
 
 		try {
 			await actions.createCategory(event);
@@ -42,5 +56,48 @@ describe('Categories Admin Actions Security', () => {
 		}
 
 		throw new Error('Action did not throw a redirect');
+	});
+
+	it('createCategory action should return 403 if user is not an admin', async () => {
+		const formData = new FormData();
+		formData.append('name', 'New Category');
+		const event = createMockEvent(formData, { id: 'user-1', role: 'user' });
+
+		try {
+			await actions.createCategory(event);
+			expect.fail('Should have thrown an error');
+		} catch (e: any) {
+			expect(e.status).toBe(403);
+			expect(e.body.message).toBe('Forbidden: Admin access required');
+		}
+	});
+
+	it('updateCategory action should return 403 if user is not an admin', async () => {
+		const formData = new FormData();
+		formData.append('id', 'cat-1');
+		formData.append('name', 'Updated Category');
+		const event = createMockEvent(formData, { id: 'user-1', role: 'user' });
+
+		try {
+			await actions.updateCategory(event);
+			expect.fail('Should have thrown an error');
+		} catch (e: any) {
+			expect(e.status).toBe(403);
+			expect(e.body.message).toBe('Forbidden: Admin access required');
+		}
+	});
+
+	it('deleteCategory action should return 403 if user is not an admin', async () => {
+		const formData = new FormData();
+		formData.append('id', 'cat-1');
+		const event = createMockEvent(formData, { id: 'user-1', role: 'user' });
+
+		try {
+			await actions.deleteCategory(event);
+			expect.fail('Should have thrown an error');
+		} catch (e: any) {
+			expect(e.status).toBe(403);
+			expect(e.body.message).toBe('Forbidden: Admin access required');
+		}
 	});
 });

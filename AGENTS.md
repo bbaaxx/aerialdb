@@ -11,7 +11,7 @@ deployed on Cloudflare Pages with D1 (SQLite) and R2 storage.
 - **Database:** Drizzle ORM over SQLite (libsql locally, Cloudflare D1 in prod)
 - **Auth:** Custom session-based auth (SHA-256 tokens, Scrypt passwords via `@noble/hashes`)
 - **Styling:** TailwindCSS v4 + `@tailwindcss/forms` + `@tailwindcss/typography`
-- **i18n:** Paraglide JS (`src/lib/paraglide/`, messages in `messages/en.json` + `es.json`)
+- **i18n:** Paraglide JS (generated imports use `$lib/paraglide/`, source messages in `messages/en.json` + `es.json`)
 - **Testing:** Vitest (unit + browser via Playwright) + Playwright (e2e)
 - **Deployment:** Cloudflare Pages + D1 + R2
 
@@ -34,6 +34,9 @@ npm run format            # prettier --write (auto-fix formatting)
 # Building
 npm run build             # vite build
 npm run preview           # Preview the built output
+
+# Project index regeneration
+npm run generate:index    # Regenerate mdocs/PROJECT_INDEX.json + .md
 
 # Testing — unit + browser
 npm run test:unit         # vitest (watch mode)
@@ -61,6 +64,10 @@ npm run db:seed           # Seed DB from src/lib/server/db/seed.ts
 npm run db:init           # Initialize DB from scripts/init-db.ts
 ```
 
+Use npm for this project. Do not switch commands to pnpm unless the package manager is intentionally changed across the repo.
+
+`db:init` prepares a local database from `scripts/init-db.ts`. `db:seed` runs the catalog seed utility in `src/lib/server/db/seed.ts`.
+
 ### Test Projects
 
 Vitest is split into two projects (see `vite.config.ts`):
@@ -71,6 +78,16 @@ Vitest is split into two projects (see `vite.config.ts`):
 | `server` | `src/**/*.{test,spec}.{js,ts}` (non-svelte) | Node                           |
 
 Run a specific project: `npm run test:unit -- --run --project=server`
+
+### Known Validation Baseline
+
+As of 2026-05-30, these commands pass cleanly:
+
+- `npm run check`
+- `npm run lint`
+- `npm run test:unit -- --run`
+
+If any of the commands above fail, treat it as a regression unless the current task intentionally changes that baseline.
 
 ---
 
@@ -182,9 +199,11 @@ export const actions = {
 - The bare `db` export from `$lib/server/db` is for scripts only (local dev)
 - Schema is in `src/lib/server/db/schema.ts`; do not use raw SQL in routes
 - Use Drizzle query builder — no string-interpolated SQL
+- No `(db as any)` casts needed — `getDb()` returns a typed `Database` (`BaseSQLiteDatabase<'async', any, typeof schema>`) that resolves query builder chains correctly
 
 ```ts
 import { getDb } from '$lib/server/db';
+import type { Database } from '$lib/server/db';
 import { moves, categories } from '$lib/server/db/schema';
 import { eq } from 'drizzle-orm';
 
@@ -236,6 +255,61 @@ TailwindCSS v4 — no CSS modules, no `<style>` blocks except for non-Tailwind c
 - Use Paraglide message functions for all user-visible strings
 - Messages live in `messages/en.json` and `messages/es.json`
 - Import from `$lib/paraglide/messages.js` (generated — do not edit directly)
+- If generated files appear under `src/paraglide/`, run `npm run check` or the Paraglide generator path configured in `vite.config.ts` before assuming imports are wrong.
+
+---
+
+## Agent Start Here
+
+Read these files first based on the task:
+
+| Task Area             | Start With                                             |
+| --------------------- | ------------------------------------------------------ |
+| General conventions   | `AGENTS.md`                                            |
+| Current project map   | `mdocs/PROJECT_INDEX.md`, `mdocs/PROJECT_INDEX.json`   |
+| Security lessons      | `.Jules/sentinel.md`                                   |
+| API endpoints         | `src/routes/api/README.md`                             |
+| Shared components     | `src/lib/components/README.md`                         |
+| TOON imports          | `mdocs/TOON_FORMAT.md`, `src/lib/utils/toon-parser.ts` |
+| Cloudflare deployment | `mdocs/CLOUDFLARE_DEPLOYMENT.md`, `wrangler.toml`      |
+| OpenSpec work         | `openspec/config.yaml`, `openspec/specs/`              |
+
+Agent/tooling directories in this repo:
+
+| Directory          | Purpose                                                             |
+| ------------------ | ------------------------------------------------------------------- |
+| `.opencode/`       | OpenCode agents, skills, commands, and context                      |
+| `.Jules/`          | Jules/Sentinel notes, especially security and reliability learnings |
+| `.claude/`         | Claude Code settings and hooks when present                         |
+| `.omc/`            | OMC project memory/config when present                              |
+| `.vscode/mcp.json` | Editor MCP configuration when present                               |
+
+Prefer current source code over generated indexes if they disagree, then update the stale doc as part of the task.
+
+---
+
+## Route Map
+
+| Route                    | Methods           | Auth                            | Purpose                                      |
+| ------------------------ | ----------------- | ------------------------------- | -------------------------------------------- |
+| `/`                      | GET               | Public                          | Move library with search/filter query params |
+| `/moves/[id]`            | GET               | Public                          | Move detail page                             |
+| `/tutorials`             | GET               | Public                          | Coming-soon tutorials page                   |
+| `/theory`                | GET               | Public                          | Coming-soon theory page                      |
+| `/community`             | GET               | Public                          | Coming-soon community page                   |
+| `/auth/login`            | GET, POST action  | Anonymous redirects home        | Login and create session                     |
+| `/auth/signup`           | GET, POST action  | Anonymous redirects home        | Register and create session                  |
+| `/auth/logout`           | POST              | Optional session                | Invalidate current session and redirect home |
+| `/upload`                | GET               | User via UI link                | Upload/create move UI                        |
+| `/admin`                 | GET               | User required by layout         | Admin move list dashboard                    |
+| `/admin/categories`      | GET, POST actions | User required; actions re-check | Manage categories                            |
+| `/admin/moves/new`       | GET, POST action  | User required; action re-check  | Create move                                  |
+| `/admin/moves/[id]/edit` | GET, POST actions | User required; actions re-check | Edit/delete move                             |
+| `/api/search`            | GET               | Public                          | JSON move search endpoint                    |
+| `/api/upload`            | POST              | Admin required                  | R2 image upload endpoint                     |
+| `/api/test-db`           | GET               | Admin required                  | Database connectivity check                  |
+
+API contracts are documented in `src/routes/api/README.md`.
 
 ---
 

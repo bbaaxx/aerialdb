@@ -25,9 +25,8 @@ export const load: PageServerLoad = async (event) => {
 
 	// Performance: Fetch move and categories in parallel to reduce TTFB.
 	// Selective Field Fetching: Only fetch fields needed for the edit form to minimize data transfer.
-	// Note: using any to bypass Drizzle's complex union types for getDb() results
 	const [movesData, allCategories] = await Promise.all([
-		(db as any)
+		db
 			.select({
 				id: moves.id,
 				name: moves.name,
@@ -40,7 +39,7 @@ export const load: PageServerLoad = async (event) => {
 			.from(moves)
 			.where(eq(moves.id, params.id))
 			.limit(1),
-		(db as any)
+		db
 			.select({
 				id: categories.id,
 				name: categories.name
@@ -72,6 +71,9 @@ export const actions = {
 	update: async (event) => {
 		if (!event.locals.user) {
 			throw redirect(302, '/auth/login');
+		}
+		if (event.locals.user.role !== 'admin') {
+			throw error(403, 'Forbidden: Admin access required');
 		}
 		const db = getDb(event);
 		const { request, params, fetch, platform } = event;
@@ -124,7 +126,7 @@ export const actions = {
 
 		// Get current move data
 		// Optimization: Only fetch imageUrl to check for existing image, reducing data transfer.
-		const [currentMove] = (await (db as any)
+		const [currentMove] = (await db
 			.select({ imageUrl: moves.imageUrl })
 			.from(moves)
 			.where(eq(moves.id, params.id))
@@ -193,12 +195,15 @@ export const actions = {
 		if (!event.locals.user) {
 			throw redirect(302, '/auth/login');
 		}
+		if (event.locals.user.role !== 'admin') {
+			throw error(403, 'Forbidden: Admin access required');
+		}
 		const db = getDb(event);
 		const { params, platform } = event;
 
 		// Get move to delete associated image
 		// Optimization: Only fetch imageUrl to check for existing image, reducing data transfer.
-		const [move] = (await (db as any)
+		const [move] = (await db
 			.select({ imageUrl: moves.imageUrl })
 			.from(moves)
 			.where(eq(moves.id, params.id))

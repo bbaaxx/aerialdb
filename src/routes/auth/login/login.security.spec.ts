@@ -2,6 +2,29 @@ import { describe, it, expect, vi } from 'vitest';
 import { load, actions } from './+page.server';
 import { isRedirect } from '@sveltejs/kit';
 
+vi.mock('$lib/server/db', () => ({
+	getDb: vi.fn().mockReturnValue({
+		select: vi.fn().mockReturnThis(),
+		from: vi.fn().mockReturnThis(),
+		where: vi.fn().mockReturnThis(),
+		at: vi.fn().mockReturnValue({
+			id: '1',
+			username: 'testuser',
+			passwordHash: 'hashed_password'
+		})
+	})
+}));
+
+vi.mock('$lib/server/password', () => ({
+	verifyPassword: vi.fn().mockResolvedValue(true)
+}));
+
+vi.mock('$lib/server/auth', () => ({
+	generateSessionToken: vi.fn().mockReturnValue('token'),
+	createSession: vi.fn().mockResolvedValue({ expiresAt: new Date() }),
+	setSessionTokenCookie: vi.fn()
+}));
+
 describe('Login Open Redirect Security Test', () => {
 	it('load function redirects to / if external URL is provided in redirectTo and user is logged in', async () => {
 		const url = new URL('http://localhost/auth/login?redirectTo=https://malicious.com');
@@ -24,30 +47,6 @@ describe('Login Open Redirect Security Test', () => {
 	});
 
 	it('action redirects to / if external URL is provided in redirectTo after successful login', async () => {
-		// Mock dependencies
-		vi.mock('$lib/server/db', () => ({
-			getDb: vi.fn().mockReturnValue({
-				select: vi.fn().mockReturnThis(),
-				from: vi.fn().mockReturnThis(),
-				where: vi.fn().mockReturnThis(),
-				at: vi.fn().mockReturnValue({
-					id: '1',
-					username: 'testuser',
-					passwordHash: 'hashed_password'
-				})
-			})
-		}));
-
-		vi.mock('$lib/server/password', () => ({
-			verifyPassword: vi.fn().mockResolvedValue(true)
-		}));
-
-		vi.mock('$lib/server/auth', () => ({
-			generateSessionToken: vi.fn().mockReturnValue('token'),
-			createSession: vi.fn().mockResolvedValue({ expiresAt: new Date() }),
-			setSessionTokenCookie: vi.fn()
-		}));
-
 		const formData = new FormData();
 		formData.append('username', 'testuser');
 		formData.append('password', 'password123');
@@ -63,7 +62,6 @@ describe('Login Open Redirect Security Test', () => {
 		} as any;
 
 		try {
-			// @ts-expect-error - action is default
 			await actions.default(event);
 			expect.fail('Should have thrown a redirect');
 		} catch (e: any) {

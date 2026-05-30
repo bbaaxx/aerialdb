@@ -1,8 +1,18 @@
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 
+/**
+ * POST /api/upload
+ *
+ * Upload an image file to R2 storage. Requires admin role.
+ *
+ * @body form/multipart - image: File (JPEG/PNG/WebP, max 5MB)
+ * @response 200 - { url: string } - Public URL of uploaded image
+ * @response 400 - { error: string } - Invalid file type or size
+ * @response 403 - { error: string } - Not authorized (non-admin)
+ * @response 500 - { error: string } - R2 not configured
+ */
 export const POST: RequestHandler = async ({ request, platform, locals }) => {
-	// SECURITY: RBAC - Only admins can upload images
 	if (!locals.user || locals.user.role !== 'admin') {
 		return json({ error: 'Forbidden: Admin access required' }, { status: 403 });
 	}

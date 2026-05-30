@@ -29,9 +29,7 @@ export async function createSession(token: string, userId: string, db: Database)
 
 export async function validateSessionToken(token: string, db: Database) {
 	const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
-	// Type assertion needed: getDb() returns a union type (D1 | libsql)
-	// that breaks .select({fields}) overload resolution
-	const [result] = (await (db as any)
+	const [result] = (await db
 		.select({
 			// Adjust user table here to tweak returned data
 			user: { id: table.user.id, username: table.user.username, role: table.user.role },

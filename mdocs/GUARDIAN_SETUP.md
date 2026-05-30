@@ -30,6 +30,7 @@ To automate the verification of PRs, configure your daily runner (e.g., GitHub A
    - For 'DUPLICATE' or 'REJECT' PRs: 'Action recommended: Close PR.'
 
 **Rules**:
+
 - Do NOT merge any PRs automatically.
 - Only verify PRs from the three specified automated agents.
 - If no automated PRs are open, report: 'No automated PRs to verify today.'"

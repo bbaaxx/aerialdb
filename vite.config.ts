@@ -15,11 +15,11 @@ export default defineConfig({
 			outdir: './src/lib/paraglide'
 		})
 	],
+	optimizeDeps: {
+		include: ['lucide-svelte']
+	},
 	test: {
 		expect: { requireAssertions: true },
-			optimizeDeps: {
-			include: ['lucide-svelte']
-		},
 		projects: [
 			{
 				extends: './vite.config.ts',

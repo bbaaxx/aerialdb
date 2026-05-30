@@ -1,12 +1,15 @@
 schema: spec-driven
-# Project context (optional)
-# This is shown to AI when creating artifacts.
-# Add your tech stack, conventions, style guides, domain knowledge, etc.
-# Example:
-#   context: |
-#     Tech stack: TypeScript, React, Node.js
-#     We use conventional commits
-#     Domain: e-commerce platform
+context: |
+  AerialDB is a SvelteKit 2 + Svelte 5 app for cataloging aerial acrobatics moves.
+  Use Svelte 5 runes only; do not add legacy stores or `$:` reactive statements.
+  Use npm scripts, not pnpm. Node.js 18+ is required.
+  Database access uses Drizzle ORM over SQLite: libsql locally and Cloudflare D1 in production.
+  In SvelteKit route files, always call `getDb(event)` instead of importing the bare `db` export.
+  Authentication is custom session auth with SHA-256 session-token hashes and Scrypt password hashes via `@noble/hashes`.
+  Admin layout loads guard page access, but every form action must explicitly check `event.locals.user`.
+  User-visible strings should use Paraglide messages from `$lib/paraglide/messages.js`.
+  Styling uses TailwindCSS v4 with the existing design-token classes in `src/routes/layout.css`.
+  Deployment target is Cloudflare Pages with D1 binding `DB` and R2 binding `IMAGES`.
 
 # Per-artifact rules (optional)
 # Add custom rules for specific artifacts.

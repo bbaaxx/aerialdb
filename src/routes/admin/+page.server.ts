@@ -10,10 +10,8 @@ export const load: PageServerLoad = async (event) => {
 	// Performance: Fetch moves and categories in parallel to reduce TTFB.
 	// Selective Field Fetching: Using computed booleans for presence indicators instead of fetching large text fields.
 	// Optimization: Categories are resolved in-memory using a Map to avoid SQL JOIN overhead.
-	// Type assertion needed: getDb() returns a union type (D1 | libsql)
-	// that breaks .select({fields}) overload resolution
 	const [movesDataRaw, allCategories] = (await Promise.all([
-		(db as any)
+		db
 			.select({
 				id: moves.id,
 				name: moves.name,

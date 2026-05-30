@@ -23,13 +23,14 @@
 
 ## Database
 
-| Command               | Description                 |
-| --------------------- | --------------------------- |
-| `npm run db:push`     | Push schema to database     |
-| `npm run db:generate` | Generate Drizzle migrations |
-| `npm run db:migrate`  | Run migrations              |
-| `npm run db:studio`   | Open Drizzle Studio GUI     |
-| `npm run db:seed`     | Seed DB from seed script    |
+| Command               | Description                                   |
+| --------------------- | --------------------------------------------- |
+| `npm run db:push`     | Push schema to database                       |
+| `npm run db:generate` | Generate Drizzle migrations                   |
+| `npm run db:migrate`  | Run migrations                                |
+| `npm run db:studio`   | Open Drizzle Studio GUI                       |
+| `npm run db:seed`     | Seed DB from `src/lib/server/db/seed.ts`      |
+| `npm run db:init`     | Initialize local DB from `scripts/init-db.ts` |
 
 ## Code Quality
 

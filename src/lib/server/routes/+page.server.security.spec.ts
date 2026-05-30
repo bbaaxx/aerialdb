@@ -112,7 +112,7 @@ describe('home page search hardening', () => {
 		const mockEvent = createMockEvent(`http://localhost/?q=${longQuery}`);
 		setupMockDb();
 
-		const result = await load(mockEvent);
+		const result = (await load(mockEvent)) as { searchQuery: string };
 
 		expect(result.searchQuery.length).toBe(100);
 	});
@@ -122,7 +122,7 @@ describe('home page search hardening', () => {
 		const mockEvent = createMockEvent(`http://localhost/?category=${longCategory}`);
 		setupMockDb();
 
-		const result = await load(mockEvent);
+		const result = (await load(mockEvent)) as { categoryFilter: string };
 
 		expect(result.categoryFilter.length).toBe(100);
 	});
@@ -132,7 +132,7 @@ describe('home page search hardening', () => {
 		const mockEvent = createMockEvent(`http://localhost/?level=${invalidLevel}`);
 		setupMockDb();
 
-		const result = await load(mockEvent);
+		const result = (await load(mockEvent)) as { levelFilter: string };
 
 		expect(result.levelFilter).toBe('');
 	});
@@ -142,7 +142,7 @@ describe('home page search hardening', () => {
 		const mockEvent = createMockEvent(`http://localhost/?level=${validLevel}`);
 		setupMockDb();
 
-		const result = await load(mockEvent);
+		const result = (await load(mockEvent)) as { levelFilter: string };
 
 		expect(result.levelFilter).toBe('advanced');
 	});
