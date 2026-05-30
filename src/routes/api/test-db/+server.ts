@@ -2,8 +2,18 @@ import { json } from '@sveltejs/kit';
 import { getDb } from '$lib/server/db';
 import type { RequestHandler } from './$types';
 
+/**
+ * GET /api/test-db
+ *
+ * Test database connectivity. Requires admin role.
+ * Returns the platform environment (Cloudflare vs Local) and whether
+ * any users exist in the database.
+ *
+ * @response 200 - { success: true, message: string, hasUsers: boolean, platform: "Cloudflare" | "Local" }
+ * @response 403 - { error: string } - Not authorized (non-admin)
+ * @response 500 - { success: false, error: string, platform: "Cloudflare" | "Local" }
+ */
 export const GET: RequestHandler = async (event) => {
-	// SECURITY: RBAC - Only admins can test the database connection
 	if (!event.locals.user || event.locals.user.role !== 'admin') {
 		return json({ error: 'Forbidden: Admin access required' }, { status: 403 });
 	}

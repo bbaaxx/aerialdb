@@ -1,42 +1,36 @@
-<!-- Context: project-intelligence/lookup/database-schema | Priority: high | Version: 1.0 | Updated: 2026-03-28 -->
+<!-- Context: project-intelligence/lookup/database-schema | Priority: high | Version: 1.1 | Updated: 2026-05-30 -->
 
 # Database Schema
 
-**Purpose**: User and session tables for session-based authentication.
+**Purpose**: Current Drizzle schema for authentication and aerial move catalog data.
 
 ## Tables
 
-### user
+| Table        | Purpose                                                |
+| ------------ | ------------------------------------------------------ |
+| `user`       | Auth users with role-based access                      |
+| `session`    | SHA-256-hashed session tokens                          |
+| `categories` | Admin-managed base techniques/apparatus categories     |
+| `moves`      | Catalog entries linked to categories and creator users |
 
-| Column          | Type    | Constraints      |
-| --------------- | ------- | ---------------- |
-| `id`            | text    | PRIMARY KEY      |
-| `username`      | text    | UNIQUE, NOT NULL |
-| `password_hash` | text    | NOT NULL         |
-| `age`           | integer | NULLABLE         |
+## Key Columns
 
-### session
+| Table        | Columns                                                                                                                                     |
+| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| `user`       | `id`, `age`, `username`, `password_hash`, `role`                                                                                            |
+| `session`    | `id`, `user_id`, `expires_at`                                                                                                               |
+| `categories` | `id`, `name`, `created_at`                                                                                                                  |
+| `moves`      | `id`, `name`, `category_id`, `description`, `image_url`, `video_url`, `level`, `contributor_name`, `created_by`, `created_at`, `updated_at` |
 
-| Column       | Type      | Constraints                |
-| ------------ | --------- | -------------------------- |
-| `id`         | text      | PRIMARY KEY (SHA-256 hash) |
-| `user_id`    | text      | FOREIGN KEY → user.id      |
-| `expires_at` | timestamp | NOT NULL                   |
+## Notes
 
-## Schema File
-
-**Location**: `src/lib/server/db/schema.ts`
-
-**ORM**: Drizzle ORM with libsql driver (Turso-compatible)
-
-## Auth Flow
-
-1. User registers → `user` row created with Argon2 hash
-2. Login → Session created, ID stored in httpOnly cookie
-3. Request → `hooks.server.ts` validates session via `validateSessionToken()`
-4. Session expires → Auto-cleanup on expiration check
+- Schema source: `src/lib/server/db/schema.ts`.
+- ORM: Drizzle with libsql locally and Cloudflare D1 in production.
+- Route files must use `getDb(event)` from `$lib/server/db`.
+- Password hashes use Scrypt via `@noble/hashes`, not Argon2.
 
 ## Related
 
-- `src/lib/server/auth.ts` — Session management functions
-- `../concepts/sveltekit-setup.md` — Server hooks integration
+- `src/lib/server/auth.ts` - session management
+- `src/lib/server/password.ts` - Scrypt password hashing
+- `.opencode/context/implementation-baseline/errors/drizzle-union-inference.md` - known Drizzle union typing caveat

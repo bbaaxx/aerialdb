@@ -1,40 +1,73 @@
-# sv
+# AerialDB
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+AerialDB is a SvelteKit 5 application for cataloging aerial acrobatics moves. It uses Drizzle ORM with SQLite locally, Cloudflare D1 in production, and Cloudflare R2 for image uploads.
 
-## Creating a project
+## Stack
 
-If you're seeing this, you've probably already done this step. Congrats!
+- SvelteKit 2 + Svelte 5 runes
+- TailwindCSS v4
+- Drizzle ORM over SQLite/libsql and Cloudflare D1
+- Custom session auth with SHA-256 session tokens and Scrypt password hashes
+- Paraglide JS i18n with messages in `messages/en.json` and `messages/es.json`
+- Vitest, Playwright, and `vitest-browser-svelte`
 
-```sh
-# create a new project in the current directory
-npx sv create
+## Setup
 
-# create a new project in my-app
-npx sv create my-app
-```
+Use npm for this project. `.npmrc` enables `engine-strict`, and `package.json` requires Node.js 18 or newer.
 
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```sh
+```bash
+npm install
+cp .env.example .env
+npm run db:init
 npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
 ```
 
-## Building
+Minimum local environment:
 
-To create a production version of your app:
+```bash
+DATABASE_URL=file:local.db
+```
 
-```sh
+Production image uploads also require `PUBLIC_R2_URL`.
+
+## Commands
+
+```bash
+npm run dev
+npm run check
+npm run lint
+npm run test:unit -- --run
+npm run test:e2e
 npm run build
 ```
 
-You can preview the production build with `npm run preview`.
+Database commands:
 
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+```bash
+npm run db:push
+npm run db:generate
+npm run db:migrate
+npm run db:seed
+npm run db:init
+```
 
-TRD
+`db:init` initializes a local database from `scripts/init-db.ts`. `db:seed` runs the TypeScript seeding utility at `src/lib/server/db/seed.ts`.
+
+## Documentation Map
+
+- `AGENTS.md` - full coding-agent guidelines, conventions, and route map
+- `mdocs/PROJECT_INDEX.md` - current project index for humans
+- `mdocs/PROJECT_INDEX.json` - current project index for tools
+- `src/routes/api/README.md` - API endpoint contracts
+- `src/lib/components/README.md` - shared component registry
+- `mdocs/TOON_FORMAT.md` - custom `.toon` import format
+- `.Jules/sentinel.md` - security and reliability lessons learned
+
+## Deployment
+
+The app builds for Cloudflare Pages via `@sveltejs/adapter-cloudflare`. Bindings are declared in `wrangler.toml`:
+
+- `DB` for Cloudflare D1
+- `IMAGES` for Cloudflare R2
+
+See `mdocs/CLOUDFLARE_DEPLOYMENT.md` for deployment details.

@@ -1,15 +1,15 @@
 import { describe, it, expect, vi } from 'vitest';
 import { actions } from './+page.server';
 
-describe('Login User Enumeration Security', () => {
-	vi.mock('$lib/server/db', () => ({ getDb: vi.fn() }));
-	vi.mock('$lib/server/password', () => ({ verifyPassword: vi.fn().mockResolvedValue(false) }));
-	vi.mock('$lib/server/auth', () => ({
-		generateSessionToken: vi.fn(),
-		createSession: vi.fn(),
-		setSessionTokenCookie: vi.fn()
-	}));
+vi.mock('$lib/server/db', () => ({ getDb: vi.fn() }));
+vi.mock('$lib/server/password', () => ({ verifyPassword: vi.fn().mockResolvedValue(false) }));
+vi.mock('$lib/server/auth', () => ({
+	generateSessionToken: vi.fn(),
+	createSession: vi.fn(),
+	setSessionTokenCookie: vi.fn()
+}));
 
+describe('Login User Enumeration Security', () => {
 	const testLogin = async (username: string) => {
 		const { getDb } = await import('$lib/server/db');
 		const user =

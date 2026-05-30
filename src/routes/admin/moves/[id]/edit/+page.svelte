@@ -3,16 +3,17 @@
 	import { Loader2 } from 'lucide-svelte';
 	import type { PageData, ActionData } from './$types';
 	import { fade } from 'svelte/transition';
+	import { untrack } from 'svelte';
 
 	let { data, form }: { data: PageData; form: ActionData } = $props();
 
-	let imagePreview = $state<string | null>(data.move.imageUrl || null);
+	let imagePreview = $state<string | null>(untrack(() => data.move.imageUrl || null));
 	let removeImage = $state(false);
 	let showDeleteConfirm = $state(false);
 	let categoryMode = $state<'existing' | 'new'>('existing');
-	let selectedCategory = $state(data.move.categoryId);
-	let name = $state(data.move.name);
-	let description = $state(data.move.description || '');
+	let selectedCategory = $state(untrack(() => data.move.categoryId));
+	let name = $state(untrack(() => data.move.name));
+	let description = $state(untrack(() => data.move.description || ''));
 	let isSubmitting = $state(false);
 	let isDeleting = $state(false);
 	let newCategoryInput = $state<HTMLInputElement | undefined>(undefined);

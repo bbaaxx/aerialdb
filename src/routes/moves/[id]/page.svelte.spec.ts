@@ -11,10 +11,13 @@ const mockMove = {
 	imageUrl: 'https://example.com/image.jpg',
 	videoUrl: 'https://youtube.com/watch?v=dQw4w9WgXcQ',
 	contributorName: 'Test Contributor',
+	createdAt: new Date('2026-01-01T00:00:00Z'),
+	updatedAt: new Date('2026-01-02T00:00:00Z'),
 	category: { id: 'test-cat', name: 'Test Category' }
 };
 
 const mockData = {
+	user: null,
 	move: mockMove
 };
 
@@ -69,6 +72,7 @@ describe('moves/[id]/+page.svelte', () => {
 
 	it('should show no media message when no image or video', async () => {
 		const noMediaData = {
+			user: null,
 			move: {
 				...mockMove,
 				imageUrl: null,

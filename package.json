@@ -3,6 +3,9 @@
 	"private": true,
 	"version": "0.0.1",
 	"type": "module",
+	"engines": {
+		"node": ">=18.0.0"
+	},
 	"scripts": {
 		"dev": "vite dev",
 		"postinstall": "node scripts/install-rollup-native.cjs",
@@ -21,7 +24,8 @@
 		"db:migrate": "drizzle-kit migrate",
 		"db:studio": "drizzle-kit studio",
 		"db:seed": "tsx src/lib/server/db/seed.ts",
-		"db:init": "tsx scripts/init-db.ts"
+		"db:init": "tsx scripts/init-db.ts",
+		"generate:index": "tsx scripts/generate-project-index.ts"
 	},
 	"devDependencies": {
 		"@cloudflare/workers-types": "^4.20251121.0",

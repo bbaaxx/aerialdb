@@ -5,13 +5,14 @@
 	import HeroBanner from '$lib/components/HeroBanner.svelte';
 	import MoveCard from '$lib/components/MoveCard.svelte';
 	import { Loader2, SearchX } from 'lucide-svelte';
+	import { untrack } from 'svelte';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
 
 	// Filter state - initialized from URL params (server data)
-	let selectedBaseTechnique = $state<string | null>(data.categoryFilter || null);
-	let selectedLevel = $state<string | null>(data.levelFilter || null);
+	let selectedBaseTechnique = $state<string | null>(untrack(() => data.categoryFilter || null));
+	let selectedLevel = $state<string | null>(untrack(() => data.levelFilter || null));
 	let favoriteIds = $state<Set<string>>(new Set());
 
 	// Update URL when filters change -> triggers server load -> data updates

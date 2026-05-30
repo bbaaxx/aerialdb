@@ -22,7 +22,7 @@ vi.mock('$lib/server/db', () => ({
 
 import { actions as newActions } from './new/+page.server';
 import { actions as editActions } from './[id]/edit/+page.server';
-import { isRedirect, type RequestEvent } from '@sveltejs/kit';
+import { isRedirect } from '@sveltejs/kit';
 
 describe('Moves Admin Actions Security', () => {
 	beforeEach(() => {
@@ -51,12 +51,14 @@ describe('Moves Admin Actions Security', () => {
 				json: vi.fn().mockResolvedValue({ url: 'http://example.com/image.jpg' })
 			}),
 			platform: {}
-		} as unknown as RequestEvent;
+		};
 	}
 
 	describe('new move action', () => {
 		it('should redirect to login if not authenticated', async () => {
-			const event = createMockEvent(new FormData());
+			const event = createMockEvent(new FormData()) as unknown as Parameters<
+				typeof newActions.default
+			>[0];
 			await expect(newActions.default(event)).rejects.toSatisfy(isRedirect);
 		});
 
@@ -104,7 +106,9 @@ describe('Moves Admin Actions Security', () => {
 
 	describe('edit move action', () => {
 		it('update should redirect to login if not authenticated', async () => {
-			const event = createMockEvent(new FormData());
+			const event = createMockEvent(new FormData(), null, {
+				id: 'move-1'
+			}) as unknown as Parameters<typeof editActions.update>[0];
 			await expect(editActions.update(event)).rejects.toSatisfy(isRedirect);
 		});
 
@@ -149,7 +153,9 @@ describe('Moves Admin Actions Security', () => {
 		});
 
 		it('delete should redirect to login if not authenticated', async () => {
-			const event = createMockEvent(new FormData());
+			const event = createMockEvent(new FormData(), null, {
+				id: 'move-1'
+			}) as unknown as Parameters<typeof editActions.delete>[0];
 			await expect(editActions.delete(event)).rejects.toSatisfy(isRedirect);
 		});
 

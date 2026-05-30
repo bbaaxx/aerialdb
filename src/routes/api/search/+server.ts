@@ -6,6 +6,16 @@ import { eq, or, and, sql } from 'drizzle-orm';
 import { escapeLike } from '$lib/utils/security';
 import type { RequestHandler } from './$types';
 
+/**
+ * GET /api/search?q=<query>&category=<categoryId>
+ *
+ * Search moves by name or category name. Requires at least 3 characters.
+ * Returns up to 50 results with category info. Public endpoint (no auth).
+ *
+ * @query q - Search query (min 3 chars, max 100, LIKE-matched)
+ * @query category - Optional category ID filter
+ * @response 200 - { moves: Array<{ id, name, imageUrl, level, category: { id, name } }> }
+ */
 export const GET: RequestHandler = async (event) => {
 	const db = getDb(event);
 	const { url } = event;
@@ -41,9 +51,7 @@ export const GET: RequestHandler = async (event) => {
 	// Fetch moves with category info
 	// Lean Query: Only selecting fields needed for the search result list
 	// to optimize performance and reduce payload size.
-	// Type assertion needed: getDb() returns a union type (D1 | libsql)
-	// that breaks .select({fields}) overload resolution
-	const movesDataRaw = (await (db as any)
+	const movesDataRaw = (await db
 		.select({
 			id: moves.id,
 			name: moves.name,

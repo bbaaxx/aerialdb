@@ -1,32 +1,21 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { actions } from './+page.server';
-import { isRedirect, type RequestEvent } from '@sveltejs/kit';
+import { isRedirect } from '@sveltejs/kit';
 
-describe('Categories Admin Actions Security', () => {
-	const mockDb: any = {
+vi.mock('$lib/server/db', () => ({
+	getDb: vi.fn().mockReturnValue({
 		select: vi.fn().mockReturnThis(),
 		from: vi.fn().mockReturnThis(),
 		where: vi.fn().mockReturnThis(),
 		get: vi.fn().mockResolvedValue(null),
 		insert: vi.fn().mockReturnThis(),
-		values: vi.fn().mockResolvedValue({}),
-		update: vi.fn().mockReturnThis(),
-		set: vi.fn().mockReturnThis(),
-		delete: vi.fn().mockReturnThis()
-	};
+		values: vi.fn().mockResolvedValue({})
+	})
+}));
 
-	vi.mock('$lib/server/db', () => ({
-		getDb: vi.fn(() => mockDb)
-	}));
-
+describe('Categories Admin Actions Security', () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
-		mockDb.select.mockReturnThis();
-		mockDb.from.mockReturnThis();
-		mockDb.where.mockReturnThis();
-		mockDb.insert.mockReturnThis();
-		mockDb.update.mockReturnThis();
-		mockDb.delete.mockReturnThis();
 	});
 
 	function createMockEvent(formData: FormData, user: any = null) {
@@ -53,7 +42,7 @@ describe('Categories Admin Actions Security', () => {
 				user: null
 			},
 			url: new URL('http://localhost/admin/categories')
-		} as unknown as RequestEvent;
+		} as Parameters<typeof actions.createCategory>[0];
 
 		try {
 			await actions.createCategory(event);

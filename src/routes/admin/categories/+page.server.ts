@@ -23,10 +23,8 @@ export const load: PageServerLoad = async (event) => {
 	const db = getDb(event);
 
 	// Performance: Fetch categories and move counts in parallel to reduce TTFB.
-	// Type assertion needed: getDb() returns a union type (D1 | libsql)
-	// that breaks .select({fields}) overload resolution
 	const [allCategories, moveCountsRaw] = (await Promise.all([
-		(db as any)
+		db
 			.select({
 				id: categories.id,
 				name: categories.name,
@@ -35,10 +33,10 @@ export const load: PageServerLoad = async (event) => {
 			.from(categories)
 			.orderBy(categories.name),
 
-		(db as any)
+		db
 			.select({
 				categoryId: moves.categoryId,
-				count: sql`count(*)`.as('count')
+				count: sql<number>`count(*)`.as('count')
 			})
 			.from(moves)
 			.groupBy(moves.categoryId)
@@ -169,8 +167,8 @@ export const actions = {
 		}
 
 		// Check if any moves reference this category using count
-		const moveCountResult = await (db as any)
-			.select({ count: sql`count(*)`.as('count') })
+		const moveCountResult = await db
+			.select({ count: sql<number>`count(*)`.as('count') })
 			.from(moves)
 			.where(eq(moves.categoryId, id))
 			.get();

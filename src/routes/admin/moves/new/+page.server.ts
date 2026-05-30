@@ -16,8 +16,7 @@ export const load: PageServerLoad = async (event) => {
 	const db = getDb(event);
 
 	// Selective Field Fetching: Only fetch fields needed for the category dropdown to minimize data transfer.
-	// Note: using any to bypass Drizzle's complex union types for getDb() results
-	const allCategories = await (db as any)
+	const allCategories = await db
 		.select({
 			id: categories.id,
 			name: categories.name

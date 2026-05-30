@@ -41,7 +41,7 @@ export const load: PageServerLoad = async (event) => {
 	// Lean Query: Selecting only the fields needed for the home page (cards + hero)
 	// to reduce database transfer and memory usage.
 	const [movesDataRaw, allCategories, [featuredMoveRaw]] = (await Promise.all([
-		(db as any)
+		db
 			.select({
 				id: moves.id,
 				name: moves.name,
@@ -53,9 +53,9 @@ export const load: PageServerLoad = async (event) => {
 			.where(conditions.length > 0 ? and(...conditions) : undefined)
 			.orderBy(moves.name),
 
-		(db as any).select().from(categories).orderBy(categories.name),
+		db.select().from(categories).orderBy(categories.name),
 
-		(db as any)
+		db
 			.select({
 				id: moves.id,
 				name: moves.name,

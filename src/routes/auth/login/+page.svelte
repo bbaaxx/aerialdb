@@ -3,10 +3,11 @@
 	import type { ActionData, PageData } from './$types';
 	import { Eye, EyeOff, Loader2 } from 'lucide-svelte';
 	import { m } from '$lib/paraglide/messages.js';
+	import { untrack } from 'svelte';
 
 	let { form, data }: { form: ActionData; data: PageData } = $props();
 
-	let username = $state(form?.username || '');
+	let username = $state(untrack(() => form?.username || ''));
 	let password = $state('');
 	let isSubmitting = $state(false);
 	let showPassword = $state(false);
