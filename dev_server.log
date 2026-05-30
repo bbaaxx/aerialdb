@@ -1,0 +1,35 @@
+
+> aerialdb@0.0.1 dev
+> vite dev
+
+(node:88060) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ [paraglide-js] Compilation complete (locale-modules)
+1:45:51 AM [vite] (client) Forced re-optimization of dependencies
+
+  VITE v7.3.3  ready in 4163 ms
+
+  ➜  Local:   http://localhost:5173/
+  ➜  Network: use --host to expose
+1:47:02 AM [vite-plugin-svelte] src/routes/auth/login/+page.svelte:9:23 This reference only captures the initial value of `form`. Did you mean to reference it inside a derived instead?
+https://svelte.dev/e/state_referenced_locally
+1:47:29 AM [vite-plugin-svelte] src/routes/auth/login/+page.svelte:9:23 This reference only captures the initial value of `form`. Did you mean to reference it inside a derived instead?
+https://svelte.dev/e/state_referenced_locally
+1:47:31 AM [vite-plugin-svelte] src/routes/+page.svelte:13:51 This reference only captures the initial value of `data`. Did you mean to reference it inside a derived instead?
+https://svelte.dev/e/state_referenced_locally
+1:47:31 AM [vite-plugin-svelte] src/routes/+page.svelte:14:43 This reference only captures the initial value of `data`. Did you mean to reference it inside a derived instead?
+https://svelte.dev/e/state_referenced_locally
+
+[1;31m[500] GET /[0m
+Error: Failed query: select "id", "name", "image_url", "level", "category_id" from "moves" order by "moves"."name"
+params:
+    at LibSQLPreparedQuery.queryWithCache (file:/app/node_modules/.pnpm/drizzle-orm@0.44.7_@cloudflare+workers-types@4.20260520.1_@libsql+client@0.15.15_kysely@0.28.17/node_modules/drizzle-orm/sqlite-core/session.js:43:15)
+    at async LibSQLPreparedQuery.values (file:/app/node_modules/.pnpm/drizzle-orm@0.44.7_@cloudflare+workers-types@4.20260520.1_@libsql+client@0.15.15_kysely@0.28.17/node_modules/drizzle-orm/libsql/session.js:193:12)
+    at async LibSQLPreparedQuery.all (file:/app/node_modules/.pnpm/drizzle-orm@0.44.7_@cloudflare+workers-types@4.20260520.1_@libsql+client@0.15.15_kysely@0.28.17/node_modules/drizzle-orm/libsql/session.js:136:18)
+    at async Promise.all (index 0)
+    at async load (src/routes/+page.server.ts:43:60)
+npm notice
+npm notice New minor version of npm available! 11.11.0 -> 11.16.0
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.16.0
+npm notice To update run: npm install -g npm@11.16.0
+npm notice
