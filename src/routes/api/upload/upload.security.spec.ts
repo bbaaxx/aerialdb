@@ -15,7 +15,11 @@ describe('api/upload extension hardening', () => {
 		};
 	});
 
-	function createMockEvent(platform: any, body?: BodyInit, user: any = { id: 'user-1', role: 'admin' }) {
+	function createMockEvent(
+		platform: any,
+		body?: BodyInit,
+		user: any = { id: 'user-1', role: 'admin' }
+	) {
 		return {
 			request: new Request('http://localhost/api/upload', {
 				method: 'POST',
