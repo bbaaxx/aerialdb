@@ -111,7 +111,7 @@
 
 	<!-- Results Count -->
 	<div class="mb-4">
-		<p class="text-sm text-on-surface-variant">
+		<p class="text-sm text-on-surface-variant" aria-live="polite">
 			Showing {filteredMoves.length} of {data.moves.length} moves
 		</p>
 	</div>
