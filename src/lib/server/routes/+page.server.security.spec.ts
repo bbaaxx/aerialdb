@@ -82,6 +82,10 @@ describe('home page search hardening', () => {
 			return chain;
 		});
 
+		mockDb.batch = vi.fn().mockImplementation(async (queries) => {
+			return Promise.all(queries);
+		});
+
 		vi.mocked(dbModule.getDb).mockReturnValue(mockDb);
 
 		// A better way: mock Promise.all specifically for this test if possible,

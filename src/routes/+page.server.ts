@@ -35,12 +35,12 @@ export const load: PageServerLoad = async (event) => {
 		conditions.push(eq(moves.level, levelFilter));
 	}
 
-	// Performance: Fetch moves, categories, and featured move in parallel to reduce TTFB.
+	// Performance: Batch fetch moves, categories, and featured move to reduce network round-trips to Cloudflare D1.
 	// Optimization: Categories are fetched in full and resolved in-memory using a Map,
 	// avoiding SQL JOIN overhead and redundant category name data transfer.
 	// Lean Query: Selecting only the fields needed for the home page (cards + hero)
 	// to reduce database transfer and memory usage.
-	const [movesDataRaw, allCategories, [featuredMoveRaw]] = (await Promise.all([
+	const [movesDataRaw, allCategories, featuredMoveResults] = (await (db as any).batch([
 		db
 			.select({
 				id: moves.id,
@@ -68,6 +68,8 @@ export const load: PageServerLoad = async (event) => {
 			.orderBy(desc(moves.createdAt))
 			.limit(1)
 	])) as [LeanMoveRaw[], (typeof categories.$inferSelect)[], LeanMoveRaw[]];
+
+	const featuredMoveRaw = featuredMoveResults[0];
 
 	// Build in-memory category lookup for O(1) resolution
 	const categoryMap = new Map(allCategories.map((c) => [c.id, c.name]));

@@ -7,10 +7,10 @@ import type { PageServerLoad } from './$types';
 export const load: PageServerLoad = async (event) => {
 	const db = getDb(event);
 
-	// Performance: Fetch moves and categories in parallel to reduce TTFB.
+	// Performance: Batch fetch moves and categories to reduce network round-trips to Cloudflare D1.
 	// Selective Field Fetching: Using computed booleans for presence indicators instead of fetching large text fields.
 	// Optimization: Categories are resolved in-memory using a Map to avoid SQL JOIN overhead.
-	const [movesDataRaw, allCategories] = (await Promise.all([
+	const [movesDataRaw, allCategories] = (await (db as any).batch([
 		db
 			.select({
 				id: moves.id,
