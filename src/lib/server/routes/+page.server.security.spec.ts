@@ -104,6 +104,10 @@ describe('home page search hardening', () => {
 			return chain;
 		});
 
+		mockDb.batch = vi.fn().mockImplementation(async (queries) => {
+			return Promise.all(queries);
+		});
+
 		return queryBuilder;
 	}
 

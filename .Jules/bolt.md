@@ -17,3 +17,8 @@
 
 **Learning:** Fetching entire database rows for listing pages (like Home or Search) is inefficient when only a subset of fields (e.g., name, image) is displayed. Large text fields like `description` significantly increase database I/O and network payload size. Using Drizzle's `.select({ fields })` to fetch only required data reduces TTFB and memory pressure on both server and client.
 **Action:** Define explicit "Lean" types for common listing views and use selective field fetching in server-side load functions and API endpoints to minimize data transfer.
+
+## 2026-05-31 - [Cloudflare D1 Query Batching]
+
+**Learning:** While `Promise.all` parallelizes queries from the application layer, it still results in multiple HTTP round-trips when using Cloudflare D1 or similar remote SQLite databases. Using Drizzle's `db.batch()` combines these into a single database request, significantly reducing latency. Proper TypeScript inference for `db.batch()` results requires an explicit type override when using a unified `Database` interface to correctly unwrap thenable query builders.
+**Action:** Prefer `db.batch()` over `Promise.all()` for independent parallel queries in environments with remote database latency. Ensure the `Database` type explicitly defines `batch` with `Awaited<T[K]>` mapping.

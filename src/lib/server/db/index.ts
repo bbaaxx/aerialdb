@@ -43,7 +43,10 @@ const localDb = localClient ? drizzleLibsql(localClient, { schema }) : null;
 // Common base type for both libsql (local) and D1 (Cloudflare) databases.
 // Both extend BaseSQLiteDatabase<'async', ...>, so using any for TRunResult is safe
 // since we only use query builder methods (select/insert/update/delete).
-export type Database = BaseSQLiteDatabase<'async', any, typeof schema>;
+// We explicitly include batch to ensure it's available in the type.
+export type Database = BaseSQLiteDatabase<'async', any, typeof schema> & {
+	batch: <T extends [any, ...any[]]>(queries: T) => Promise<{ [K in keyof T]: Awaited<T[K]> }>;
+};
 
 /**
  * Get database instance based on environment
