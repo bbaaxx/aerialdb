@@ -17,3 +17,7 @@
 
 **Learning:** Fetching entire database rows for listing pages (like Home or Search) is inefficient when only a subset of fields (e.g., name, image) is displayed. Large text fields like `description` significantly increase database I/O and network payload size. Using Drizzle's `.select({ fields })` to fetch only required data reduces TTFB and memory pressure on both server and client.
 **Action:** Define explicit "Lean" types for common listing views and use selective field fetching in server-side load functions and API endpoints to minimize data transfer.
+
+## 2026-06-02 - [Drizzle Batch Type Support]
+**Learning:** When using a unified `Database` type that wraps multiple Drizzle drivers (libsql and D1), the `.batch()` method may not be automatically inferred in the base type. Explicitly extending the `Database` type with the `batch` signature is necessary for TypeScript to allow its use in server loaders and to correctly unwrap the results array.
+**Action:** Always verify that the `Database` type definition in `src/lib/server/db/index.ts` includes the `batch` method before attempting to use it for query optimization.

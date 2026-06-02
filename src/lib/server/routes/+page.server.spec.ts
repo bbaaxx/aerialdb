@@ -106,6 +106,10 @@ describe('+page.server', () => {
 				select: vi.fn().mockImplementation(() => {
 					return createQueryBuilderMock(queryResults[resultIndex++]);
 				}),
+				batch: vi.fn().mockImplementation(async (queries) => {
+					// Queries are already thenable, resolve them to get results
+					return Promise.all(queries);
+				}),
 				from: vi.fn().mockReturnThis(),
 				innerJoin: vi.fn().mockReturnThis(),
 				where: vi.fn().mockReturnThis(),
