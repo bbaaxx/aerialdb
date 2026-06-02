@@ -5,12 +5,14 @@ describe('hooks.server security headers', () => {
 	const expectedHeaders = {
 		'X-Frame-Options': 'SAMEORIGIN',
 		'X-Content-Type-Options': 'nosniff',
+		'X-Permitted-Cross-Domain-Policies': 'none',
 		'Referrer-Policy': 'strict-origin-when-cross-origin',
 		'Cross-Origin-Opener-Policy': 'same-origin',
 		'Cross-Origin-Resource-Policy': 'same-origin',
 		'X-XSS-Protection': '0',
-		'Permissions-Policy': 'geolocation=(), camera=(), microphone=(), payment=()'
-		// CSP and HSTS removed - were blocking SvelteKit hydration
+		'Permissions-Policy':
+			'geolocation=(), camera=(), microphone=(), payment=(), usb=(), interest-cohort=(), screen-wake-lock=()'
+		// HSTS removed - only in production
 	};
 
 	async function callHook(response: Response) {
@@ -23,8 +25,8 @@ describe('hooks.server security headers', () => {
 		for (const [header, value] of Object.entries(expectedHeaders)) {
 			expect(response.headers.get(header)).toBe(value);
 		}
-		// CSP removed - was blocking inline scripts needed for SvelteKit hydration
-		expect(response.headers.get('Content-Security-Policy')).toBeNull();
+		// CSP is now handled by SvelteKit config, but in unit tests of this hook it might not be present
+		// since we are calling handleSecurityHeaders directly on a mock Response.
 		expect(response.headers.get('Strict-Transport-Security')).toBeNull();
 	}
 

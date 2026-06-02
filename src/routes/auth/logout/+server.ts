@@ -20,7 +20,7 @@ export const POST: RequestHandler = async (event) => {
 
 	return redirect(302, '/', {
 		headers: {
-			'Clear-Site-Data': '"cookies", "storage"'
+			'Clear-Site-Data': '"cookies", "storage", "cache"'
 		}
 	});
 };

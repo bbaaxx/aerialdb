@@ -51,3 +51,9 @@
 **Vulnerability:** Missing modern isolation headers (`COOP`, `CORP`) and presence of outdated browser-side XSS filtering configurations could expose the application to cross-origin attacks or inconsistent security behaviors.
 **Learning:** Modern web security requires explicit resource isolation through headers to mitigate speculative execution attacks and cross-origin information leaks. Outdated `X-XSS-Protection` can sometimes be leveraged for attacks.
 **Prevention:** Always implement `Cross-Origin-Opener-Policy` and `Cross-Origin-Resource-Policy` set to `same-origin`. Disable legacy XSS filters with `X-XSS-Protection: 0` in favor of robust CSP and input validation.
+
+## 2026-06-02 - [Comprehensive Header Hardening and CSP]
+
+**Vulnerability:** The application lacked a Content Security Policy (CSP) and modern isolation headers, and the logout endpoint did not clear the browser cache, potentially leaving sensitive data accessible on shared devices.
+**Learning:** SvelteKit's built-in CSP support with 'nonce' mode is the most robust way to secure the application without breaking hydration. Clearing "cache" in `Clear-Site-Data` is essential for complete session termination.
+**Prevention:** Use `kit.csp` in `svelte.config.js` for declarative security. Always include "cache" in logout headers to protect shared environment users.

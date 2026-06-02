@@ -37,10 +37,12 @@ const handleAuth: Handle = async ({ event, resolve }) => {
 };
 
 export const handleAdminGuard: Handle = async ({ event, resolve }) => {
+	const { pathname } = event.url;
+
 	// Protect all routes starting with /admin
-	if (event.url.pathname.startsWith('/admin')) {
+	if (pathname === '/admin' || pathname.startsWith('/admin/')) {
 		if (!event.locals.user) {
-			const redirectTo = encodeURIComponent(event.url.pathname + event.url.search);
+			const redirectTo = encodeURIComponent(pathname + event.url.search);
 			throw redirect(302, `/auth/login?redirectTo=${redirectTo}`);
 		}
 
@@ -57,18 +59,15 @@ export const handleSecurityHeaders: Handle = async ({ event, resolve }) => {
 
 	response.headers.set('X-Frame-Options', 'SAMEORIGIN');
 	response.headers.set('X-Content-Type-Options', 'nosniff');
+	response.headers.set('X-Permitted-Cross-Domain-Policies', 'none');
 	response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
 	response.headers.set('Cross-Origin-Opener-Policy', 'same-origin');
 	response.headers.set('Cross-Origin-Resource-Policy', 'same-origin');
 	response.headers.set('X-XSS-Protection', '0');
 	response.headers.set(
 		'Permissions-Policy',
-		'geolocation=(), camera=(), microphone=(), payment=()'
+		'geolocation=(), camera=(), microphone=(), payment=(), usb=(), interest-cohort=(), screen-wake-lock=()'
 	);
-
-	// CSP removed - was blocking SvelteKit hydration inline scripts
-	// Uncomment if needed for production:
-	// response.headers.set('Content-Security-Policy', [...]);
 
 	// SECURITY: Enable HSTS in production to ensure secure connections
 	if (import.meta.env.PROD) {
