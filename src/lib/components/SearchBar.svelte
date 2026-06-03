@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Search, X } from 'lucide-svelte';
+	import { m } from '$lib/paraglide/messages.js';
 
 	interface Props {
 		value: string;
@@ -10,7 +11,7 @@
 
 	const {
 		value = '',
-		placeholder = 'Search moves, performers, techniques...',
+		placeholder = m.nav_search_placeholder(),
 		oninput,
 		onclear
 	}: Props = $props();
@@ -25,20 +26,20 @@
 		</div>
 
 		<input
-			type="text"
+			type="search"
 			{value}
 			{placeholder}
 			aria-label={placeholder}
 			oninput={(e: Event) => oninput?.((e.target as HTMLInputElement).value)}
-			class="w-full rounded-xl border border-outline-variant/15 bg-surface-container py-3.5 pr-10 pl-12 text-on-surface placeholder-on-surface-variant shadow-inner transition-colors focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none"
+			class="w-full rounded-xl border border-outline-variant/15 bg-surface-container py-3.5 pr-10 pl-12 text-on-surface placeholder-on-surface-variant shadow-inner transition-colors focus:border-primary focus:ring-2 focus:ring-primary focus:outline-none [&::-webkit-search-cancel-button]:appearance-none [&::-webkit-search-decoration]:appearance-none"
 		/>
 
 		{#if value}
 			<button
 				type="button"
 				onclick={() => onclear?.()}
-				class="absolute inset-y-0 right-0 flex items-center pr-4 text-primary-light transition-colors hover:text-gray-200"
-				aria-label="Clear search"
+				class="absolute inset-y-0 right-0 flex items-center pr-4 text-primary-light transition-colors hover:text-gray-200 focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
+				aria-label={m.nav_search_clear()}
 			>
 				<X size={18} />
 			</button>
