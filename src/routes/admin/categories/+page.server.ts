@@ -22,8 +22,9 @@ type CategoryWithMoveCount = {
 export const load: PageServerLoad = async (event) => {
 	const db = getDb(event);
 
-	// Performance: Fetch categories and move counts in parallel to reduce TTFB.
-	const [allCategories, moveCountsRaw] = (await Promise.all([
+	// Performance: Batch categories and move counts queries into a single round-trip.
+	// This is specifically optimized for Cloudflare D1 to minimize network latency between Worker and DB.
+	const [allCategories, moveCountsRaw] = await db.batch([
 		db
 			.select({
 				id: categories.id,
@@ -40,7 +41,7 @@ export const load: PageServerLoad = async (event) => {
 			})
 			.from(moves)
 			.groupBy(moves.categoryId)
-	])) as [{ id: string; name: string; createdAt: Date }[], { categoryId: string; count: number }[]];
+	]);
 
 	// Create a map for faster lookup
 	const moveCountMap = new Map<string, number>(
