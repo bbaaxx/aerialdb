@@ -296,7 +296,7 @@
 						placeholder={m.nav_search_placeholder()}
 						oninput={(e: Event) => handleSearchInput((e.target as HTMLInputElement).value)}
 						onkeydown={handleSearchKeydown}
-						class="w-full rounded-lg border border-outline-variant/15 bg-surface-container py-2 pr-10 pl-10 text-sm text-on-surface placeholder-on-surface-variant focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none"
+						class="w-full rounded-lg border border-outline-variant/15 bg-surface-container py-2 pr-10 pl-10 text-sm text-on-surface placeholder-on-surface-variant focus:border-primary focus:ring-2 focus:ring-primary focus:outline-none [&::-webkit-search-cancel-button]:appearance-none [&::-webkit-search-decoration]:appearance-none"
 					/>
 					{#if searchQuery}
 						<button
