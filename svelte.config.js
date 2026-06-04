@@ -16,11 +16,14 @@ const config = {
 			directives: {
 				'default-src': ["'self'"],
 				'script-src': ["'self'"],
-				'style-src': ["'self'", 'https://fonts.googleapis.com'],
+				'style-src': ["'self'", 'https://fonts.googleapis.com', "'unsafe-inline'"],
 				'font-src': ["'self'", 'https://fonts.gstatic.com'],
 				'img-src': ["'self'", 'data:', 'https://i.ytimg.com', '*.r2.dev'],
 				'frame-src': ['https://www.youtube.com'],
-				'connect-src': ["'self'"]
+				'connect-src': ["'self'"],
+				'base-uri': ["'self'"],
+				'form-action': ["'self'"],
+				'frame-ancestors': ["'none'"]
 			}
 		}
 	},
