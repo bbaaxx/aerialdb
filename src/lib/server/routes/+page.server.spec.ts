@@ -109,7 +109,10 @@ describe('+page.server', () => {
 				from: vi.fn().mockReturnThis(),
 				innerJoin: vi.fn().mockReturnThis(),
 				where: vi.fn().mockReturnThis(),
-				orderBy: vi.fn().mockReturnThis()
+				orderBy: vi.fn().mockReturnThis(),
+				batch: vi.fn().mockImplementation(async (queries) => {
+					return Promise.all(queries);
+				})
 			};
 			vi.mocked(dbModule.getDb).mockReturnValue(mockDb);
 		}
