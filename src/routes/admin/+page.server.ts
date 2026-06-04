@@ -1,5 +1,5 @@
 import { getDb } from '$lib/server/db';
-import { type AdminLeanMoveRaw, type AdminLeanMove } from '$lib/server/db/types';
+import { type AdminLeanMove } from '$lib/server/db/types';
 import { moves, categories } from '$lib/server/db/schema';
 import { sql } from 'drizzle-orm';
 import type { PageServerLoad } from './$types';
@@ -7,10 +7,10 @@ import type { PageServerLoad } from './$types';
 export const load: PageServerLoad = async (event) => {
 	const db = getDb(event);
 
-	// Performance: Fetch moves and categories in parallel to reduce TTFB.
+	// Performance: Fetch moves and categories in parallel using db.batch() to reduce TTFB.
 	// Selective Field Fetching: Using computed booleans for presence indicators instead of fetching large text fields.
 	// Optimization: Categories are resolved in-memory using a Map to avoid SQL JOIN overhead.
-	const [movesDataRaw, allCategories] = (await Promise.all([
+	const [movesDataRaw, allCategories] = await db.batch([
 		db
 			.select({
 				id: moves.id,
@@ -36,7 +36,7 @@ export const load: PageServerLoad = async (event) => {
 			.orderBy(moves.name),
 
 		db.select().from(categories).orderBy(categories.name)
-	])) as [AdminLeanMoveRaw[], (typeof categories.$inferSelect)[]];
+	]);
 
 	// Build in-memory category lookup for O(1) resolution
 	const categoryMap = new Map(allCategories.map((c) => [c.id, c.name]));

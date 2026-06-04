@@ -30,7 +30,7 @@ let DATABASE_URL: string;
 try {
 	// Try SvelteKit env first
 	const { env } = await import('$env/dynamic/private');
-	DATABASE_URL = env.DATABASE_URL;
+	DATABASE_URL = env.DATABASE_URL || '';
 } catch {
 	// Fallback to process.env for standalone scripts
 	DATABASE_URL = process.env.DATABASE_URL || '';
@@ -43,7 +43,10 @@ const localDb = localClient ? drizzleLibsql(localClient, { schema }) : null;
 // Common base type for both libsql (local) and D1 (Cloudflare) databases.
 // Both extend BaseSQLiteDatabase<'async', ...>, so using any for TRunResult is safe
 // since we only use query builder methods (select/insert/update/delete).
-export type Database = BaseSQLiteDatabase<'async', any, typeof schema>;
+// We explicitly include the batch method for parallel query optimization.
+export type Database = BaseSQLiteDatabase<'async', any, typeof schema> & {
+	batch<T extends [any, ...any[]]>(queries: T): Promise<{ [K in keyof T]: Awaited<T[K]> }>;
+};
 
 /**
  * Get database instance based on environment
