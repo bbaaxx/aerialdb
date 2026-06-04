@@ -38,7 +38,8 @@ const handleAuth: Handle = async ({ event, resolve }) => {
 
 export const handleAdminGuard: Handle = async ({ event, resolve }) => {
 	// Protect all routes starting with /admin
-	if (event.url.pathname.startsWith('/admin')) {
+	const path = event.url.pathname;
+	if (path === '/admin' || path.startsWith('/admin/')) {
 		if (!event.locals.user) {
 			const redirectTo = encodeURIComponent(event.url.pathname + event.url.search);
 			throw redirect(302, `/auth/login?redirectTo=${redirectTo}`);
@@ -72,7 +73,10 @@ export const handleSecurityHeaders: Handle = async ({ event, resolve }) => {
 
 	// SECURITY: Enable HSTS in production to ensure secure connections
 	if (import.meta.env.PROD) {
-		response.headers.set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+		response.headers.set(
+			'Strict-Transport-Security',
+			'max-age=31536000; includeSubDomains; preload'
+		);
 	}
 
 	return response;

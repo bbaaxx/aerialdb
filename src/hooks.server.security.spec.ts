@@ -10,7 +10,6 @@ describe('hooks.server security headers', () => {
 		'Cross-Origin-Resource-Policy': 'same-origin',
 		'X-XSS-Protection': '0',
 		'Permissions-Policy': 'geolocation=(), camera=(), microphone=(), payment=()'
-		// CSP and HSTS removed - were blocking SvelteKit hydration
 	};
 
 	async function callHook(response: Response) {
@@ -23,9 +22,8 @@ describe('hooks.server security headers', () => {
 		for (const [header, value] of Object.entries(expectedHeaders)) {
 			expect(response.headers.get(header)).toBe(value);
 		}
-		// CSP removed - was blocking inline scripts needed for SvelteKit hydration
+		// CSP is now handled by SvelteKit via svelte.config.js
 		expect(response.headers.get('Content-Security-Policy')).toBeNull();
-		expect(response.headers.get('Strict-Transport-Security')).toBeNull();
 	}
 
 	it('adds security headers to a successful response', async () => {
@@ -71,6 +69,34 @@ describe('hooks.server admin guard', () => {
 		} catch (e: any) {
 			expect(e.status).toBe(302);
 			expect(e.location).toBe('/auth/login?redirectTo=%2Fadmin%2Fmoves');
+		}
+	});
+
+	it('allows access to non-admin routes that start with /admin (e.g. /administration)', async () => {
+		const event = {
+			url: new URL('http://localhost/administration'),
+			locals: { user: null }
+		} as any;
+		const resolve = vi.fn().mockResolvedValue(new Response('OK'));
+
+		const response = await handleAdminGuard({ event, resolve });
+		expect(response.status).toBe(200);
+		expect(resolve).toHaveBeenCalled();
+	});
+
+	it('redirects unauthenticated users from exactly /admin', async () => {
+		const event = {
+			url: new URL('http://localhost/admin'),
+			locals: { user: null }
+		} as any;
+		const resolve = vi.fn();
+
+		try {
+			await handleAdminGuard({ event, resolve });
+			expect.fail('Should have thrown a redirect');
+		} catch (e: any) {
+			expect(e.status).toBe(302);
+			expect(e.location).toBe('/auth/login?redirectTo=%2Fadmin');
 		}
 	});
 
