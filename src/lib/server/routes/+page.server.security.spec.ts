@@ -102,7 +102,7 @@ describe('home page search hardening', () => {
 				callCount++;
 				if (callCount === 1) return Promise.resolve([]).then(resolve); // movesDataRaw
 				if (callCount === 2) return Promise.resolve([]).then(resolve); // allCategories
-				if (callCount === 3) return Promise.resolve([]).then(resolve); // featuredMoveRaw (wrapped in array by destructuring)
+				if (callCount === 3) return Promise.resolve([]).then(resolve); // featuredMoveResults (third query in db.batch; featuredMoveRaw = featuredMoveResults[0])
 				return Promise.resolve([]).then(resolve);
 			};
 			return chain;

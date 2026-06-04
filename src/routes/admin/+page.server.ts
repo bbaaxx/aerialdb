@@ -1,5 +1,5 @@
 import { getDb } from '$lib/server/db';
-import { type AdminLeanMoveRaw, type AdminLeanMove } from '$lib/server/db/types';
+import { type AdminLeanMove } from '$lib/server/db/types';
 import { moves, categories } from '$lib/server/db/schema';
 import { sql } from 'drizzle-orm';
 import type { PageServerLoad } from './$types';
