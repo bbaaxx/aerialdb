@@ -7,6 +7,10 @@
 
 	let { data, form }: { data: PageData; form: ActionData } = $props();
 
+	// Submission state
+	let isSubmitting = $state(false);
+	let processingId = $state<string | null>(null);
+
 	// State for inline editing
 	let editingId = $state<string | null>(null);
 	let editingName = $state('');
@@ -17,10 +21,6 @@
 
 	// New category form state
 	let newCategoryName = $state('');
-
-	// Loading states
-	let isSubmitting = $state(false);
-	let processingId = $state<string | null>(null);
 
 	// Character count helper
 	function getCountColor(length: number, max: number) {
@@ -79,10 +79,10 @@
 				isSubmitting = true;
 				return async ({ result, update }) => {
 					await update();
-					isSubmitting = false;
 					if (result.type === 'redirect' || result.type === 'success') {
 						await refreshData();
 					}
+					isSubmitting = false;
 				};
 			}}
 			class="flex flex-col gap-4 sm:flex-row sm:items-end"
@@ -120,12 +120,10 @@
 				disabled={isSubmitting}
 				class="inline-flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-purple-500 to-indigo-500 px-6 py-2.5 text-sm font-medium text-white shadow-[0_0_15px_rgba(138,99,248,0.5)] transition-all hover:shadow-[0_0_20px_rgba(138,99,248,0.6)] focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-surface-container disabled:cursor-not-allowed disabled:opacity-70"
 			>
-				{#if isSubmitting}
-					<Loader2 size={16} class="animate-spin" />
-					<span>Adding...</span>
-				{:else}
-					Add Category
+				{#if isSubmitting && !processingId}
+					<Loader2 class="h-4 w-4 animate-spin" />
 				{/if}
+				Add Category
 			</button>
 		</form>
 	</div>
@@ -176,14 +174,16 @@
 										method="POST"
 										action="?/updateCategory"
 										use:enhance={() => {
+											isSubmitting = true;
 											processingId = category.id;
 											return async ({ result, update }) => {
 												await update();
-												processingId = null;
 												if (result.type === 'success') {
 													cancelEdit();
 													await refreshData();
 												}
+												isSubmitting = false;
+												processingId = null;
 											};
 										}}
 										class="flex items-center gap-2"
@@ -196,11 +196,11 @@
 												bind:value={editingName}
 												maxlength="100"
 												required
+												disabled={isSubmitting}
 												aria-describedby="edit-category-hint-{category.id}"
 												aria-invalid={form?.action === 'update' &&
 													form?.id === category.id &&
 													!!(form as any).error}
-												disabled={processingId === category.id}
 												class="w-full rounded-lg border border-outline-variant/15 bg-surface-container px-3 py-1.5 pr-16 text-sm text-on-surface focus:border-primary focus:ring-2 focus:ring-primary focus:outline-none disabled:opacity-70"
 											/>
 											<span
@@ -215,18 +215,19 @@
 										</div>
 										<button
 											type="submit"
-											disabled={processingId === category.id}
-											class="inline-flex items-center gap-1.5 rounded-lg bg-purple-600 px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-purple-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1 focus-visible:ring-offset-surface-container-high disabled:cursor-not-allowed disabled:opacity-70"
+											disabled={isSubmitting}
+											class="inline-flex items-center gap-2 rounded-lg bg-purple-600 px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-purple-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1 focus-visible:ring-offset-surface-container-high disabled:cursor-not-allowed disabled:opacity-70"
 										>
-											{#if processingId === category.id}
-												<Loader2 size={14} class="animate-spin" />
+											{#if isSubmitting && processingId === category.id}
+												<Loader2 class="h-4 w-4 animate-spin" />
 											{/if}
 											Save
 										</button>
 										<button
 											type="button"
 											onclick={cancelEdit}
-											class="rounded-lg border border-outline-variant/15 px-3 py-1.5 text-sm font-medium text-on-surface-variant transition-colors hover:bg-surface-container-high focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1 focus-visible:ring-offset-surface-container-high"
+											disabled={isSubmitting}
+											class="rounded-lg border border-outline-variant/15 px-3 py-1.5 text-sm font-medium text-on-surface-variant transition-colors hover:bg-surface-container-high focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1 focus-visible:ring-offset-surface-container-high disabled:cursor-not-allowed disabled:opacity-70"
 										>
 											Cancel
 										</button>
@@ -246,10 +247,7 @@
 								</span>
 							</td>
 							<td class="px-4 py-3 text-right">
-								{#if editingId === category.id}
-									<!-- Actions are handled by the edit form in the first cell -->
-									<span></span>
-								{:else if deletingId === category.id}
+								{#if deletingId === category.id}
 									<!-- Delete Confirmation -->
 									<div
 										transition:fade={{ duration: 150 }}
@@ -266,14 +264,16 @@
 											method="POST"
 											action="?/deleteCategory"
 											use:enhance={() => {
+												isSubmitting = true;
 												processingId = category.id;
 												return async ({ result, update }) => {
 													await update();
-													processingId = null;
 													if (result.type === 'success' || result.type === 'redirect') {
 														cancelDelete();
 														await refreshData();
 													}
+													isSubmitting = false;
+													processingId = null;
 												};
 											}}
 											class="inline"
@@ -281,11 +281,11 @@
 											<input type="hidden" name="id" value={category.id} />
 											<button
 												type="submit"
-												disabled={processingId === category.id}
-												class="inline-flex items-center gap-1.5 rounded-lg bg-red-600 px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-red-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-error focus-visible:ring-offset-1 focus-visible:ring-offset-surface-container-high disabled:cursor-not-allowed disabled:opacity-70"
+												disabled={isSubmitting}
+												class="inline-flex items-center gap-2 rounded-lg bg-red-600 px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-red-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-error focus-visible:ring-offset-1 focus-visible:ring-offset-surface-container-high disabled:cursor-not-allowed disabled:opacity-70"
 											>
-												{#if processingId === category.id}
-													<Loader2 size={14} class="animate-spin" />
+												{#if isSubmitting && processingId === category.id}
+													<Loader2 class="h-4 w-4 animate-spin" />
 												{/if}
 												Confirm
 											</button>
@@ -293,7 +293,8 @@
 										<button
 											type="button"
 											onclick={cancelDelete}
-											class="rounded-lg border border-outline-variant/15 px-3 py-1.5 text-sm font-medium text-on-surface-variant transition-colors hover:bg-surface-container-high focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1 focus-visible:ring-offset-surface-container-high"
+											disabled={isSubmitting}
+											class="rounded-lg border border-outline-variant/15 px-3 py-1.5 text-sm font-medium text-on-surface-variant transition-colors hover:bg-surface-container-high focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1 focus-visible:ring-offset-surface-container-high disabled:cursor-not-allowed disabled:opacity-70"
 										>
 											Cancel
 										</button>
@@ -306,14 +307,16 @@
 										<button
 											type="button"
 											onclick={() => startEdit(category.id, category.name)}
-											class="rounded-lg bg-purple-600 px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-purple-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1 focus-visible:ring-offset-surface-container-high"
+											disabled={isSubmitting}
+											class="rounded-lg bg-purple-600 px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-purple-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1 focus-visible:ring-offset-surface-container-high disabled:cursor-not-allowed disabled:opacity-70"
 										>
 											Edit
 										</button>
 										<button
 											type="button"
 											onclick={() => startDelete(category.id, category.moveCount)}
-											class="rounded-lg bg-red-600 px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-red-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-error focus-visible:ring-offset-1 focus-visible:ring-offset-surface-container-high"
+											disabled={isSubmitting}
+											class="rounded-lg bg-red-600 px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-red-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-error focus-visible:ring-offset-1 focus-visible:ring-offset-surface-container-high disabled:cursor-not-allowed disabled:opacity-70"
 										>
 											Delete
 										</button>
