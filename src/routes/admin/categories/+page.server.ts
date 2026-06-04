@@ -22,8 +22,8 @@ type CategoryWithMoveCount = {
 export const load: PageServerLoad = async (event) => {
 	const db = getDb(event);
 
-	// Performance: Fetch categories and move counts in parallel to reduce TTFB.
-	const [allCategories, moveCountsRaw] = (await Promise.all([
+	// Performance: Fetch categories and move counts in a single batch to reduce network round-trips.
+	const [allCategories, moveCountsRaw] = await db.batch([
 		db
 			.select({
 				id: categories.id,
@@ -40,7 +40,7 @@ export const load: PageServerLoad = async (event) => {
 			})
 			.from(moves)
 			.groupBy(moves.categoryId)
-	])) as [{ id: string; name: string; createdAt: Date }[], { categoryId: string; count: number }[]];
+	]);
 
 	// Create a map for faster lookup
 	const moveCountMap = new Map<string, number>(

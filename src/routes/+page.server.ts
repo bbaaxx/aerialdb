@@ -1,5 +1,5 @@
 import { getDb } from '$lib/server/db';
-import { type LeanMoveRaw, type LeanMove } from '$lib/server/db/types';
+import { type LeanMove } from '$lib/server/db/types';
 import { moves, categories } from '$lib/server/db/schema';
 import { desc, eq, isNotNull, and, sql } from 'drizzle-orm';
 import { escapeLike } from '$lib/utils/security';
