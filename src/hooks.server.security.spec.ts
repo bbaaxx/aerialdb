@@ -9,7 +9,10 @@ describe('hooks.server security headers', () => {
 		'Cross-Origin-Opener-Policy': 'same-origin',
 		'Cross-Origin-Resource-Policy': 'same-origin',
 		'X-XSS-Protection': '0',
-		'Permissions-Policy': 'geolocation=(), camera=(), microphone=(), payment=()'
+		'X-Permitted-Cross-Domain-Policies': 'none',
+		'X-DNS-Prefetch-Control': 'off',
+		'Permissions-Policy':
+			'geolocation=(), camera=(), microphone=(), payment=(), usb=(), interest-cohort=(), screen-wake-lock=()'
 		// CSP and HSTS removed - were blocking SvelteKit hydration
 	};
 
@@ -72,6 +75,34 @@ describe('hooks.server admin guard', () => {
 		} catch (e: any) {
 			expect(e.status).toBe(302);
 			expect(e.location).toBe('/auth/login?redirectTo=%2Fadmin%2Fmoves');
+		}
+	});
+
+	it('does not redirect unauthenticated users from routes that just start with admin but are not admin routes', async () => {
+		const event = {
+			url: new URL('http://localhost/administration'),
+			locals: { user: null }
+		} as any;
+		const resolve = vi.fn().mockResolvedValue(new Response('OK'));
+
+		const response = await handleAdminGuard({ event, resolve });
+		expect(response.status).toBe(200);
+		expect(resolve).toHaveBeenCalled();
+	});
+
+	it('redirects unauthenticated users from /admin root route', async () => {
+		const event = {
+			url: new URL('http://localhost/admin'),
+			locals: { user: null }
+		} as any;
+		const resolve = vi.fn();
+
+		try {
+			await handleAdminGuard({ event, resolve });
+			expect.fail('Should have thrown a redirect');
+		} catch (e: any) {
+			expect(e.status).toBe(302);
+			expect(e.location).toBe('/auth/login?redirectTo=%2Fadmin');
 		}
 	});
 

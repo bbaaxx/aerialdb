@@ -51,3 +51,9 @@
 **Vulnerability:** Missing modern isolation headers (`COOP`, `CORP`) and presence of outdated browser-side XSS filtering configurations could expose the application to cross-origin attacks or inconsistent security behaviors.
 **Learning:** Modern web security requires explicit resource isolation through headers to mitigate speculative execution attacks and cross-origin information leaks. Outdated `X-XSS-Protection` can sometimes be leveraged for attacks.
 **Prevention:** Always implement `Cross-Origin-Opener-Policy` and `Cross-Origin-Resource-Policy` set to `same-origin`. Disable legacy XSS filters with `X-XSS-Protection: 0` in favor of robust CSP and input validation.
+
+## 2026-05-30 - [Hardened Admin Guard and Feature Restriction]
+
+**Vulnerability:** The admin guard used a simple prefix check (`startsWith('/admin')`), which could potentially over-protect public routes sharing the same prefix (e.g., `/administration`). Additionally, several unused browser features (USB, Interest Cohort, Screen Wake Lock) were enabled by default.
+**Learning:** Authorization guards should use precise path matching to avoid unintended side effects on similar route namespaces. Defensive security also involves minimizing the browser's attack surface by explicitly disabling unused features via headers.
+**Prevention:** Use explicit path comparisons (`path === '/admin' || path.startsWith('/admin/')`) for route guards. Regularly review and harden the `Permissions-Policy` and add supplementary security headers like `X-Permitted-Cross-Domain-Policies` and `X-DNS-Prefetch-Control`.
