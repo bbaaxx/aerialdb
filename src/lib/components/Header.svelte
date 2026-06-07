@@ -24,6 +24,7 @@
 	let searchOpen = $state(false);
 	let searchQuery = $state('');
 	let searchInput: HTMLInputElement | undefined = $state(undefined);
+	let searchButton: HTMLButtonElement | undefined = $state(undefined);
 	let searchTimeout: ReturnType<typeof setTimeout> | null = null;
 
 	// Account dropdown state
@@ -33,6 +34,7 @@
 
 	// Mobile menu state
 	let mobileMenuOpen = $state(false);
+	let mobileMenuButton: HTMLButtonElement | undefined = $state(undefined);
 
 	function isActive(href: string, matchPrefix: boolean): boolean {
 		const pathname = $page.url.pathname;
@@ -108,6 +110,7 @@
 			if (searchOpen) {
 				searchOpen = false;
 				searchQuery = '';
+				searchButton?.focus();
 			}
 			if (accountOpen) {
 				accountOpen = false;
@@ -115,6 +118,7 @@
 			}
 			if (mobileMenuOpen) {
 				mobileMenuOpen = false;
+				mobileMenuButton?.focus();
 			}
 		} else if (
 			e.key === '/' &&
@@ -147,7 +151,7 @@
 				{#each navLinks as link (link.href)}
 					<a
 						href={link.href}
-						class="rounded-lg px-3 py-1.5 text-sm font-medium transition {isActive(
+						class="rounded-lg px-3 py-1.5 text-sm font-medium transition active:scale-95 {isActive(
 							link.href,
 							link.matchPrefix
 						)
@@ -165,8 +169,9 @@
 				<!-- Search toggle -->
 				<button
 					type="button"
+					bind:this={searchButton}
 					onclick={toggleSearch}
-					class="group relative rounded-lg p-2 text-on-surface-variant transition hover:bg-surface-container-high/50 hover:text-on-surface focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
+					class="group relative rounded-lg p-2 text-on-surface-variant transition hover:bg-surface-container-high/50 hover:text-on-surface focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none active:scale-95"
 					aria-label={m.nav_search_toggle_label()}
 					aria-expanded={searchOpen}
 					aria-controls="header-search-bar"
@@ -192,7 +197,7 @@
 				{#if user}
 					<a
 						href="/upload"
-						class="hidden items-center gap-1.5 rounded-lg bg-primary/15 px-3 py-1.5 text-sm font-medium text-primary transition hover:bg-primary/25 focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none sm:flex"
+						class="hidden items-center gap-1.5 rounded-lg bg-primary/15 px-3 py-1.5 text-sm font-medium text-primary transition hover:bg-primary/25 focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none active:scale-95 sm:flex"
 					>
 						<Upload size={16} />
 						<span class="hidden md:inline">{m.nav_upload_move()}</span>
@@ -206,7 +211,7 @@
 							type="button"
 							bind:this={accountButton}
 							onclick={toggleAccount}
-							class="rounded-lg p-2 text-on-surface-variant transition hover:bg-surface-container-high/50 hover:text-on-surface focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
+							class="rounded-lg p-2 text-on-surface-variant transition hover:bg-surface-container-high/50 hover:text-on-surface focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none active:scale-95"
 							aria-label={m.nav_account_menu_label()}
 							aria-haspopup="true"
 							aria-expanded={accountOpen}
@@ -228,7 +233,7 @@
 								</div>
 								<a
 									href="/account"
-									class="flex items-center gap-2 px-4 py-2 text-sm text-on-surface-variant transition hover:bg-surface-container-high/50 hover:text-on-surface"
+									class="flex items-center gap-2 px-4 py-2 text-sm text-on-surface-variant transition hover:bg-surface-container-high/50 hover:text-on-surface active:bg-surface-container-highest/70"
 									role="menuitem"
 									onclick={() => (accountOpen = false)}
 								>
@@ -237,7 +242,7 @@
 								</a>
 								<a
 									href="/library"
-									class="flex items-center gap-2 px-4 py-2 text-sm text-on-surface-variant transition hover:bg-surface-container-high/50 hover:text-on-surface"
+									class="flex items-center gap-2 px-4 py-2 text-sm text-on-surface-variant transition hover:bg-surface-container-high/50 hover:text-on-surface active:bg-surface-container-highest/70"
 									role="menuitem"
 									onclick={() => (accountOpen = false)}
 								>
@@ -247,7 +252,7 @@
 								<form method="POST" action="/auth/logout" class="block">
 									<button
 										type="submit"
-										class="flex w-full items-center gap-2 px-4 py-2 text-sm text-on-surface-variant transition hover:bg-surface-container-high/50 hover:text-on-surface"
+										class="flex w-full items-center gap-2 px-4 py-2 text-sm text-on-surface-variant transition hover:bg-surface-container-high/50 hover:text-on-surface active:bg-surface-container-highest/70"
 										role="menuitem"
 										onclick={() => (accountOpen = false)}
 									>
@@ -261,7 +266,7 @@
 				{:else}
 					<a
 						href="/auth/signup"
-						class="rounded-lg bg-gradient-to-r from-purple-500 to-indigo-500 px-4 py-1.5 text-sm font-medium text-white shadow-[0_0_15px_rgba(138,99,248,0.5)] transition hover:shadow-[0_0_20px_rgba(138,99,248,0.6)]"
+						class="rounded-lg bg-gradient-to-r from-purple-500 to-indigo-500 px-4 py-1.5 text-sm font-medium text-white shadow-[0_0_15px_rgba(138,99,248,0.5)] transition hover:shadow-[0_0_20px_rgba(138,99,248,0.6)] focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none active:scale-95"
 					>
 						{m.nav_sign_up()}
 					</a>
@@ -270,12 +275,18 @@
 				<!-- Hamburger (mobile only) -->
 				<button
 					type="button"
+					bind:this={mobileMenuButton}
 					onclick={() => (mobileMenuOpen = !mobileMenuOpen)}
-					class="rounded-lg p-2 text-on-surface-variant transition hover:bg-surface-container-high/50 hover:text-on-surface focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none lg:hidden"
+					class="rounded-lg p-2 text-on-surface-variant transition hover:bg-surface-container-high/50 hover:text-on-surface focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none active:scale-95 lg:hidden"
 					aria-label={m.nav_mobile_menu_label()}
 					aria-expanded={mobileMenuOpen}
+					aria-controls="mobile-nav-panel"
 				>
-					<Menu size={20} />
+					{#if mobileMenuOpen}
+						<X size={20} />
+					{:else}
+						<Menu size={20} />
+					{/if}
 				</button>
 			</div>
 		</div>
@@ -318,6 +329,7 @@
 		<!-- Mobile nav panel -->
 		{#if mobileMenuOpen}
 			<nav
+				id="mobile-nav-panel"
 				transition:slide
 				class="mt-3 border-t border-outline-variant/15 pt-3 lg:hidden"
 				aria-label="Mobile navigation"
@@ -325,7 +337,7 @@
 				{#each navLinks as link (link.href)}
 					<a
 						href={link.href}
-						class="flex items-center justify-between rounded-lg px-3 py-2 text-sm font-medium transition {isActive(
+						class="flex items-center justify-between rounded-lg px-3 py-2 text-sm font-medium transition active:scale-[0.98] {isActive(
 							link.href,
 							link.matchPrefix
 						)
@@ -343,7 +355,7 @@
 				{#if user}
 					<a
 						href="/upload"
-						class="mt-2 flex items-center gap-2 rounded-lg bg-primary/15 px-3 py-2 text-sm font-medium text-primary transition hover:bg-primary/25"
+						class="mt-2 flex items-center gap-2 rounded-lg bg-primary/15 px-3 py-2 text-sm font-medium text-primary transition hover:bg-primary/25 active:scale-[0.98]"
 						onclick={() => (mobileMenuOpen = false)}
 					>
 						<Upload size={16} />

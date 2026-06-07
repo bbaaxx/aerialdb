@@ -128,7 +128,7 @@
 				<div>
 					<a
 						href="/moves/{move.id}"
-						class="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-purple-500 to-indigo-500 px-6 py-3 font-medium text-white shadow-[0_0_15px_rgba(138,99,248,0.5)] transition hover:scale-105 hover:shadow-[0_0_20px_rgba(138,99,248,0.6)] focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
+						class="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-purple-500 to-indigo-500 px-6 py-3 font-medium text-white shadow-[0_0_15px_rgba(138,99,248,0.5)] transition hover:scale-105 hover:shadow-[0_0_20px_rgba(138,99,248,0.6)] focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none active:scale-95"
 						aria-label={m.move_learn_more_aria({ name: move.name })}
 					>
 						Learn More

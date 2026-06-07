@@ -47,3 +47,8 @@
 
 **Learning:** Using `type="search"` provides better mobile OS integration, but browsers like Chrome/Safari add native clear buttons that can clash with custom UI. Using Tailwind's pseudo-element variants `[&::-webkit-search-cancel-button]:appearance-none` and `[&::-webkit-search-decoration]:appearance-none` allows for full control over the search interface while keeping the semantic benefits of the search type.
 **Action:** Always suppress native search decorations when implementing custom clear buttons on `type="search" icon-only inputs.
+
+## 2026-06-07 - [Standardized Tactile Feedback and Overlay Focus]
+
+**Learning:** Providing consistent tactile feedback (e.g., `active:scale-95`) across all interactive elements significantly improves the "feel" of the UI, especially on touch devices. Additionally, for mobile-first overlays like search bars and mobile menus, restoring focus to the trigger button when closing via keyboard (Escape) is a critical accessibility requirement that prevents focus from being lost in the document.
+**Action:** Always pair `focus-visible` styles with `active:scale-95` for interactive elements. Ensure focus is explicitly returned to triggering elements when overlays are dismissed.
