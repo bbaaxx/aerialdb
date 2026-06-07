@@ -8,7 +8,7 @@ import * as table from '$lib/server/db/schema';
 
 const DAY_IN_MS = 1000 * 60 * 60 * 24;
 
-export const sessionCookieName = 'auth-session';
+export const sessionCookieName = import.meta.env.PROD ? '__Host-auth-session' : 'auth-session';
 
 export function generateSessionToken() {
 	const bytes = crypto.getRandomValues(new Uint8Array(18));
@@ -69,6 +69,8 @@ export async function invalidateSession(sessionId: string, db: Database) {
 }
 
 export function setSessionTokenCookie(event: RequestEvent, token: string, expiresAt: Date) {
+	// __Host- prefix requires Secure, Path=/ and no Domain attribute.
+	// event.cookies.set with path: '/' ensures no Domain is set by default.
 	event.cookies.set(sessionCookieName, token, {
 		httpOnly: true,
 		sameSite: 'lax',
