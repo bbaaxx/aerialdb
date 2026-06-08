@@ -8,7 +8,7 @@ import * as table from '$lib/server/db/schema';
 
 const DAY_IN_MS = 1000 * 60 * 60 * 24;
 
-export const sessionCookieName = 'auth-session';
+export const sessionCookieName = import.meta.env.PROD ? '__Host-auth-session' : 'auth-session';
 
 export function generateSessionToken() {
 	const bytes = crypto.getRandomValues(new Uint8Array(18));
@@ -80,6 +80,9 @@ export function setSessionTokenCookie(event: RequestEvent, token: string, expire
 
 export function deleteSessionTokenCookie(event: RequestEvent) {
 	event.cookies.delete(sessionCookieName, {
+		httpOnly: true,
+		sameSite: 'lax',
+		secure: import.meta.env.PROD,
 		path: '/'
 	});
 }

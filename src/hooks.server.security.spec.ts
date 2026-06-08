@@ -8,14 +8,28 @@ describe('hooks.server security headers', () => {
 		'Referrer-Policy': 'strict-origin-when-cross-origin',
 		'Cross-Origin-Opener-Policy': 'same-origin',
 		'Cross-Origin-Resource-Policy': 'same-origin',
+		'X-Permitted-Cross-Domain-Policies': 'none',
+		'X-DNS-Prefetch-Control': 'off',
 		'X-XSS-Protection': '0',
-		'Permissions-Policy': 'geolocation=(), camera=(), microphone=(), payment=()'
-		// CSP and HSTS removed - were blocking SvelteKit hydration
+		'Permissions-Policy':
+			'geolocation=(), camera=(), microphone=(), payment=(), usb=(), interest-cohort=(), screen-wake-lock=()'
 	};
 
 	async function callHook(response: Response) {
-		const event = {} as any;
-		const resolve = vi.fn().mockResolvedValue(response);
+		const headers = new Map();
+		const event = {
+			setHeaders: vi.fn((newHeaders) => {
+				for (const [key, value] of Object.entries(newHeaders)) {
+					headers.set(key, value);
+				}
+			})
+		} as any;
+		const resolve = vi.fn().mockImplementation(async () => {
+			for (const [key, value] of headers.entries()) {
+				response.headers.set(key, value as string);
+			}
+			return response;
+		});
 		return handleSecurityHeaders({ event, resolve });
 	}
 
