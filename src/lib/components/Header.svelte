@@ -166,7 +166,7 @@
 				<button
 					type="button"
 					onclick={toggleSearch}
-					class="group relative rounded-lg p-2 text-on-surface-variant transition hover:bg-surface-container-high/50 hover:text-on-surface focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
+					class="group relative rounded-lg p-2 text-on-surface-variant transition hover:bg-surface-container-high/50 hover:text-on-surface focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none active:scale-95"
 					aria-label={m.nav_search_toggle_label()}
 					aria-expanded={searchOpen}
 					aria-controls="header-search-bar"
@@ -206,7 +206,7 @@
 							type="button"
 							bind:this={accountButton}
 							onclick={toggleAccount}
-							class="rounded-lg p-2 text-on-surface-variant transition hover:bg-surface-container-high/50 hover:text-on-surface focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
+							class="rounded-lg p-2 text-on-surface-variant transition hover:bg-surface-container-high/50 hover:text-on-surface focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none active:scale-95"
 							aria-label={m.nav_account_menu_label()}
 							aria-haspopup="true"
 							aria-expanded={accountOpen}
@@ -228,7 +228,7 @@
 								</div>
 								<a
 									href="/account"
-									class="flex items-center gap-2 px-4 py-2 text-sm text-on-surface-variant transition hover:bg-surface-container-high/50 hover:text-on-surface"
+									class="flex items-center gap-2 px-4 py-2 text-sm text-on-surface-variant transition hover:bg-surface-container-high/50 hover:text-on-surface active:bg-surface-container-highest/70"
 									role="menuitem"
 									onclick={() => (accountOpen = false)}
 								>
@@ -237,7 +237,7 @@
 								</a>
 								<a
 									href="/library"
-									class="flex items-center gap-2 px-4 py-2 text-sm text-on-surface-variant transition hover:bg-surface-container-high/50 hover:text-on-surface"
+									class="flex items-center gap-2 px-4 py-2 text-sm text-on-surface-variant transition hover:bg-surface-container-high/50 hover:text-on-surface active:bg-surface-container-highest/70"
 									role="menuitem"
 									onclick={() => (accountOpen = false)}
 								>
@@ -247,7 +247,7 @@
 								<form method="POST" action="/auth/logout" class="block">
 									<button
 										type="submit"
-										class="flex w-full items-center gap-2 px-4 py-2 text-sm text-on-surface-variant transition hover:bg-surface-container-high/50 hover:text-on-surface"
+										class="flex w-full items-center gap-2 px-4 py-2 text-sm text-on-surface-variant transition hover:bg-surface-container-high/50 hover:text-on-surface active:bg-surface-container-highest/70"
 										role="menuitem"
 										onclick={() => (accountOpen = false)}
 									>
@@ -271,7 +271,7 @@
 				<button
 					type="button"
 					onclick={() => (mobileMenuOpen = !mobileMenuOpen)}
-					class="rounded-lg p-2 text-on-surface-variant transition hover:bg-surface-container-high/50 hover:text-on-surface focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none lg:hidden"
+					class="rounded-lg p-2 text-on-surface-variant transition hover:bg-surface-container-high/50 hover:text-on-surface focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none active:scale-95 lg:hidden"
 					aria-label={m.nav_mobile_menu_label()}
 					aria-expanded={mobileMenuOpen}
 				>
@@ -305,7 +305,7 @@
 								searchQuery = '';
 								searchInput?.focus();
 							}}
-							class="absolute inset-y-0 right-0 flex items-center pr-3 text-on-surface-variant transition hover:text-on-surface focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
+							class="absolute inset-y-0 right-0 flex items-center pr-3 text-on-surface-variant transition hover:text-on-surface focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none active:scale-95"
 							aria-label={m.nav_search_clear()}
 						>
 							<X size={16} />
@@ -325,7 +325,7 @@
 				{#each navLinks as link (link.href)}
 					<a
 						href={link.href}
-						class="flex items-center justify-between rounded-lg px-3 py-2 text-sm font-medium transition {isActive(
+						class="flex items-center justify-between rounded-lg px-3 py-2 text-sm font-medium transition active:scale-[0.98] {isActive(
 							link.href,
 							link.matchPrefix
 						)
@@ -343,7 +343,7 @@
 				{#if user}
 					<a
 						href="/upload"
-						class="mt-2 flex items-center gap-2 rounded-lg bg-primary/15 px-3 py-2 text-sm font-medium text-primary transition hover:bg-primary/25"
+						class="mt-2 flex items-center gap-2 rounded-lg bg-primary/15 px-3 py-2 text-sm font-medium text-primary transition active:scale-[0.98] hover:bg-primary/25"
 						onclick={() => (mobileMenuOpen = false)}
 					>
 						<Upload size={16} />
