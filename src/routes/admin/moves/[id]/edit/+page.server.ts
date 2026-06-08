@@ -23,9 +23,10 @@ export const load: PageServerLoad = async (event) => {
 	const db = getDb(event);
 	const { params } = event;
 
-	// Performance: Fetch move and categories in parallel to reduce TTFB.
+	// Performance: Batch move and categories queries into a single round-trip.
+	// This is specifically optimized for Cloudflare D1 to minimize network latency between Worker and DB.
 	// Selective Field Fetching: Only fetch fields needed for the edit form to minimize data transfer.
-	const [movesData, allCategories] = await Promise.all([
+	const [movesData, allCategories] = await db.batch([
 		db
 			.select({
 				id: moves.id,
