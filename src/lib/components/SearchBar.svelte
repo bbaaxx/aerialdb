@@ -38,7 +38,7 @@
 			<button
 				type="button"
 				onclick={() => onclear?.()}
-				class="absolute inset-y-0 right-0 flex items-center pr-4 text-primary-light transition-colors hover:text-gray-200 focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none active:scale-95"
+				class="absolute inset-y-0 right-0 flex items-center pr-4 text-primary-light transition-colors hover:text-gray-200 focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
 				aria-label={m.nav_search_clear()}
 			>
 				<X size={18} />
