@@ -51,3 +51,9 @@
 **Vulnerability:** Missing modern isolation headers (`COOP`, `CORP`) and presence of outdated browser-side XSS filtering configurations could expose the application to cross-origin attacks or inconsistent security behaviors.
 **Learning:** Modern web security requires explicit resource isolation through headers to mitigate speculative execution attacks and cross-origin information leaks. Outdated `X-XSS-Protection` can sometimes be leveraged for attacks.
 **Prevention:** Always implement `Cross-Origin-Opener-Policy` and `Cross-Origin-Resource-Policy` set to `same-origin`. Disable legacy XSS filters with `X-XSS-Protection: 0` in favor of robust CSP and input validation.
+
+## 2026-05-20 - [Hardened Security Header Delivery]
+
+**Vulnerability:** Security headers were set using `response.headers.set()` after `resolve(event)`. If a downstream hook (e.g., admin guard) triggered a redirect or error, these headers were skipped, leaving redirects and error pages unprotected.
+**Learning:** SvelteKit's `event.setHeaders()` should be used at the start of the hook chain to ensure headers persist across redirects and errors.
+**Prevention:** Always place the security headers hook at the beginning of the middleware sequence and use `event.setHeaders()` before calling `resolve(event)`.

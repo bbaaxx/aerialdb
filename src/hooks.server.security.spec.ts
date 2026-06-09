@@ -14,8 +14,20 @@ describe('hooks.server security headers', () => {
 	};
 
 	async function callHook(response: Response) {
-		const event = {} as any;
-		const resolve = vi.fn().mockResolvedValue(response);
+		const headers = new Headers();
+		const event = {
+			setHeaders: vi.fn().mockImplementation((newHeaders) => {
+				for (const [key, value] of Object.entries(newHeaders)) {
+					headers.set(key, value as string);
+				}
+			})
+		} as any;
+		const resolve = vi.fn().mockImplementation(async () => {
+			for (const [key, value] of headers.entries()) {
+				response.headers.set(key, value);
+			}
+			return response;
+		});
 		return handleSecurityHeaders({ event, resolve });
 	}
 
