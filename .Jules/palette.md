@@ -54,5 +54,11 @@
 **Action:** Always pair `focus-visible` styles with `active:scale-95` for interactive elements. Ensure focus is explicitly returned to triggering elements when overlays are dismissed.
 
 ## 2026-05-29 - [Targeted Loading States for List Management]
+
 **Learning:** When managing a list of items (like categories), using a global loading state can be confusing. Implementing a targeted 'processingId' state allows for specific feedback (like spinners on the exact button clicked) while keeping the rest of the UI interactive. Furthermore, in SvelteKit 'use:enhance', the loading state should persist through the 'await update()' AND any subsequent data invalidation ('await invalidateAll()') to ensure a seamless transition until the UI is fully updated.
 **Action:** Use a combination of 'isSubmitting' and 'processingId' for granular feedback in list views. Ensure the loading state wraps all post-submission data refreshes.
+
+## 2026-05-29 - [Autofocus and Visual Feedback for Auth Flows]
+
+**Learning:** Automatically focusing the first input in authentication forms (Login/Signup) significantly reduces friction by allowing users to start typing immediately. Pairing this with clear visual indicators for required fields (\*) and tactile feedback on button interaction (active:scale-95) creates a more professional and responsive user experience.
+**Action:** Always implement autofocus for the primary input on task-oriented pages and provide immediate visual/tactile feedback for primary actions.

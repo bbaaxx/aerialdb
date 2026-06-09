@@ -11,6 +11,11 @@
 	let password = $state('');
 	let isSubmitting = $state(false);
 	let showPassword = $state(false);
+	let usernameInput = $state<HTMLInputElement | undefined>(undefined);
+
+	$effect(() => {
+		usernameInput?.focus();
+	});
 
 	// Client-side validation states
 	let usernameError = $state('');
@@ -91,12 +96,13 @@
 				<!-- Username Field -->
 				<div class="mb-5">
 					<label for="username" class="mb-2 block text-sm font-medium text-on-surface-variant">
-						Username
+						Username <span class="text-error" aria-hidden="true">*</span>
 					</label>
 					<input
 						id="username"
 						name="username"
 						type="text"
+						bind:this={usernameInput}
 						autocomplete="username"
 						required
 						bind:value={username}
@@ -121,7 +127,7 @@
 				<!-- Password Field -->
 				<div class="mb-6">
 					<label for="password" class="mb-2 block text-sm font-medium text-on-surface-variant">
-						Password
+						Password <span class="text-error" aria-hidden="true">*</span>
 					</label>
 					<div class="relative">
 						<input
@@ -166,7 +172,7 @@
 				<button
 					type="submit"
 					disabled={isSubmitting || !!usernameError || !!passwordError || !username || !password}
-					class="w-full rounded-lg bg-gradient-to-r from-purple-500 to-indigo-500 px-4 py-3 font-medium text-white shadow-[0_0_15px_rgba(138,99,248,0.5)] transition hover:shadow-[0_0_20px_rgba(138,99,248,0.6)] focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:bg-gray-400"
+					class="w-full rounded-lg bg-gradient-to-r from-purple-500 to-indigo-500 px-4 py-3 font-medium text-white shadow-[0_0_15px_rgba(138,99,248,0.5)] transition hover:shadow-[0_0_20px_rgba(138,99,248,0.6)] focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:outline-none active:scale-95 disabled:cursor-not-allowed disabled:opacity-50"
 				>
 					{#if isSubmitting}
 						<span class="flex items-center justify-center">
