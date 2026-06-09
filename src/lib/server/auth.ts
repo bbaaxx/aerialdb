@@ -79,7 +79,11 @@ export function setSessionTokenCookie(event: RequestEvent, token: string, expire
 }
 
 export function deleteSessionTokenCookie(event: RequestEvent) {
+	// SECURITY: Use same security attributes as creation to ensure consistent deletion across all browsers
 	event.cookies.delete(sessionCookieName, {
+		httpOnly: true,
+		sameSite: 'lax',
+		secure: import.meta.env.PROD,
 		path: '/'
 	});
 }
