@@ -52,3 +52,7 @@
 
 **Learning:** Providing consistent tactile feedback (e.g., `active:scale-95`) across all interactive elements significantly improves the "feel" of the UI, especially on touch devices. Additionally, for mobile-first overlays like search bars and mobile menus, restoring focus to the trigger button when closing via keyboard (Escape) is a critical accessibility requirement that prevents focus from being lost in the document.
 **Action:** Always pair `focus-visible` styles with `active:scale-95` for interactive elements. Ensure focus is explicitly returned to triggering elements when overlays are dismissed.
+
+## 2026-05-29 - [Targeted Loading States for List Management]
+**Learning:** When managing a list of items (like categories), using a global loading state can be confusing. Implementing a targeted 'processingId' state allows for specific feedback (like spinners on the exact button clicked) while keeping the rest of the UI interactive. Furthermore, in SvelteKit 'use:enhance', the loading state should persist through the 'await update()' AND any subsequent data invalidation ('await invalidateAll()') to ensure a seamless transition until the UI is fully updated.
+**Action:** Use a combination of 'isSubmitting' and 'processingId' for granular feedback in list views. Ensure the loading state wraps all post-submission data refreshes.
