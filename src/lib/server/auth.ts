@@ -8,7 +8,9 @@ import * as table from '$lib/server/db/schema';
 
 const DAY_IN_MS = 1000 * 60 * 60 * 24;
 
-export const sessionCookieName = 'auth-session';
+// SECURITY: Use __Host- prefix in production to ensure cookie is only sent over HTTPS
+// and restricted to the host that set it (no subdomains).
+export const sessionCookieName = import.meta.env.PROD ? '__Host-auth-session' : 'auth-session';
 
 export function generateSessionToken() {
 	const bytes = crypto.getRandomValues(new Uint8Array(18));

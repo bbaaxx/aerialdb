@@ -5,11 +5,13 @@ describe('hooks.server security headers', () => {
 	const expectedHeaders = {
 		'X-Frame-Options': 'SAMEORIGIN',
 		'X-Content-Type-Options': 'nosniff',
+		'X-Permitted-Cross-Domain-Policies': 'none',
 		'Referrer-Policy': 'strict-origin-when-cross-origin',
 		'Cross-Origin-Opener-Policy': 'same-origin',
 		'Cross-Origin-Resource-Policy': 'same-origin',
 		'X-XSS-Protection': '0',
-		'Permissions-Policy': 'geolocation=(), camera=(), microphone=(), payment=()'
+		'Permissions-Policy':
+			'geolocation=(), camera=(), microphone=(), payment=(), usb=(), interest-cohort=(), screen-wake-lock=()'
 		// CSP and HSTS removed - were blocking SvelteKit hydration
 	};
 
@@ -71,6 +73,42 @@ describe('hooks.server security headers', () => {
 });
 
 describe('hooks.server admin guard', () => {
+	it('tightens admin guard path check to prevent accidental matches', async () => {
+		const resolve = vi.fn().mockResolvedValue(new Response('OK'));
+
+		// Should NOT redirect /administration
+		const eventNotAdmin = {
+			url: new URL('http://localhost/administration'),
+			locals: { user: null }
+		} as any;
+		const responseNotAdmin = await handleAdminGuard({ event: eventNotAdmin, resolve });
+		expect(responseNotAdmin.status).toBe(200);
+
+		// Should redirect /admin
+		const eventAdmin = {
+			url: new URL('http://localhost/admin'),
+			locals: { user: null }
+		} as any;
+		try {
+			await handleAdminGuard({ event: eventAdmin, resolve });
+			expect.fail('Should have thrown a redirect');
+		} catch (e: any) {
+			expect(e.status).toBe(302);
+		}
+
+		// Should redirect /admin/moves
+		const eventAdminMoves = {
+			url: new URL('http://localhost/admin/moves'),
+			locals: { user: null }
+		} as any;
+		try {
+			await handleAdminGuard({ event: eventAdminMoves, resolve });
+			expect.fail('Should have thrown a redirect');
+		} catch (e: any) {
+			expect(e.status).toBe(302);
+		}
+	});
+
 	it('redirects unauthenticated users from /admin routes', async () => {
 		const event = {
 			url: new URL('http://localhost/admin/moves'),
