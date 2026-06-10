@@ -78,7 +78,7 @@
 		<button
 			type="button"
 			onclick={() => (showDeleteConfirm = true)}
-			class="rounded-lg border border-error/50 px-4 py-2 text-sm font-medium text-error transition-colors hover:bg-error/10"
+			class="rounded-lg border border-error/50 px-4 py-2 text-sm font-medium text-error transition-all hover:bg-error/10 focus-visible:ring-2 focus-visible:ring-error focus-visible:outline-none active:scale-95"
 		>
 			Delete Move
 		</button>
@@ -120,7 +120,7 @@
 						<button
 							type="submit"
 							disabled={isDeleting}
-							class="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-70"
+							class="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white transition-all hover:bg-red-700 focus-visible:ring-2 focus-visible:ring-error focus-visible:outline-none active:scale-95 disabled:cursor-not-allowed disabled:opacity-70"
 						>
 							{#if isDeleting}
 								<Loader2 size={16} class="animate-spin" />
@@ -133,7 +133,7 @@
 					<button
 						type="button"
 						onclick={() => (showDeleteConfirm = false)}
-						class="flex-1 rounded-lg border border-outline-variant/15 px-4 py-2 text-sm font-medium text-on-surface-variant transition-colors hover:bg-surface-container"
+						class="flex-1 rounded-lg border border-outline-variant/15 px-4 py-2 text-sm font-medium text-on-surface-variant transition-all hover:bg-surface-container focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none active:scale-95"
 					>
 						Cancel
 					</button>
@@ -301,7 +301,7 @@
 							<button
 								type="button"
 								onclick={handleRemoveImage}
-								class="absolute top-2 right-2 rounded-md bg-red-600 px-2 py-1 text-xs font-medium text-white shadow-lg transition-colors hover:bg-red-700"
+								class="absolute top-2 right-2 rounded-md bg-red-600 px-2 py-1 text-xs font-medium text-white shadow-lg transition-all hover:bg-red-700 focus-visible:ring-2 focus-visible:ring-error focus-visible:outline-none active:scale-95"
 							>
 								Remove
 							</button>
@@ -348,7 +348,7 @@
 			<button
 				type="submit"
 				disabled={isSubmitting}
-				class="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-purple-500 to-indigo-500 px-6 py-2.5 text-sm font-medium text-white shadow-[0_0_15px_rgba(138,99,248,0.5)] transition-shadow hover:shadow-[0_0_20px_rgba(138,99,248,0.6)] focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-70"
+				class="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-purple-500 to-indigo-500 px-6 py-2.5 text-sm font-medium text-white shadow-[0_0_15px_rgba(138,99,248,0.5)] transition-all hover:shadow-[0_0_20px_rgba(138,99,248,0.6)] focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:outline-none active:scale-95 disabled:cursor-not-allowed disabled:opacity-70"
 			>
 				{#if isSubmitting}
 					<Loader2 size={18} class="animate-spin" />
@@ -359,7 +359,7 @@
 			</button>
 			<a
 				href="/moves/{data.move.id}"
-				class="rounded-lg border border-outline-variant/15 px-6 py-2.5 text-sm font-medium text-on-surface-variant transition-colors hover:bg-surface-container"
+				class="rounded-lg border border-outline-variant/15 px-6 py-2.5 text-sm font-medium text-on-surface-variant transition-all hover:bg-surface-container focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none active:scale-95"
 			>
 				Cancel
 			</a>

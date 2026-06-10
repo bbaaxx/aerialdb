@@ -241,7 +241,7 @@
 			<button
 				type="submit"
 				disabled={isSubmitting}
-				class="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-purple-500 to-indigo-500 px-6 py-2.5 text-sm font-medium text-white shadow-[0_0_15px_rgba(138,99,248,0.5)] transition hover:shadow-[0_0_20px_rgba(138,99,248,0.6)] focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-70"
+				class="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-purple-500 to-indigo-500 px-6 py-2.5 text-sm font-medium text-white shadow-[0_0_15px_rgba(138,99,248,0.5)] transition-all hover:shadow-[0_0_20px_rgba(138,99,248,0.6)] focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:outline-none active:scale-95 disabled:cursor-not-allowed disabled:opacity-70"
 			>
 				{#if isSubmitting}
 					<Loader2 size={18} class="animate-spin" />
@@ -252,7 +252,7 @@
 			</button>
 			<a
 				href="/admin"
-				class="rounded-lg border border-outline-variant/15 px-6 py-2.5 text-sm font-medium text-on-surface-variant transition-colors hover:bg-surface-container"
+				class="rounded-lg border border-outline-variant/15 px-6 py-2.5 text-sm font-medium text-on-surface-variant transition-all hover:bg-surface-container focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none active:scale-95"
 			>
 				Cancel
 			</a>
