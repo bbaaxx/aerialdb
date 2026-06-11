@@ -45,6 +45,18 @@
 	}
 
 	const youtubeId = $derived(getYouTubeId(data.move.videoUrl));
+
+	const levelClasses = $derived(
+		data.move.level === 'beginner'
+			? 'text-teal-400 bg-teal-400/10'
+			: data.move.level === 'intermediate'
+				? 'text-blue-400 bg-blue-400/10'
+				: data.move.level === 'advanced'
+					? 'text-purple-400 bg-purple-400/10'
+					: data.move.level === 'professional'
+						? 'text-amber-400 bg-amber-400/10'
+						: ''
+	);
 </script>
 
 <svelte:head>
@@ -100,14 +112,23 @@
 			<div
 				class="mb-3 flex flex-col gap-3 sm:mb-4 sm:flex-row sm:items-start sm:justify-between sm:gap-4"
 			>
-				<h1 class="text-2xl leading-tight font-bold text-white sm:text-3xl">
-					{data.move.name}
-				</h1>
-				<span
-					class="shrink-0 self-start rounded-full bg-primary-container/20 px-3 py-1 text-sm font-medium text-primary"
-				>
-					{data.move.category.name}
-				</span>
+				<div class="flex flex-col gap-2">
+					<h1 class="text-2xl leading-tight font-bold text-white sm:text-3xl">
+						{data.move.name}
+					</h1>
+					<div class="flex flex-wrap items-center gap-2">
+						<span
+							class="shrink-0 rounded-full bg-primary-container/20 px-3 py-1 text-xs font-medium text-primary"
+						>
+							{data.move.category.name}
+						</span>
+						{#if data.move.level}
+							<span class="shrink-0 rounded-full px-3 py-1 text-xs font-medium {levelClasses}">
+								{data.move.level}
+							</span>
+						{/if}
+					</div>
+				</div>
 			</div>
 
 			{#if data.move.contributorName}

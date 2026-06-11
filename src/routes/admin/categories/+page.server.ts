@@ -15,7 +15,6 @@ function generateId(length: number = 10): string {
 type CategoryWithMoveCount = {
 	id: string;
 	name: string;
-	createdAt: Date;
 	moveCount: number;
 };
 
@@ -24,12 +23,12 @@ export const load: PageServerLoad = async (event) => {
 
 	// Performance: Batch categories and move counts queries into a single round-trip.
 	// This is specifically optimized for Cloudflare D1 to minimize network latency between Worker and DB.
+	// Selective Field Fetching: Removed unused createdAt field to reduce database and network overhead.
 	const [allCategories, moveCountsRaw] = await db.batch([
 		db
 			.select({
 				id: categories.id,
-				name: categories.name,
-				createdAt: categories.createdAt
+				name: categories.name
 			})
 			.from(categories)
 			.orderBy(categories.name),
@@ -50,7 +49,7 @@ export const load: PageServerLoad = async (event) => {
 
 	// Merge categories with their move counts
 	const categoriesWithCounts: CategoryWithMoveCount[] = allCategories.map(
-		(cat: { id: string; name: string; createdAt: Date }) => ({
+		(cat: { id: string; name: string }) => ({
 			...cat,
 			moveCount: moveCountMap.get(cat.id) ?? 0
 		})

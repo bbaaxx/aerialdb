@@ -10,9 +10,8 @@ const mockMove = {
 	description: 'Test Description',
 	imageUrl: 'https://example.com/image.jpg',
 	videoUrl: 'https://youtube.com/watch?v=dQw4w9WgXcQ',
+	level: 'beginner',
 	contributorName: 'Test Contributor',
-	createdAt: new Date('2026-01-01T00:00:00Z'),
-	updatedAt: new Date('2026-01-02T00:00:00Z'),
 	category: { id: 'test-cat', name: 'Test Category' }
 };
 

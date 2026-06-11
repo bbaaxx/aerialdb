@@ -22,3 +22,8 @@
 
 **Learning:** Using `Promise.all()` with independent Drizzle queries on Cloudflare D1 results in multiple network round-trips (one per query). Using `db.batch()` combines these into a single HTTP request to the D1 API, significantly reducing TTFB and latency for pages that fetch multiple datasets (e.g., moves + categories + featured content).
 **Action:** Prefer `db.batch()` over `Promise.all()` for parallel database queries in environments using Cloudflare D1 or LibSQL. Ensure the `Database` type is correctly augmented to support `.batch()` in TypeScript.
+
+## 2026-06-11 - [Context-Aware Query Optimization: JOINs vs. Maps]
+
+**Learning:** While listing pages in this repository prefer fetching categories separately and resolving via an in-memory Map to avoid redundant data transfer, single-record detail pages (e.g., move details) should continue to use `innerJoin`. For a single ID lookup, a JOIN is more efficient as it retrieves all required data in one database round-trip without the overhead of multiple batch queries or Map construction.
+**Action:** Use selective field fetching with `innerJoin` for single-record detail lookups, while maintaining the Map-based resolution for performance-critical listing pages.

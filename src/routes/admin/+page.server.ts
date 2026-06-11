@@ -36,7 +36,15 @@ export const load: PageServerLoad = async (event) => {
 			.from(moves)
 			.orderBy(moves.name),
 
-		db.select().from(categories).orderBy(categories.name)
+		// Performance: Selective field fetching for categories.
+		// Only id and name are needed for the category filter and name resolution, reducing data transfer.
+		db
+			.select({
+				id: categories.id,
+				name: categories.name
+			})
+			.from(categories)
+			.orderBy(categories.name)
 	]);
 
 	// Build in-memory category lookup for O(1) resolution
