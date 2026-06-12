@@ -10,6 +10,7 @@ const mockMove = {
 	description: 'Test Description',
 	imageUrl: 'https://example.com/image.jpg',
 	videoUrl: 'https://youtube.com/watch?v=dQw4w9WgXcQ',
+	level: 'intermediate',
 	contributorName: 'Test Contributor',
 	createdAt: new Date('2026-01-01T00:00:00Z'),
 	updatedAt: new Date('2026-01-02T00:00:00Z'),
@@ -27,6 +28,12 @@ describe('moves/[id]/+page.svelte', () => {
 
 		await expect.element(page.getByText('Test Move')).toBeVisible();
 		await expect.element(page.getByText('Test Category')).toBeVisible();
+	});
+
+	it('should render the difficulty level badge when present', async () => {
+		render(MoveDetailPage, { data: mockData });
+
+		await expect.element(page.getByText('intermediate')).toBeVisible();
 	});
 
 	it('should have a share button that copies to clipboard when Web Share API is unavailable', async () => {
@@ -76,7 +83,8 @@ describe('moves/[id]/+page.svelte', () => {
 			move: {
 				...mockMove,
 				imageUrl: null,
-				videoUrl: null
+				videoUrl: null,
+				level: null
 			}
 		};
 
