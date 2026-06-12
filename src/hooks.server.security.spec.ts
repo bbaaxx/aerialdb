@@ -6,10 +6,13 @@ describe('hooks.server security headers', () => {
 		'X-Frame-Options': 'SAMEORIGIN',
 		'X-Content-Type-Options': 'nosniff',
 		'Referrer-Policy': 'strict-origin-when-cross-origin',
+		'X-Permitted-Cross-Domain-Policies': 'none',
+		'X-DNS-Prefetch-Control': 'off',
 		'Cross-Origin-Opener-Policy': 'same-origin',
 		'Cross-Origin-Resource-Policy': 'same-origin',
 		'X-XSS-Protection': '0',
-		'Permissions-Policy': 'geolocation=(), camera=(), microphone=(), payment=()'
+		'Permissions-Policy':
+			'geolocation=(), camera=(), microphone=(), payment=(), usb=(), interest-cohort=(), screen-wake-lock=()'
 		// CSP and HSTS removed - were blocking SvelteKit hydration
 	};
 
@@ -107,6 +110,18 @@ describe('hooks.server admin guard', () => {
 		const event = {
 			url: new URL('http://localhost/admin/moves'),
 			locals: { user: { id: 'admin-1', username: 'admin', role: 'admin' } }
+		} as any;
+		const resolve = vi.fn().mockResolvedValue(new Response('OK'));
+
+		const response = await handleAdminGuard({ event, resolve });
+		expect(response.status).toBe(200);
+		expect(resolve).toHaveBeenCalled();
+	});
+
+	it('does not protect routes that just start with /admin but are not the admin section', async () => {
+		const event = {
+			url: new URL('http://localhost/administration'),
+			locals: { user: null }
 		} as any;
 		const resolve = vi.fn().mockResolvedValue(new Response('OK'));
 

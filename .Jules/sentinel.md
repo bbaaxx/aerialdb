@@ -28,6 +28,12 @@
 **Learning:** Simple string prefix checks are insufficient for URL validation; the `URL` constructor with a controlled base is more reliable for detecting origin changes.
 **Prevention:** Use a combination of character blocklists (whitespace/control chars) and the `URL` constructor to ensure redirect targets remain within the expected origin.
 
+## 2026-06-06 - [Session Cookie Hardening and Admin Path Tightening]
+
+**Vulnerability:** Session cookies lacked the `__Host-` prefix in production, making them susceptible to certain subdomain-based hijacking. Additionally, the admin guard used a broad `startsWith('/admin')` check which could accidentally protect non-admin routes that happened to share the same prefix.
+**Learning:** Using the `__Host-` prefix provides a robust defense by enforcing `Secure`, `Path=/`, and no `Domain` attribute. Refined path matching (checking for `/admin/` specifically) prevents accidental overlaps with hypothetical future routes like `/administration`.
+**Prevention:** Always use the `__Host-` prefix for session cookies in production and use exact or trailing-slash path matching for security guards.
+
 ## 2026-04-21 - [User Enumeration and Timing Attacks]
 
 **Vulnerability:** The login flow returned different error messages for existent vs. non-existent users and skipped the computationally expensive password hashing if the user was not found, allowing attackers to identify valid usernames through error messages and response timing.
