@@ -62,3 +62,7 @@
 
 **Learning:** Automatically focusing the first input in authentication forms (Login/Signup) significantly reduces friction by allowing users to start typing immediately. Pairing this with clear visual indicators for required fields (\*) and tactile feedback on button interaction (active:scale-95) creates a more professional and responsive user experience.
 **Action:** Always implement autofocus for the primary input on task-oriented pages and provide immediate visual/tactile feedback for primary actions.
+
+## 2026-06-08 - [Standardized Admin Dashboard Interactions]
+**Learning:** Admin interfaces often prioritize functionality over "feel," leading to a static and less accessible experience. Applying standardized tactile feedback (active:scale-95) and focus-visible rings (ring-primary) across all interactive elements—including primary actions, search clear buttons, and table links—makes the management experience feel more responsive and professional. Adding 'rounded-sm' and 'transition-all' to text-heavy links ensures that focus rings are clearly defined and state transitions are smooth.
+**Action:** Consistently apply the active:scale-95 and focus-visible:ring-2 pattern to all interactive elements in administrative views, ensuring even minor actions like "Clear filters" or "Edit" links provide immediate feedback.

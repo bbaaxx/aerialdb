@@ -36,7 +36,7 @@
 		</div>
 		<a
 			href="/admin/moves/new"
-			class="inline-flex items-center justify-center rounded-lg bg-gradient-to-r from-purple-500 to-indigo-500 px-6 py-2.5 text-sm font-medium text-white shadow-[0_0_15px_rgba(138,99,248,0.5)] transition hover:shadow-[0_0_20px_rgba(138,99,248,0.6)] focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:outline-none"
+			class="inline-flex items-center justify-center rounded-lg bg-gradient-to-r from-purple-500 to-indigo-500 px-6 py-2.5 text-sm font-medium text-white shadow-[0_0_15px_rgba(138,99,248,0.5)] transition-all hover:shadow-[0_0_20px_rgba(138,99,248,0.6)] focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:outline-none active:scale-95"
 		>
 			+ Add New Move
 		</a>
@@ -90,7 +90,7 @@
 					<button
 						type="button"
 						onclick={() => (searchQuery = '')}
-						class="absolute inset-y-0 right-0 flex items-center pr-3 text-on-surface-variant transition hover:text-on-surface focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
+						class="absolute inset-y-0 right-0 flex items-center pr-3 text-on-surface-variant transition hover:text-on-surface focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none active:scale-95"
 						aria-label={m.nav_search_clear()}
 					>
 						<X size={18} />
@@ -122,7 +122,7 @@
 					searchQuery = '';
 					selectedCategory = 'all';
 				}}
-				class="rounded-lg border border-outline-variant/15 bg-surface-container-low px-4 py-2 text-sm font-medium text-on-surface-variant transition-colors hover:bg-surface-container"
+				class="rounded-lg border border-outline-variant/15 bg-surface-container-low px-4 py-2 text-sm font-medium text-on-surface-variant transition-all hover:bg-surface-container focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none active:scale-95"
 			>
 				Clear
 			</button>
@@ -173,7 +173,10 @@
 					{#each filteredMoves as move (move.id)}
 						<tr class="transition-colors hover:bg-surface-container-high">
 							<td class="px-4 py-3">
-								<a href="/moves/{move.id}" class="font-medium text-on-surface hover:text-primary">
+								<a
+									href="/moves/{move.id}"
+									class="rounded-sm font-medium text-on-surface transition-all hover:text-primary focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
+								>
 									{move.name}
 								</a>
 								<div class="mt-1 text-xs text-on-surface-variant sm:hidden">
@@ -207,7 +210,7 @@
 							<td class="px-4 py-3 text-right">
 								<a
 									href="/admin/moves/{move.id}/edit"
-									class="inline-flex items-center rounded-md bg-primary/10 px-3 py-1.5 text-sm font-medium text-primary transition-colors hover:bg-primary/20"
+									class="inline-flex items-center rounded-md bg-primary/10 px-3 py-1.5 text-sm font-medium text-primary transition-all hover:bg-primary/20 focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none active:scale-95"
 								>
 									Edit
 								</a>
@@ -224,7 +227,7 @@
 											searchQuery = '';
 											selectedCategory = 'all';
 										}}
-										class="mt-2 text-sm text-primary hover:text-primary/80"
+										class="mt-2 rounded-sm text-sm text-primary transition-all hover:text-primary/80 focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none active:scale-95"
 									>
 										Clear filters
 									</button>
