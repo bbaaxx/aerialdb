@@ -173,7 +173,10 @@
 					{#each filteredMoves as move (move.id)}
 						<tr class="transition-colors hover:bg-surface-container-high">
 							<td class="px-4 py-3">
-								<a href="/moves/{move.id}" class="font-medium text-on-surface hover:text-primary">
+								<a
+									href="/moves/{move.id}"
+									class="rounded-sm font-medium text-on-surface transition-all hover:text-primary focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
+								>
 									{move.name}
 								</a>
 								<div class="mt-1 text-xs text-on-surface-variant sm:hidden">
@@ -224,7 +227,7 @@
 											searchQuery = '';
 											selectedCategory = 'all';
 										}}
-										class="mt-2 text-sm text-primary hover:text-primary/80"
+										class="mt-2 rounded-sm text-sm text-primary transition-all hover:text-primary/80 focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none active:scale-95"
 									>
 										Clear filters
 									</button>
