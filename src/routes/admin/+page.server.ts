@@ -36,7 +36,15 @@ export const load: PageServerLoad = async (event) => {
 			.from(moves)
 			.orderBy(moves.name),
 
-		db.select().from(categories).orderBy(categories.name)
+		db
+			.select({
+				// Performance: Selective field fetching (Lean Query pattern)
+				// Fetching only id and name reduces database I/O and payload size
+				id: categories.id,
+				name: categories.name
+			})
+			.from(categories)
+			.orderBy(categories.name)
 	]);
 
 	// Build in-memory category lookup for O(1) resolution

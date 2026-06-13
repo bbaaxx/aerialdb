@@ -11,14 +11,15 @@ export const load: PageServerLoad = async (event) => {
 
 	const [moveRaw] = (await db
 		.select({
+			// Performance: Selective field fetching (Lean Query pattern)
+			// Selecting only fields required by the UI. Removed unused createdAt/updatedAt.
 			id: moves.id,
 			name: moves.name,
 			description: moves.description,
 			imageUrl: moves.imageUrl,
 			videoUrl: moves.videoUrl,
+			level: moves.level,
 			contributorName: moves.contributorName,
-			createdAt: moves.createdAt,
-			updatedAt: moves.updatedAt,
 			categoryId: categories.id,
 			categoryName: categories.name
 		})
@@ -37,9 +38,8 @@ export const load: PageServerLoad = async (event) => {
 		description: moveRaw.description,
 		imageUrl: moveRaw.imageUrl,
 		videoUrl: moveRaw.videoUrl,
+		level: moveRaw.level,
 		contributorName: moveRaw.contributorName,
-		createdAt: moveRaw.createdAt,
-		updatedAt: moveRaw.updatedAt,
 		category: {
 			id: moveRaw.categoryId,
 			name: moveRaw.categoryName

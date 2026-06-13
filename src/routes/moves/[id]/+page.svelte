@@ -103,11 +103,20 @@
 				<h1 class="text-2xl leading-tight font-bold text-white sm:text-3xl">
 					{data.move.name}
 				</h1>
-				<span
-					class="shrink-0 self-start rounded-full bg-primary-container/20 px-3 py-1 text-sm font-medium text-primary"
-				>
-					{data.move.category.name}
-				</span>
+				<div class="flex flex-wrap items-center gap-2">
+					<span
+						class="shrink-0 rounded-full bg-primary-container/20 px-3 py-1 text-sm font-medium text-primary"
+					>
+						{data.move.category.name}
+					</span>
+					{#if data.move.level}
+						<span
+							class="shrink-0 rounded-full bg-surface-container-high px-3 py-1 text-sm font-medium text-on-surface-variant capitalize"
+						>
+							{data.move.level}
+						</span>
+					{/if}
+				</div>
 			</div>
 
 			{#if data.move.contributorName}

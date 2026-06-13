@@ -54,7 +54,15 @@ export const load: PageServerLoad = async (event) => {
 			.where(conditions.length > 0 ? and(...conditions) : undefined)
 			.orderBy(moves.name),
 
-		db.select().from(categories).orderBy(categories.name),
+		db
+			.select({
+				// Performance: Selective field fetching (Lean Query pattern)
+				// Fetching only id and name reduces database I/O and payload size
+				id: categories.id,
+				name: categories.name
+			})
+			.from(categories)
+			.orderBy(categories.name),
 
 		db
 			.select({
