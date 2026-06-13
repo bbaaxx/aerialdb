@@ -1,11 +1,11 @@
 ---
-id: 'guardian-setup'
-title: 'Guardian: Automated PR Verification'
-category: 'process'
-created: '2026-06-04'
-updated: '2026-06-04'
+id: "guardian-setup"
+title: "Guardian: Automated PR Verification"
+category: "process"
+created: "2026-06-04"
+updated: "2026-06-04"
 related_initiatives: []
-tags: ['process', 'guardian', 'pr-review', 'ci', 'automation']
+tags: ["process","guardian","pr-review","ci","automation"]
 ---
 
 # Guardian: Automated PR Verification
