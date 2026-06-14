@@ -35,12 +35,14 @@
 			aria-label="Play video: {title}"
 		>
 			<!-- Thumbnail -->
+			<!-- Performance: Added fetchpriority="high" and loading="eager" for LCP optimization as this is the primary media -->
 			<img
 				src={thumbnailUrl}
 				alt={title}
 				onerror={handleThumbnailError}
 				class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105 group-focus:scale-105"
-				loading="lazy"
+				fetchpriority="high"
+				loading="eager"
 				decoding="async"
 			/>
 
