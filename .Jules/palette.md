@@ -62,3 +62,7 @@
 
 **Learning:** Automatically focusing the first input in authentication forms (Login/Signup) significantly reduces friction by allowing users to start typing immediately. Pairing this with clear visual indicators for required fields (\*) and tactile feedback on button interaction (active:scale-95) creates a more professional and responsive user experience.
 **Action:** Always implement autofocus for the primary input on task-oriented pages and provide immediate visual/tactile feedback for primary actions.
+
+## 2026-06-14 - [Accessible Data Tables & Focus States]
+**Learning:** Data-heavy tables in the Admin Dashboard required improved keyboard discoverability and accessible status indicators. Standardizing link focus rings with 'rounded-sm' and 'transition-all' prevents focus indicators from feeling "boxy" or disconnected from the text. Additionally, using emojis as status indicators (media presence) requires 'role="img"' and 'aria-label' to be perceivable by screen reader users.
+**Action:** Use 'rounded-sm transition-all focus-visible:ring-2' for table links. Always wrap status emojis in 'role="img"' spans with descriptive 'aria-label's.
