@@ -6,10 +6,13 @@ describe('hooks.server security headers', () => {
 		'X-Frame-Options': 'SAMEORIGIN',
 		'X-Content-Type-Options': 'nosniff',
 		'Referrer-Policy': 'strict-origin-when-cross-origin',
+		'X-Permitted-Cross-Domain-Policies': 'none',
+		'X-DNS-Prefetch-Control': 'off',
 		'Cross-Origin-Opener-Policy': 'same-origin',
 		'Cross-Origin-Resource-Policy': 'same-origin',
 		'X-XSS-Protection': '0',
-		'Permissions-Policy': 'geolocation=(), camera=(), microphone=(), payment=()'
+		'Permissions-Policy':
+			'geolocation=(), camera=(), microphone=(), payment=(), usb=(), interest-cohort=(), screen-wake-lock=()'
 		// CSP and HSTS removed - were blocking SvelteKit hydration
 	};
 
@@ -100,6 +103,34 @@ describe('hooks.server admin guard', () => {
 		} catch (e: any) {
 			expect(e.status).toBe(403);
 			expect(e.body.message).toBe('Forbidden: Admin access required');
+		}
+	});
+
+	it('does not protect non-admin routes that start with /admin', async () => {
+		const event = {
+			url: new URL('http://localhost/administration'),
+			locals: { user: null }
+		} as any;
+		const resolve = vi.fn().mockResolvedValue(new Response('OK'));
+
+		const response = await handleAdminGuard({ event, resolve });
+		expect(response.status).toBe(200);
+		expect(resolve).toHaveBeenCalled();
+	});
+
+	it('redirects unauthenticated users from /admin exactly', async () => {
+		const event = {
+			url: new URL('http://localhost/admin'),
+			locals: { user: null }
+		} as any;
+		const resolve = vi.fn();
+
+		try {
+			await handleAdminGuard({ event, resolve });
+			expect.fail('Should have thrown a redirect');
+		} catch (e: any) {
+			expect(e.status).toBe(302);
+			expect(e.location).toBe('/auth/login?redirectTo=%2Fadmin');
 		}
 	});
 
