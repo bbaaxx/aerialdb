@@ -22,3 +22,8 @@
 
 **Learning:** Using `Promise.all()` with independent Drizzle queries on Cloudflare D1 results in multiple network round-trips (one per query). Using `db.batch()` combines these into a single HTTP request to the D1 API, significantly reducing TTFB and latency for pages that fetch multiple datasets (e.g., moves + categories + featured content).
 **Action:** Prefer `db.batch()` over `Promise.all()` for parallel database queries in environments using Cloudflare D1 or LibSQL. Ensure the `Database` type is correctly augmented to support `.batch()` in TypeScript.
+
+## 2026-06-16 - [SQL Aggregation vs. Client-side Batch Merging]
+
+**Learning:** While `db.batch()` minimizes round-trips in Cloudflare D1, using a single SQL query with `LEFT JOIN` and `GROUP BY` to calculate related record counts (e.g., moves per category) is more efficient than fetching two sets and merging them in-memory. It reduces the amount of data transferred and the computational work required by the Cloudflare Worker.
+**Action:** Use SQL aggregation (GROUP BY, COUNT) and JOINs for related count data instead of fetching and merging multiple result sets in-memory.
