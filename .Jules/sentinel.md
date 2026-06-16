@@ -57,3 +57,9 @@
 **Vulnerability:** Security headers were set using `response.headers.set()` after `resolve(event)`. If a downstream hook (e.g., admin guard) triggered a redirect or error, these headers were skipped, leaving redirects and error pages unprotected.
 **Learning:** SvelteKit's `event.setHeaders()` should be used at the start of the hook chain to ensure headers persist across redirects and errors.
 **Prevention:** Always place the security headers hook at the beginning of the middleware sequence and use `event.setHeaders()` before calling `resolve(event)`.
+
+## 2026-05-22 - [Broad Path Matching in Admin Guard]
+
+**Vulnerability:** The admin guard used `startsWith('/admin')` to protect routes, which could inadvertently cover non-admin paths like `/administration` or `/admin-settings` if they were meant to be public.
+**Learning:** Broad string prefix matching for authorization can lead to unintended access control or accidental restriction of public resources.
+**Prevention:** Use exact path matching (`=== '/admin'`) combined with specific sub-path matching (`startsWith('/admin/')`) to ensure clear authorization boundaries.
