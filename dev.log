@@ -1,0 +1,12 @@
+
+> aerialdb@0.0.1 dev /app
+> vite dev
+
+(node:517788) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ [paraglide-js] Compilation complete (locale-modules)
+
+  VITE v7.3.3  ready in 4469 ms
+
+  ➜  Local:   http://localhost:5173/
+  ➜  Network: use --host to expose

@@ -36,7 +36,7 @@
 		</div>
 		<a
 			href="/admin/moves/new"
-			class="inline-flex items-center justify-center rounded-lg bg-gradient-to-r from-purple-500 to-indigo-500 px-6 py-2.5 text-sm font-medium text-white shadow-[0_0_15px_rgba(138,99,248,0.5)] transition hover:shadow-[0_0_20px_rgba(138,99,248,0.6)] focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:outline-none"
+			class="inline-flex items-center justify-center rounded-lg bg-gradient-to-r from-purple-500 to-indigo-500 px-6 py-2.5 text-sm font-medium text-white shadow-[0_0_15px_rgba(138,99,248,0.5)] transition hover:shadow-[0_0_20px_rgba(138,99,248,0.6)] focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-surface-container-low focus-visible:outline-none active:scale-95"
 		>
 			+ Add New Move
 		</a>
@@ -90,7 +90,7 @@
 					<button
 						type="button"
 						onclick={() => (searchQuery = '')}
-						class="absolute inset-y-0 right-0 flex items-center pr-3 text-on-surface-variant transition hover:text-on-surface focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
+						class="absolute inset-y-0 right-0 flex items-center pr-3 text-on-surface-variant transition hover:text-on-surface focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none active:scale-95"
 						aria-label={m.nav_search_clear()}
 					>
 						<X size={18} />
@@ -105,7 +105,7 @@
 			<select
 				id="category"
 				bind:value={selectedCategory}
-				class="w-full rounded-lg border border-outline-variant/15 bg-surface-container-low px-4 py-2 text-sm text-on-surface focus:border-primary focus:ring-2 focus:ring-primary focus:outline-none"
+				class="w-full rounded-lg border border-outline-variant/15 bg-surface-container-low px-4 py-2 text-sm text-on-surface transition-all focus:border-primary focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-surface-container focus:outline-none"
 			>
 				<option value="all">All Base Techniques</option>
 				{#each data.categories as category (category.id)}
@@ -122,7 +122,7 @@
 					searchQuery = '';
 					selectedCategory = 'all';
 				}}
-				class="rounded-lg border border-outline-variant/15 bg-surface-container-low px-4 py-2 text-sm font-medium text-on-surface-variant transition-colors hover:bg-surface-container"
+				class="rounded-lg border border-outline-variant/15 bg-surface-container-low px-4 py-2 text-sm font-medium text-on-surface-variant transition-colors hover:bg-surface-container focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-surface-container active:scale-95"
 			>
 				Clear
 			</button>
@@ -173,7 +173,10 @@
 					{#each filteredMoves as move (move.id)}
 						<tr class="transition-colors hover:bg-surface-container-high">
 							<td class="px-4 py-3">
-								<a href="/moves/{move.id}" class="font-medium text-on-surface hover:text-primary">
+								<a
+									href="/moves/{move.id}"
+									class="rounded-sm font-medium text-on-surface transition-all hover:text-primary focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-4 focus-visible:ring-offset-surface-container focus-visible:outline-none"
+								>
 									{move.name}
 								</a>
 								<div class="mt-1 text-xs text-on-surface-variant sm:hidden">
@@ -186,16 +189,25 @@
 							<td class="hidden px-4 py-3 text-center md:table-cell">
 								<div class="flex items-center justify-center gap-2">
 									{#if move.hasImage}
-										<span class="text-lg" title="Has image">📷</span>
+										<span class="text-lg" role="img" aria-label="Has image" title="Has image"
+											>📷</span
+										>
 									{/if}
 									{#if move.hasVideo}
-										<span class="text-lg" title="Has video">🎥</span>
+										<span class="text-lg" role="img" aria-label="Has video" title="Has video"
+											>🎥</span
+										>
 									{/if}
 									{#if move.hasDescription}
-										<span class="text-lg" title="Has description">📝</span>
+										<span
+											class="text-lg"
+											role="img"
+											aria-label="Has description"
+											title="Has description">📝</span
+										>
 									{/if}
 									{#if !move.hasImage && !move.hasVideo && !move.hasDescription}
-										<span class="text-on-surface-variant">—</span>
+										<span class="text-on-surface-variant" aria-hidden="true">—</span>
 									{/if}
 								</div>
 							</td>
@@ -207,7 +219,7 @@
 							<td class="px-4 py-3 text-right">
 								<a
 									href="/admin/moves/{move.id}/edit"
-									class="inline-flex items-center rounded-md bg-primary/10 px-3 py-1.5 text-sm font-medium text-primary transition-colors hover:bg-primary/20"
+									class="inline-flex items-center rounded-md bg-primary/10 px-3 py-1.5 text-sm font-medium text-primary transition-all hover:bg-primary/20 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-surface-container active:scale-95"
 								>
 									Edit
 								</a>
