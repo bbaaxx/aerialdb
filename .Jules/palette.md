@@ -62,3 +62,8 @@
 
 **Learning:** Automatically focusing the first input in authentication forms (Login/Signup) significantly reduces friction by allowing users to start typing immediately. Pairing this with clear visual indicators for required fields (\*) and tactile feedback on button interaction (active:scale-95) creates a more professional and responsive user experience.
 **Action:** Always implement autofocus for the primary input on task-oriented pages and provide immediate visual/tactile feedback for primary actions.
+
+## 2026-06-08 - [Admin Navigation Discoverability and State]
+
+**Learning:** Admin interfaces often neglect the same level of UX polish as public-facing pages. Implementing clear active states with `aria-current="page"` and ensuring all management sections (like Categories) are directly accessible from a persistent navigation bar significantly improves admin efficiency and reduces reliance on the dashboard as the sole entry point.
+**Action:** Ensure admin layouts provide a complete, accessible, and visually expressive navigation experience mirroring the public site's standards.
