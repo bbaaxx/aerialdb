@@ -62,7 +62,10 @@ export const handleSecurityHeaders: Handle = async ({ event, resolve }) => {
 		'Cross-Origin-Opener-Policy': 'same-origin',
 		'Cross-Origin-Resource-Policy': 'same-origin',
 		'X-XSS-Protection': '0',
-		'Permissions-Policy': 'geolocation=(), camera=(), microphone=(), payment=()'
+		'X-Permitted-Cross-Domain-Policies': 'none',
+		'X-DNS-Prefetch-Control': 'off',
+		'Permissions-Policy':
+			'geolocation=(), camera=(), microphone=(), payment=(), usb=(), interest-cohort=(), screen-wake-lock=()'
 	});
 
 	// SECURITY: Enable HSTS in production to ensure secure connections
