@@ -1,9 +1,9 @@
 ---
-id: "agent-pr-spawn-pattern"
-title: "Agent PR Spawn Duplication Pattern"
-category: "process"
-created: "2026-06-04"
-updated: "2026-06-04"
+id: 'agent-pr-spawn-pattern'
+title: 'Agent PR Spawn Duplication Pattern'
+category: 'process'
+created: '2026-06-04'
+updated: '2026-06-04'
 related_initiatives: []
 tags: []
 ---
@@ -16,11 +16,11 @@ AerialDB uses three named coding agents — **Bolt** (performance), **Sentinel**
 
 ## Evidence (as of 2026-06-03)
 
-| Topic | Open PRs | Same dev head? | Pattern |
-|---|---|---|---|
-| `db.batch()` D1 query batching | #132, #133, #134, #139 | Yes (1e0baf5) | 4 PRs, 3 days apart |
-| CSP + security headers | #135, #138 | Yes (1e0baf5) | 2 PRs, 1 day apart |
-| Admin category loading states | #131, #136 | Yes (1e0baf5) | 2 PRs, 2 days apart |
+| Topic                          | Open PRs               | Same dev head? | Pattern             |
+| ------------------------------ | ---------------------- | -------------- | ------------------- |
+| `db.batch()` D1 query batching | #132, #133, #134, #139 | Yes (1e0baf5)  | 4 PRs, 3 days apart |
+| CSP + security headers         | #135, #138             | Yes (1e0baf5)  | 2 PRs, 1 day apart  |
+| Admin category loading states  | #131, #136             | Yes (1e0baf5)  | 2 PRs, 2 days apart |
 
 All 9 open PRs target `dev` and branched from the same commit (`1e0baf5`, the merge of PR #130 on 2026-05-30). The "latest updates accumulated" cleanup on 2026-05-30 closed 14+ similar duplicates from earlier in May.
 
@@ -40,7 +40,7 @@ When N open PRs are concentrated on one topic:
 3. **Validate the superset's correctness independently.** Duplicates are not always safe — the strict-superset rule does not guarantee that the chosen PR is the most correct. In June 2026, the strict superset of the security cluster was actually buggy: PR #135's CSP `style-src` lacked `'unsafe-inline'`, which would have broken 5 Svelte transition call sites in production. The non-superset PR #138 was the right choice.
 4. **Close the duplicates with reasons** in the PR comment (e.g., "Superseded by #N — this PR does not batch `src/routes/admin/categories/+page.server.ts`").
 5. **Merge the canonical PR.** The user's standard merge button is fine — Guardian has already run, and the four surviving PRs in the June 2026 triage operated on entirely disjoint file sets.
-6. **Capture the lesson.** The Agent PR spawn pattern should be addressed at the *task* layer (prevent parallel/redundant Jules tasks) and the *PR-verification* layer (Guardian should detect semantic duplication, not just CI/lint).
+6. **Capture the lesson.** The Agent PR spawn pattern should be addressed at the _task_ layer (prevent parallel/redundant Jules tasks) and the _PR-verification_ layer (Guardian should detect semantic duplication, not just CI/lint).
 
 ## Common Defects Found in Duplicate PRs
 
