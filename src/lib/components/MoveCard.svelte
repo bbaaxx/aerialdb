@@ -17,13 +17,13 @@
 
 	let levelClasses = $derived(
 		move.level === 'beginner'
-			? 'text-teal-400 bg-teal-400/10'
+			? 'bg-teal-400/15 text-teal-400 ring-1 ring-teal-400/30'
 			: move.level === 'intermediate'
-				? 'text-blue-400 bg-blue-400/10'
+				? 'bg-blue-400/15 text-blue-400 ring-1 ring-blue-400/30'
 				: move.level === 'advanced'
-					? 'text-purple-400 bg-purple-400/10'
+					? 'bg-purple-400/15 text-purple-400 ring-1 ring-purple-400/30'
 					: move.level === 'professional'
-						? 'text-amber-400 bg-amber-400/10'
+						? 'bg-amber-400/15 text-amber-400 ring-1 ring-amber-400/30'
 						: ''
 	);
 
@@ -87,7 +87,7 @@
 			{move.category.name}
 		</span>
 		{#if move.level}
-			<span class="rounded-full px-2.5 py-0.5 text-xs font-medium {levelClasses}">
+			<span class="rounded-full px-2.5 py-0.5 text-xs font-medium capitalize {levelClasses}">
 				{move.level}
 			</span>
 		{/if}

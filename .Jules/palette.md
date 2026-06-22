@@ -62,3 +62,8 @@
 
 **Learning:** Automatically focusing the first input in authentication forms (Login/Signup) significantly reduces friction by allowing users to start typing immediately. Pairing this with clear visual indicators for required fields (\*) and tactile feedback on button interaction (active:scale-95) creates a more professional and responsive user experience.
 **Action:** Always implement autofocus for the primary input on task-oriented pages and provide immediate visual/tactile feedback for primary actions.
+
+## 2026-06-08 - [Standardized Badge Patterns and CSS-Aware Testing]
+
+**Learning:** Standardizing the visual treatment of metadata badges (like difficulty levels) across the application reduces cognitive load. A pattern of 15% background opacity, 30% ring opacity, and the `capitalize` class provides a consistent, accessible high-contrast design. However, CSS-transformed text (via `capitalize`) can lead to test failures if unit tests expect the visual casing instead of the raw data casing.
+**Action:** Use the standardized badge pattern (bg/15, ring/30, capitalize) for all metadata indicators. In tests, always use case-insensitive regex matchers (e.g., `getByText(/text/i)`) when asserting on elements that use CSS text transformations.

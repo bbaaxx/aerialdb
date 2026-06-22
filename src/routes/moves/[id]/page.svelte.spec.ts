@@ -10,6 +10,7 @@ const mockMove = {
 	description: 'Test Description',
 	imageUrl: 'https://example.com/image.jpg',
 	videoUrl: 'https://youtube.com/watch?v=dQw4w9WgXcQ',
+	level: 'intermediate',
 	contributorName: 'Test Contributor',
 	createdAt: new Date('2026-01-01T00:00:00Z'),
 	updatedAt: new Date('2026-01-02T00:00:00Z'),
@@ -22,11 +23,12 @@ const mockData = {
 };
 
 describe('moves/[id]/+page.svelte', () => {
-	it('should render the move name and category', async () => {
+	it('should render the move name, category, and difficulty level', async () => {
 		render(MoveDetailPage, { data: mockData });
 
 		await expect.element(page.getByText('Test Move')).toBeVisible();
 		await expect.element(page.getByText('Test Category')).toBeVisible();
+		await expect.element(page.getByText(/intermediate/i)).toBeVisible();
 	});
 
 	it('should have a share button that copies to clipboard when Web Share API is unavailable', async () => {
