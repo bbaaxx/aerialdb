@@ -57,3 +57,9 @@
 **Vulnerability:** Security headers were set using `response.headers.set()` after `resolve(event)`. If a downstream hook (e.g., admin guard) triggered a redirect or error, these headers were skipped, leaving redirects and error pages unprotected.
 **Learning:** SvelteKit's `event.setHeaders()` should be used at the start of the hook chain to ensure headers persist across redirects and errors.
 **Prevention:** Always place the security headers hook at the beginning of the middleware sequence and use `event.setHeaders()` before calling `resolve(event)`.
+
+## 2026-05-22 - [Hardened Session Cookies with __Host- Prefix]
+
+**Vulnerability:** Session cookies lacked the `__Host-` prefix, potentially allowing cookie tossing or session fixation attacks from subdomains if the application were deployed alongside other subdomains.
+**Learning:** Browsers provide built-in enforcement for cookies prefixed with `__Host-`, requiring them to be `Secure`, have `Path=/`, and no `Domain` attribute. This prevents subdomains from setting or overwriting the cookie.
+**Prevention:** Use the `__Host-` prefix for critical session cookies in production to leverage browser-level security guarantees and provide defense-in-depth against subdomain-based attacks.

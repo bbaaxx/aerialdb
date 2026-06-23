@@ -1,7 +1,13 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { generateSessionToken, validateSessionToken } from './auth';
+import { generateSessionToken, validateSessionToken, sessionCookieName } from './auth';
 
 describe('auth', () => {
+	describe('sessionCookieName', () => {
+		it('returns "auth-session" in development/test environment', () => {
+			expect(sessionCookieName).toBe('auth-session');
+		});
+	});
+
 	describe('generateSessionToken', () => {
 		it('returns a 24-character base64url encoded string (18 bytes)', () => {
 			// Act
