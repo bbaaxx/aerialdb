@@ -35,5 +35,8 @@
 	"move_description_title": "Descripción",
 	"move_description_empty": "No hay descripción disponible todavía. ¡Vuelve pronto!",
 	"move_no_media": "No hay medios disponibles",
-	"move_edit": "Editar este movimiento"
+	"move_edit": "Editar este movimiento",
+	"admin_nav_dashboard": "Panel de Control",
+	"admin_nav_categories": "Categorías",
+	"admin_nav_add_move": "Agregar Movimiento"
 }

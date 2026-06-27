@@ -35,5 +35,8 @@
 	"move_description_title": "Description",
 	"move_description_empty": "No description available yet. Check back later!",
 	"move_no_media": "No media available",
-	"move_edit": "Edit this move"
+	"move_edit": "Edit this move",
+	"admin_nav_dashboard": "Dashboard",
+	"admin_nav_categories": "Categories",
+	"admin_nav_add_move": "Add Move"
 }
