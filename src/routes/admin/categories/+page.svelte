@@ -7,6 +7,9 @@
 
 	let { data, form }: { data: PageData; form: ActionData } = $props();
 
+	// References for focus management
+	let editInput = $state<HTMLInputElement | undefined>(undefined);
+
 	// Submission state
 	let isSubmitting = $state(false);
 	let processingId = $state<string | null>(null);
@@ -21,6 +24,14 @@
 
 	// New category form state
 	let newCategoryName = $state('');
+
+	// Focus management effects
+	$effect(() => {
+		if (editingId && editInput) {
+			editInput.focus();
+			editInput.select();
+		}
+	});
 
 	// Character count helper
 	function getCountColor(length: number, max: number) {
@@ -193,7 +204,9 @@
 											<input
 												type="text"
 												name="name"
+												bind:this={editInput}
 												bind:value={editingName}
+												onkeydown={(e) => e.key === 'Escape' && cancelEdit()}
 												maxlength="100"
 												required
 												disabled={isSubmitting}

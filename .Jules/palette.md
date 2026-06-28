@@ -62,3 +62,8 @@
 
 **Learning:** Automatically focusing the first input in authentication forms (Login/Signup) significantly reduces friction by allowing users to start typing immediately. Pairing this with clear visual indicators for required fields (\*) and tactile feedback on button interaction (active:scale-95) creates a more professional and responsive user experience.
 **Action:** Always implement autofocus for the primary input on task-oriented pages and provide immediate visual/tactile feedback for primary actions.
+
+## 2026-06-08 - [Polished Inline Edit Focus and A11y]
+
+**Learning:** For a smooth inline editing experience in Svelte 5, using an `$effect` to both `.focus()` and `.select()` an input when an 'edit mode' is triggered allows users to immediately type to replace the existing value. Additionally, placing keyboard handlers like 'Escape' directly on the input or an element with an appropriate ARIA role (rather than a static `form` or `div`) avoids accessibility warnings and ensures semantic correctness.
+**Action:** Use `$effect` with `.focus()` and `.select()` for inline edits. Avoid `onkeydown` on non-interactive elements without roles to prevent `a11y-no-noninteractive-element-interactions` warnings.
