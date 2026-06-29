@@ -62,3 +62,8 @@
 
 **Learning:** Automatically focusing the first input in authentication forms (Login/Signup) significantly reduces friction by allowing users to start typing immediately. Pairing this with clear visual indicators for required fields (\*) and tactile feedback on button interaction (active:scale-95) creates a more professional and responsive user experience.
 **Action:** Always implement autofocus for the primary input on task-oriented pages and provide immediate visual/tactile feedback for primary actions.
+
+## 2026-06-29 - [Navigation Standardization and Tactile Feedback]
+
+**Learning:** Standardizing navigation UX with clear visual/semantic active states (`aria-current="page"` and `bg-surface-container`) and tactile feedback (`active:scale-95`) significantly improves user orientation and the "feel" of the interface. Using keyed loops in Svelte 5 for navigation lists ensures better performance and satisfies linting requirements.
+**Action:** Use a consistent `isActive` pattern and tactile transforms for all navigation components. Always key your `{#each}` loops for navigation links.
