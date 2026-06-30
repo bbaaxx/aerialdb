@@ -1,11 +1,12 @@
 <script lang="ts">
 	import type { PageData } from './$types';
-	import { ChevronLeft, Pencil, ImageOff, Share2, Check } from 'lucide-svelte';
+	import { ChevronLeft, Pencil, ImageOff, Share2, Check, Copy } from 'lucide-svelte';
 	import { m } from '$lib/paraglide/messages.js';
 	import YouTubeFacade from '$lib/components/YouTubeFacade.svelte';
 
 	let { data }: { data: PageData } = $props();
 	let copied = $state(false);
+	let descriptionCopied = $state(false);
 
 	/**
 	 * Handles sharing the move using the Web Share API if available,
@@ -45,6 +46,21 @@
 	}
 
 	const youtubeId = $derived(getYouTubeId(data.move.videoUrl));
+
+	/**
+	 * Copies the move description to the clipboard.
+	 */
+	async function handleCopyDescription() {
+		if (!data.move.description) return;
+
+		try {
+			await navigator.clipboard.writeText(data.move.description);
+			descriptionCopied = true;
+			setTimeout(() => (descriptionCopied = false), 2000);
+		} catch (err) {
+			console.error('Failed to copy description: ', err);
+		}
+	}
 </script>
 
 <svelte:head>
@@ -150,7 +166,27 @@
 
 		<!-- Description Section -->
 		<div class="rounded-lg bg-surface-container p-6">
-			<h2 class="mb-4 text-lg font-semibold text-on-surface">{m.move_description_title()}</h2>
+			<div class="mb-4 flex items-center justify-between">
+				<h2 class="text-lg font-semibold text-on-surface">{m.move_description_title()}</h2>
+				{#if data.move.description}
+					<button
+						type="button"
+						onclick={handleCopyDescription}
+						class="inline-flex items-center gap-1.5 rounded-lg px-2 py-1 text-xs font-medium text-on-surface-variant transition-all hover:bg-surface-container-high hover:text-on-surface focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none active:scale-95"
+						aria-label={descriptionCopied
+							? m.move_description_copied()
+							: m.move_copy_description_aria()}
+					>
+						{#if descriptionCopied}
+							<Check size={14} class="text-teal-400" aria-hidden="true" />
+							<span class="text-teal-400">{m.move_description_copied()}</span>
+						{:else}
+							<Copy size={14} aria-hidden="true" />
+							<span>{m.move_copy_description()}</span>
+						{/if}
+					</button>
+				{/if}
+			</div>
 
 			{#if data.move.description}
 				<div class="prose max-w-none prose-invert">

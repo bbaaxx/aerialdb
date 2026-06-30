@@ -33,6 +33,9 @@
 	"move_copied_aria": "Copied to clipboard",
 	"move_contributor": "Contributor",
 	"move_description_title": "Description",
+	"move_copy_description": "Copy",
+	"move_description_copied": "Copied!",
+	"move_copy_description_aria": "Copy description to clipboard",
 	"move_description_empty": "No description available yet. Check back later!",
 	"move_no_media": "No media available",
 	"move_edit": "Edit this move"

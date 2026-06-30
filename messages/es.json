@@ -33,6 +33,9 @@
 	"move_copied_aria": "Copiado al portapapeles",
 	"move_contributor": "Contribuidor",
 	"move_description_title": "Descripción",
+	"move_copy_description": "Copiar",
+	"move_description_copied": "¡Copiado!",
+	"move_copy_description_aria": "Copiar descripción al portapapeles",
 	"move_description_empty": "No hay descripción disponible todavía. ¡Vuelve pronto!",
 	"move_no_media": "No hay medios disponibles",
 	"move_edit": "Editar este movimiento"
