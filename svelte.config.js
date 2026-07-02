@@ -15,6 +15,7 @@ const config = {
 			mode: 'nonce',
 			directives: {
 				'default-src': ['self'],
+				'object-src': ['none'],
 				'script-src': ['self'],
 				'style-src': ['self', 'unsafe-inline', 'https://fonts.googleapis.com'],
 				'font-src': ['self', 'https://fonts.gstatic.com'],
