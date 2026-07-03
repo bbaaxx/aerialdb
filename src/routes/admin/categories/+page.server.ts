@@ -22,39 +22,20 @@ type CategoryWithMoveCount = {
 export const load: PageServerLoad = async (event) => {
 	const db = getDb(event);
 
-	// Performance: Batch categories and move counts queries into a single round-trip.
-	// This is specifically optimized for Cloudflare D1 to minimize network latency between Worker and DB.
-	const [allCategories, moveCountsRaw] = await db.batch([
-		db
-			.select({
-				id: categories.id,
-				name: categories.name,
-				createdAt: categories.createdAt
-			})
-			.from(categories)
-			.orderBy(categories.name),
-
-		db
-			.select({
-				categoryId: moves.categoryId,
-				count: sql<number>`count(*)`.as('count')
-			})
-			.from(moves)
-			.groupBy(moves.categoryId)
-	]);
-
-	// Create a map for faster lookup
-	const moveCountMap = new Map<string, number>(
-		moveCountsRaw.map((mc) => [mc.categoryId, mc.count])
-	);
-
-	// Merge categories with their move counts
-	const categoriesWithCounts: CategoryWithMoveCount[] = allCategories.map(
-		(cat: { id: string; name: string; createdAt: Date }) => ({
-			...cat,
-			moveCount: moveCountMap.get(cat.id) ?? 0
+	// Performance: Join categories with moves to fetch move counts in a single query.
+	// This reduces database query executions and avoids manual merging in JavaScript.
+	// LEFT JOIN ensures categories with zero moves are included.
+	const categoriesWithCounts = (await db
+		.select({
+			id: categories.id,
+			name: categories.name,
+			createdAt: categories.createdAt,
+			moveCount: sql<number>`count(${moves.id})`.as('move_count')
 		})
-	);
+		.from(categories)
+		.leftJoin(moves, eq(categories.id, moves.categoryId))
+		.groupBy(categories.id)
+		.orderBy(categories.name)) as CategoryWithMoveCount[];
 
 	return {
 		categories: categoriesWithCounts
