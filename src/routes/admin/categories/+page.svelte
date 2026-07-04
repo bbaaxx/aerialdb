@@ -14,6 +14,14 @@
 	// State for inline editing
 	let editingId = $state<string | null>(null);
 	let editingName = $state('');
+	let editInput = $state<HTMLInputElement | null>(null);
+
+	$effect(() => {
+		if (editingId && editInput) {
+			editInput.focus();
+			editInput.select();
+		}
+	});
 
 	// State for delete confirmation
 	let deletingId = $state<string | null>(null);
@@ -190,9 +198,14 @@
 									>
 										<input type="hidden" name="id" value={category.id} />
 										<div class="relative flex-1">
+											<label for="edit-category-{category.id}" class="sr-only">
+												Edit category name
+											</label>
 											<input
+												id="edit-category-{category.id}"
 												type="text"
 												name="name"
+												bind:this={editInput}
 												bind:value={editingName}
 												maxlength="100"
 												required

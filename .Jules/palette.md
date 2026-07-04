@@ -62,3 +62,8 @@
 
 **Learning:** Automatically focusing the first input in authentication forms (Login/Signup) significantly reduces friction by allowing users to start typing immediately. Pairing this with clear visual indicators for required fields (\*) and tactile feedback on button interaction (active:scale-95) creates a more professional and responsive user experience.
 **Action:** Always implement autofocus for the primary input on task-oriented pages and provide immediate visual/tactile feedback for primary actions.
+
+## 2026-07-04 - [Enhanced Inline Edit UX in Svelte 5]
+
+**Learning:** For inline editing in tables or lists, automatically focusing AND selecting the text of the input field when edit mode is activated significantly reduces friction for the user by enabling immediate replacement of the existing value. In Svelte 5, this is most cleanly implemented using an `$effect` that monitors the state variable controlling the edit mode (e.g., `editingId`) and calls `.focus()` and `.select()` on the bound element reference.
+**Action:** Use an `$effect` with `.focus()` and `.select()` on bound input elements to provide a polished inline editing experience.
