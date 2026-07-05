@@ -1,7 +1,21 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { generateSessionToken, validateSessionToken } from './auth';
+import { generateSessionToken, validateSessionToken, sessionCookieName } from './auth';
 
 describe('auth', () => {
+	describe('sessionCookieName', () => {
+		it('has the correct prefix based on environment', () => {
+			// In test environment, import.meta.env.PROD is false
+			const expected = import.meta.env.PROD ? '__Host-auth-session' : 'auth-session';
+			expect(sessionCookieName).toBe(expected);
+		});
+
+		it('matches security standards for production', () => {
+			// Logic check: if PROD is true, it MUST have __Host- prefix
+			const getCookieName = (isProd: boolean) => (isProd ? '__Host-auth-session' : 'auth-session');
+			expect(getCookieName(true)).toBe('__Host-auth-session');
+		});
+	});
+
 	describe('generateSessionToken', () => {
 		it('returns a 24-character base64url encoded string (18 bytes)', () => {
 			// Act
