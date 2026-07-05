@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { actions } from './+page.server';
-import { isRedirect } from '@sveltejs/kit';
+import { isRedirect, type RequestEvent } from '@sveltejs/kit';
 
 vi.mock('$lib/server/db', () => ({
 	getDb: vi.fn().mockReturnValue({
@@ -42,7 +42,7 @@ describe('Categories Admin Actions Security', () => {
 				user: null
 			},
 			url: new URL('http://localhost/admin/categories')
-		} as Parameters<typeof actions.createCategory>[0];
+		} as any;
 
 		try {
 			await actions.createCategory(event);
@@ -61,7 +61,7 @@ describe('Categories Admin Actions Security', () => {
 	it('createCategory action should return 403 if user is not an admin', async () => {
 		const formData = new FormData();
 		formData.append('name', 'New Category');
-		const event = createMockEvent(formData, { id: 'user-1', role: 'user' });
+		const event = createMockEvent(formData, { id: 'user-1', role: 'user' }) as any;
 
 		try {
 			await actions.createCategory(event);
@@ -76,7 +76,7 @@ describe('Categories Admin Actions Security', () => {
 		const formData = new FormData();
 		formData.append('id', 'cat-1');
 		formData.append('name', 'Updated Category');
-		const event = createMockEvent(formData, { id: 'user-1', role: 'user' });
+		const event = createMockEvent(formData, { id: 'user-1', role: 'user' }) as any;
 
 		try {
 			await actions.updateCategory(event);
@@ -90,7 +90,7 @@ describe('Categories Admin Actions Security', () => {
 	it('deleteCategory action should return 403 if user is not an admin', async () => {
 		const formData = new FormData();
 		formData.append('id', 'cat-1');
-		const event = createMockEvent(formData, { id: 'user-1', role: 'user' });
+		const event = createMockEvent(formData, { id: 'user-1', role: 'user' }) as any;
 
 		try {
 			await actions.deleteCategory(event);
