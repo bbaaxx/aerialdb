@@ -54,7 +54,13 @@ export const load: PageServerLoad = async (event) => {
 			.where(conditions.length > 0 ? and(...conditions) : undefined)
 			.orderBy(moves.name),
 
-		db.select().from(categories).orderBy(categories.name),
+		db
+			.select({
+				id: categories.id,
+				name: categories.name
+			})
+			.from(categories)
+			.orderBy(categories.name),
 
 		db
 			.select({

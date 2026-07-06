@@ -17,13 +17,27 @@
 		})
 	);
 
-	// Statistics
-	let stats = $derived({
-		total: data.moves.length,
-		withImage: data.moves.filter((m) => m.hasImage).length,
-		withVideo: data.moves.filter((m) => m.hasVideo).length,
-		needsMedia: data.moves.filter((m) => !m.hasImage && !m.hasVideo).length,
-		complete: data.moves.filter((m) => m.hasImage && m.hasVideo && m.hasDescription).length
+	// Statistics: Consolidated into a single pass over the data for better performance.
+	let stats = $derived.by(() => {
+		let withImage = 0;
+		let withVideo = 0;
+		let needsMedia = 0;
+		let complete = 0;
+
+		for (const move of data.moves) {
+			if (move.hasImage) withImage++;
+			if (move.hasVideo) withVideo++;
+			if (!move.hasImage && !move.hasVideo) needsMedia++;
+			if (move.hasImage && move.hasVideo && move.hasDescription) complete++;
+		}
+
+		return {
+			total: data.moves.length,
+			withImage,
+			withVideo,
+			needsMedia,
+			complete
+		};
 	});
 </script>
 
