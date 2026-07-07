@@ -128,4 +128,20 @@ describe('moves/[id]/+page.svelte', () => {
 		expect(writeTextMock).toHaveBeenCalledWith('Test Description');
 		await expect.element(page.getByText(m.move_description_copied())).toBeVisible();
 	});
+
+	it('should not show edit link for public users', async () => {
+		render(MoveDetailPage, { data: mockData });
+		const editLink = page.getByRole('link', { name: m.move_edit() });
+		await expect.element(editLink).not.toBeInTheDocument();
+	});
+
+	it('should show edit link for admin users', async () => {
+		const adminData = {
+			user: { id: 'admin-id', username: 'admin', role: 'admin' },
+			move: mockMove
+		};
+		render(MoveDetailPage, { data: adminData });
+		const editLink = page.getByRole('link', { name: m.move_edit() });
+		await expect.element(editLink).toBeVisible();
+	});
 });
