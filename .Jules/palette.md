@@ -47,3 +47,23 @@
 
 **Learning:** Using `type="search"` provides better mobile OS integration, but browsers like Chrome/Safari add native clear buttons that can clash with custom UI. Using Tailwind's pseudo-element variants `[&::-webkit-search-cancel-button]:appearance-none` and `[&::-webkit-search-decoration]:appearance-none` allows for full control over the search interface while keeping the semantic benefits of the search type.
 **Action:** Always suppress native search decorations when implementing custom clear buttons on `type="search" icon-only inputs.
+
+## 2026-06-07 - [Standardized Tactile Feedback and Overlay Focus]
+
+**Learning:** Providing consistent tactile feedback (e.g., `active:scale-95`) across all interactive elements significantly improves the "feel" of the UI, especially on touch devices. Additionally, for mobile-first overlays like search bars and mobile menus, restoring focus to the trigger button when closing via keyboard (Escape) is a critical accessibility requirement that prevents focus from being lost in the document.
+**Action:** Always pair `focus-visible` styles with `active:scale-95` for interactive elements. Ensure focus is explicitly returned to triggering elements when overlays are dismissed.
+
+## 2026-05-29 - [Targeted Loading States for List Management]
+
+**Learning:** When managing a list of items (like categories), using a global loading state can be confusing. Implementing a targeted 'processingId' state allows for specific feedback (like spinners on the exact button clicked) while keeping the rest of the UI interactive. Furthermore, in SvelteKit 'use:enhance', the loading state should persist through the 'await update()' AND any subsequent data invalidation ('await invalidateAll()') to ensure a seamless transition until the UI is fully updated.
+**Action:** Use a combination of 'isSubmitting' and 'processingId' for granular feedback in list views. Ensure the loading state wraps all post-submission data refreshes.
+
+## 2026-05-29 - [Autofocus and Visual Feedback for Auth Flows]
+
+**Learning:** Automatically focusing the first input in authentication forms (Login/Signup) significantly reduces friction by allowing users to start typing immediately. Pairing this with clear visual indicators for required fields (\*) and tactile feedback on button interaction (active:scale-95) creates a more professional and responsive user experience.
+**Action:** Always implement autofocus for the primary input on task-oriented pages and provide immediate visual/tactile feedback for primary actions.
+
+## 2026-06-29 - [Navigation Standardization and Tactile Feedback]
+
+**Learning:** Standardizing navigation UX with clear visual/semantic active states (`aria-current="page"` and `bg-surface-container`) and tactile feedback (`active:scale-95`) significantly improves user orientation and the "feel" of the interface. Using keyed loops in Svelte 5 for navigation lists ensures better performance and satisfies linting requirements.
+**Action:** Use a consistent `isActive` pattern and tactile transforms for all navigation components. Always key your `{#each}` loops for navigation links.

@@ -53,34 +53,31 @@ export const handleAdminGuard: Handle = async ({ event, resolve }) => {
 };
 
 export const handleSecurityHeaders: Handle = async ({ event, resolve }) => {
-	const response = await resolve(event);
-
-	response.headers.set('X-Frame-Options', 'SAMEORIGIN');
-	response.headers.set('X-Content-Type-Options', 'nosniff');
-	response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
-	response.headers.set('Cross-Origin-Opener-Policy', 'same-origin');
-	response.headers.set('Cross-Origin-Resource-Policy', 'same-origin');
-	response.headers.set('X-XSS-Protection', '0');
-	response.headers.set(
-		'Permissions-Policy',
-		'geolocation=(), camera=(), microphone=(), payment=()'
-	);
-
-	// CSP removed - was blocking SvelteKit hydration inline scripts
-	// Uncomment if needed for production:
-	// response.headers.set('Content-Security-Policy', [...]);
+	// SECURITY: Use event.setHeaders() before resolve to ensure headers are applied
+	// even if downstream hooks throw a redirect or error.
+	event.setHeaders({
+		'X-Frame-Options': 'SAMEORIGIN',
+		'X-Content-Type-Options': 'nosniff',
+		'Referrer-Policy': 'strict-origin-when-cross-origin',
+		'Cross-Origin-Opener-Policy': 'same-origin',
+		'Cross-Origin-Resource-Policy': 'same-origin',
+		'X-XSS-Protection': '0',
+		'Permissions-Policy': 'geolocation=(), camera=(), microphone=(), payment=()'
+	});
 
 	// SECURITY: Enable HSTS in production to ensure secure connections
 	if (import.meta.env.PROD) {
-		response.headers.set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+		event.setHeaders({
+			'Strict-Transport-Security': 'max-age=31536000; includeSubDomains; preload'
+		});
 	}
 
-	return response;
+	return resolve(event);
 };
 
 export const handle: Handle = sequence(
+	handleSecurityHeaders,
 	handleParaglide,
 	handleAuth,
-	handleAdminGuard,
-	handleSecurityHeaders
+	handleAdminGuard
 );

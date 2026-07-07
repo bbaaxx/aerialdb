@@ -18,9 +18,9 @@ export const POST: RequestHandler = async (event) => {
 		auth.deleteSessionTokenCookie(event);
 	}
 
-	return redirect(302, '/', {
-		headers: {
-			'Clear-Site-Data': '"cookies", "storage"'
-		}
+	event.setHeaders({
+		'Clear-Site-Data': '"cookies", "storage", "cache"'
 	});
+
+	return redirect(302, '/');
 };
