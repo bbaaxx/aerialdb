@@ -3,8 +3,13 @@
 	import { enhance } from '$app/forms';
 	import { invalidateAll } from '$app/navigation';
 	import { fade } from 'svelte/transition';
+	import { Loader2 } from 'lucide-svelte';
 
 	let { data, form }: { data: PageData; form: ActionData } = $props();
+
+	// Submission state
+	let isSubmitting = $state(false);
+	let processingId = $state<string | null>(null);
 
 	// State for inline editing
 	let editingId = $state<string | null>(null);
@@ -16,6 +21,19 @@
 
 	// New category form state
 	let newCategoryName = $state('');
+	let newCategoryInput = $state<HTMLInputElement | undefined>(undefined);
+	let editInput = $state<HTMLInputElement | undefined>(undefined);
+
+	$effect(() => {
+		newCategoryInput?.focus();
+	});
+
+	$effect(() => {
+		if (editingId && editInput) {
+			editInput.focus();
+			editInput.select();
+		}
+	});
 
 	// Character count helper
 	function getCountColor(length: number, max: number) {
@@ -71,11 +89,13 @@
 			method="POST"
 			action="?/createCategory"
 			use:enhance={() => {
+				isSubmitting = true;
 				return async ({ result, update }) => {
 					await update();
 					if (result.type === 'redirect' || result.type === 'success') {
 						await refreshData();
 					}
+					isSubmitting = false;
 				};
 			}}
 			class="flex flex-col gap-4 sm:flex-row sm:items-end"
@@ -86,12 +106,15 @@
 					type="text"
 					id="new-category-name"
 					name="name"
+					bind:this={newCategoryInput}
 					bind:value={newCategoryName}
 					placeholder="Enter category name..."
 					maxlength="100"
 					required
 					aria-describedby="new-category-hint"
-					class="w-full rounded-lg border border-outline-variant/15 bg-surface-container px-4 py-2 text-sm text-on-surface placeholder-on-surface-variant focus:border-primary focus:ring-2 focus:ring-primary focus:outline-none"
+					aria-invalid={form?.action === 'create' && !!form?.error}
+					class="w-full rounded-lg border border-outline-variant/15 bg-surface-container px-4 py-2 text-sm text-on-surface placeholder-on-surface-variant focus:border-primary focus:ring-2 focus:ring-primary focus:outline-none disabled:opacity-70"
+					disabled={isSubmitting}
 				/>
 				<div id="new-category-hint" class="mt-1 flex items-center justify-between px-1">
 					{#if form?.action === 'create' && form?.error}
@@ -108,8 +131,12 @@
 			</div>
 			<button
 				type="submit"
-				class="inline-flex items-center justify-center rounded-lg bg-gradient-to-r from-purple-500 to-indigo-500 px-6 py-2.5 text-sm font-medium text-white shadow-[0_0_15px_rgba(138,99,248,0.5)] transition-all hover:shadow-[0_0_20px_rgba(138,99,248,0.6)] focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-surface-container"
+				disabled={isSubmitting}
+				class="inline-flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-purple-500 to-indigo-500 px-6 py-2.5 text-sm font-medium text-white shadow-[0_0_15px_rgba(138,99,248,0.5)] transition-all hover:shadow-[0_0_20px_rgba(138,99,248,0.6)] focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-surface-container active:scale-95 disabled:cursor-not-allowed disabled:opacity-70"
 			>
+				{#if isSubmitting && !processingId}
+					<Loader2 class="h-4 w-4 animate-spin" />
+				{/if}
 				Add Category
 			</button>
 		</form>
@@ -124,7 +151,7 @@
 
 	{#if form?.success}
 		<div class="mb-6 rounded-lg bg-green-500/10 p-4">
-			<p class="text-sm text-green-300">Operation completed successfully.</p>
+			<p class="text-sm text-teal-400">Operation completed successfully.</p>
 		</div>
 	{/if}
 
@@ -161,12 +188,16 @@
 										method="POST"
 										action="?/updateCategory"
 										use:enhance={() => {
+											isSubmitting = true;
+											processingId = category.id;
 											return async ({ result, update }) => {
 												await update();
 												if (result.type === 'success') {
 													cancelEdit();
 													await refreshData();
 												}
+												isSubmitting = false;
+												processingId = null;
 											};
 										}}
 										class="flex items-center gap-2"
@@ -176,11 +207,16 @@
 											<input
 												type="text"
 												name="name"
+												bind:this={editInput}
 												bind:value={editingName}
 												maxlength="100"
 												required
+												disabled={isSubmitting}
 												aria-describedby="edit-category-hint-{category.id}"
-												class="w-full rounded-lg border border-outline-variant/15 bg-surface-container px-3 py-1.5 pr-16 text-sm text-on-surface focus:border-primary focus:ring-2 focus:ring-primary focus:outline-none"
+												aria-invalid={form?.action === 'update' &&
+													form?.id === category.id &&
+													!!(form as any).error}
+												class="w-full rounded-lg border border-outline-variant/15 bg-surface-container px-3 py-1.5 pr-16 text-sm text-on-surface focus:border-primary focus:ring-2 focus:ring-primary focus:outline-none disabled:opacity-70"
 											/>
 											<span
 												id="edit-category-hint-{category.id}"
@@ -194,14 +230,19 @@
 										</div>
 										<button
 											type="submit"
-											class="rounded-lg bg-purple-600 px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-purple-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1 focus-visible:ring-offset-surface-container-high"
+											disabled={isSubmitting}
+											class="inline-flex items-center gap-2 rounded-lg bg-purple-600 px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-purple-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1 focus-visible:ring-offset-surface-container-high active:scale-95 disabled:cursor-not-allowed disabled:opacity-70"
 										>
+											{#if isSubmitting && processingId === category.id}
+												<Loader2 class="h-4 w-4 animate-spin" />
+											{/if}
 											Save
 										</button>
 										<button
 											type="button"
 											onclick={cancelEdit}
-											class="rounded-lg border border-outline-variant/15 px-3 py-1.5 text-sm font-medium text-on-surface-variant transition-colors hover:bg-surface-container-high focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1 focus-visible:ring-offset-surface-container-high"
+											disabled={isSubmitting}
+											class="rounded-lg border border-outline-variant/15 px-3 py-1.5 text-sm font-medium text-on-surface-variant transition-colors hover:bg-surface-container-high focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1 focus-visible:ring-offset-surface-container-high active:scale-95 disabled:cursor-not-allowed disabled:opacity-70"
 										>
 											Cancel
 										</button>
@@ -238,12 +279,16 @@
 											method="POST"
 											action="?/deleteCategory"
 											use:enhance={() => {
+												isSubmitting = true;
+												processingId = category.id;
 												return async ({ result, update }) => {
 													await update();
 													if (result.type === 'success' || result.type === 'redirect') {
 														cancelDelete();
 														await refreshData();
 													}
+													isSubmitting = false;
+													processingId = null;
 												};
 											}}
 											class="inline"
@@ -251,15 +296,20 @@
 											<input type="hidden" name="id" value={category.id} />
 											<button
 												type="submit"
-												class="rounded-lg bg-red-600 px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-red-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-error focus-visible:ring-offset-1 focus-visible:ring-offset-surface-container-high"
+												disabled={isSubmitting}
+												class="inline-flex items-center gap-2 rounded-lg bg-red-600 px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-red-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-error focus-visible:ring-offset-1 focus-visible:ring-offset-surface-container-high active:scale-95 disabled:cursor-not-allowed disabled:opacity-70"
 											>
+												{#if isSubmitting && processingId === category.id}
+													<Loader2 class="h-4 w-4 animate-spin" />
+												{/if}
 												Confirm
 											</button>
 										</form>
 										<button
 											type="button"
 											onclick={cancelDelete}
-											class="rounded-lg border border-outline-variant/15 px-3 py-1.5 text-sm font-medium text-on-surface-variant transition-colors hover:bg-surface-container-high focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1 focus-visible:ring-offset-surface-container-high"
+											disabled={isSubmitting}
+											class="rounded-lg border border-outline-variant/15 px-3 py-1.5 text-sm font-medium text-on-surface-variant transition-colors hover:bg-surface-container-high focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1 focus-visible:ring-offset-surface-container-high active:scale-95 disabled:cursor-not-allowed disabled:opacity-70"
 										>
 											Cancel
 										</button>
@@ -272,14 +322,16 @@
 										<button
 											type="button"
 											onclick={() => startEdit(category.id, category.name)}
-											class="rounded-lg bg-purple-600 px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-purple-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1 focus-visible:ring-offset-surface-container-high"
+											disabled={isSubmitting}
+											class="rounded-lg bg-purple-600 px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-purple-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1 focus-visible:ring-offset-surface-container-high active:scale-95 disabled:cursor-not-allowed disabled:opacity-70"
 										>
 											Edit
 										</button>
 										<button
 											type="button"
 											onclick={() => startDelete(category.id, category.moveCount)}
-											class="rounded-lg bg-red-600 px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-red-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-error focus-visible:ring-offset-1 focus-visible:ring-offset-surface-container-high"
+											disabled={isSubmitting}
+											class="rounded-lg bg-red-600 px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-red-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-error focus-visible:ring-offset-1 focus-visible:ring-offset-surface-container-high active:scale-95 disabled:cursor-not-allowed disabled:opacity-70"
 										>
 											Delete
 										</button>

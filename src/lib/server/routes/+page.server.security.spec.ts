@@ -84,8 +84,12 @@ describe('home page search hardening', () => {
 
 		vi.mocked(dbModule.getDb).mockReturnValue(mockDb);
 
-		// A better way: mock Promise.all specifically for this test if possible,
-		// but it's a global. Let's just mock the chain to return different things based on call count or arguments.
+		// A better way: mock db.batch specifically for this test
+		mockDb.batch = vi.fn().mockImplementation(async (queries) => {
+			return Promise.all(queries);
+		});
+
+		// A better way: mock the chain to return different things based on call count or arguments.
 		let callCount = 0;
 		mockDb.select.mockImplementation(() => {
 			const chain: any = {
@@ -98,7 +102,7 @@ describe('home page search hardening', () => {
 				callCount++;
 				if (callCount === 1) return Promise.resolve([]).then(resolve); // movesDataRaw
 				if (callCount === 2) return Promise.resolve([]).then(resolve); // allCategories
-				if (callCount === 3) return Promise.resolve([]).then(resolve); // featuredMoveRaw (wrapped in array by destructuring)
+				if (callCount === 3) return Promise.resolve([]).then(resolve); // featuredMoveResults (third query in db.batch; featuredMoveRaw = featuredMoveResults[0])
 				return Promise.resolve([]).then(resolve);
 			};
 			return chain;

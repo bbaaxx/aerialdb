@@ -23,9 +23,10 @@ export const load: PageServerLoad = async (event) => {
 	const db = getDb(event);
 	const { params } = event;
 
-	// Performance: Fetch move and categories in parallel to reduce TTFB.
+	// Performance: Batch move and categories queries into a single round-trip.
+	// This is specifically optimized for Cloudflare D1 to minimize network latency between Worker and DB.
 	// Selective Field Fetching: Only fetch fields needed for the edit form to minimize data transfer.
-	const [movesData, allCategories] = await Promise.all([
+	const [movesData, allCategories] = await db.batch([
 		db
 			.select({
 				id: moves.id,
@@ -48,23 +49,13 @@ export const load: PageServerLoad = async (event) => {
 			.orderBy(categories.name)
 	]);
 
-	const move = (
-		movesData as {
-			id: string;
-			name: string;
-			categoryId: string;
-			description: string | null;
-			imageUrl: string | null;
-			videoUrl: string | null;
-			contributorName: string | null;
-		}[]
-	)[0];
+	const move = movesData[0];
 
 	if (!move) {
 		throw error(404, 'Move not found');
 	}
 
-	return { move, categories: allCategories as { id: string; name: string }[] };
+	return { move, categories: allCategories };
 };
 
 export const actions = {

@@ -14,8 +14,20 @@ describe('hooks.server security headers', () => {
 	};
 
 	async function callHook(response: Response) {
-		const event = {} as any;
-		const resolve = vi.fn().mockResolvedValue(response);
+		const headers = new Headers();
+		const event = {
+			setHeaders: vi.fn().mockImplementation((newHeaders) => {
+				for (const [key, value] of Object.entries(newHeaders)) {
+					headers.set(key, value as string);
+				}
+			})
+		} as any;
+		const resolve = vi.fn().mockImplementation(async () => {
+			for (const [key, value] of headers.entries()) {
+				response.headers.set(key, value);
+			}
+			return response;
+		});
 		return handleSecurityHeaders({ event, resolve });
 	}
 
@@ -23,8 +35,9 @@ describe('hooks.server security headers', () => {
 		for (const [header, value] of Object.entries(expectedHeaders)) {
 			expect(response.headers.get(header)).toBe(value);
 		}
-		// CSP removed - was blocking inline scripts needed for SvelteKit hydration
+		// CSP is managed by svelte.config.js, so it won't appear in this isolated hook test
 		expect(response.headers.get('Content-Security-Policy')).toBeNull();
+		// HSTS is only added in production (import.meta.env.PROD), which is false in tests
 		expect(response.headers.get('Strict-Transport-Security')).toBeNull();
 	}
 

@@ -288,6 +288,23 @@ Prefer current source code over generated indexes if they disagree, then update 
 
 ---
 
+## Jules Automation Rules
+
+Jules must treat `ENHANCEMENT_PLAN.md` and explicitly labeled GitHub issues as the source of truth for autonomous work.
+
+- Do not create speculative PRs from broad prompts like "improve UX", "optimize performance", or "find security improvements".
+- Implement exactly one explicit task ID from `ENHANCEMENT_PLAN.md` or one GitHub issue per PR.
+- Before coding, check open PRs and recent merged PRs for duplicate or overlapping work.
+- If overlap exists, stop and report the existing PR/commit instead of creating another PR.
+- PR titles from Jules must include the agent name and task ID when available, e.g. `Palette: UX-P0-001 hide public edit link`.
+- Keep PRs small, scoped, and reviewable. Do not bundle unrelated improvements.
+- Use npm commands only: `npm run check`, `npm run lint`, and relevant tests.
+- If no suitable task is explicitly provided, Jules should first look for suitable tasks in `ENHANCEMENT_PLAN.md` and GitHub issues. If none fit, Jules may propose one concrete enhancement with rationale and acceptance criteria, but must not modify code or create a PR until approved.
+- Scheduled Jules tasks should be audit/recommendation only unless a specific task ID is included.
+- Avoid repeating already merged hardening/optimization work, especially session-cookie, CSP, and category-query changes.
+
+---
+
 ## Route Map
 
 | Route                    | Methods           | Auth                            | Purpose                                      |
