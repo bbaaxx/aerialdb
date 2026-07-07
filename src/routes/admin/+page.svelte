@@ -9,21 +9,42 @@
 	let selectedCategory = $state('all');
 
 	// Filtered moves based on search and category
-	let filteredMoves = $derived(
-		data.moves.filter((move) => {
-			const matchesSearch = move.name.toLowerCase().includes(searchQuery.toLowerCase());
-			const matchesCategory = selectedCategory === 'all' || move.categoryId === selectedCategory;
+	// Optimization: Pre-calculate lowercased search query to avoid redundant operations in the loop
+	let filteredMoves = $derived.by(() => {
+		const search = searchQuery.toLowerCase().trim();
+		const category = selectedCategory;
+
+		if (!search && category === 'all') return data.moves;
+
+		return data.moves.filter((move) => {
+			const matchesSearch = !search || move.name.toLowerCase().includes(search);
+			const matchesCategory = category === 'all' || move.categoryId === category;
 			return matchesSearch && matchesCategory;
-		})
-	);
+		});
+	});
 
 	// Statistics
-	let stats = $derived({
-		total: data.moves.length,
-		withImage: data.moves.filter((m) => m.hasImage).length,
-		withVideo: data.moves.filter((m) => m.hasVideo).length,
-		needsMedia: data.moves.filter((m) => !m.hasImage && !m.hasVideo).length,
-		complete: data.moves.filter((m) => m.hasImage && m.hasVideo && m.hasDescription).length
+	// Optimization: Consolidated multiple .filter().length calls into a single pass using $derived.by
+	// to improve performance on larger datasets.
+	let stats = $derived.by(() => {
+		const moves = data.moves;
+		const result = {
+			total: moves.length,
+			withImage: 0,
+			withVideo: 0,
+			needsMedia: 0,
+			complete: 0
+		};
+
+		for (let i = 0; i < moves.length; i++) {
+			const m = moves[i];
+			if (m.hasImage) result.withImage++;
+			if (m.hasVideo) result.withVideo++;
+			if (!m.hasImage && !m.hasVideo) result.needsMedia++;
+			if (m.hasImage && m.hasVideo && m.hasDescription) result.complete++;
+		}
+
+		return result;
 	});
 </script>
 
