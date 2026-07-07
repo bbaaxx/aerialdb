@@ -95,7 +95,7 @@ export const actions = {
 		};
 
 		await db.insert(categories).values(newCategory);
-		throw redirect(303, '/admin/categories');
+		return { success: true, action: 'create' };
 	},
 
 	updateCategory: async (event) => {
