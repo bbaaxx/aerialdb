@@ -36,7 +36,13 @@ export const load: PageServerLoad = async (event) => {
 			.from(moves)
 			.orderBy(moves.name),
 
-		db.select().from(categories).orderBy(categories.name)
+		db
+			.select({
+				id: categories.id,
+				name: categories.name
+			})
+			.from(categories)
+			.orderBy(categories.name)
 	]);
 
 	// Build in-memory category lookup for O(1) resolution

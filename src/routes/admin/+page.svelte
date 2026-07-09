@@ -23,28 +23,27 @@
 		});
 	});
 
-	// Statistics
-	// Optimization: Consolidated multiple .filter().length calls into a single pass using $derived.by
-	// to improve performance on larger datasets.
+	// Statistics: Consolidated into a single pass over the data for better performance.
 	let stats = $derived.by(() => {
-		const moves = data.moves;
-		const result = {
-			total: moves.length,
-			withImage: 0,
-			withVideo: 0,
-			needsMedia: 0,
-			complete: 0
-		};
+		let withImage = 0;
+		let withVideo = 0;
+		let needsMedia = 0;
+		let complete = 0;
 
-		for (let i = 0; i < moves.length; i++) {
-			const m = moves[i];
-			if (m.hasImage) result.withImage++;
-			if (m.hasVideo) result.withVideo++;
-			if (!m.hasImage && !m.hasVideo) result.needsMedia++;
-			if (m.hasImage && m.hasVideo && m.hasDescription) result.complete++;
+		for (const move of data.moves) {
+			if (move.hasImage) withImage++;
+			if (move.hasVideo) withVideo++;
+			if (!move.hasImage && !move.hasVideo) needsMedia++;
+			if (move.hasImage && move.hasVideo && move.hasDescription) complete++;
 		}
 
-		return result;
+		return {
+			total: data.moves.length,
+			withImage,
+			withVideo,
+			needsMedia,
+			complete
+		};
 	});
 </script>
 

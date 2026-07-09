@@ -109,4 +109,39 @@ describe('moves/[id]/+page.svelte', () => {
 			'https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&rel=0'
 		);
 	});
+
+	it('should have a copy description button that copies to clipboard', async () => {
+		const writeTextMock = vi.fn().mockResolvedValue(undefined);
+		vi.stubGlobal('navigator', {
+			clipboard: {
+				writeText: writeTextMock
+			}
+		});
+
+		render(MoveDetailPage, { data: mockData });
+
+		const copyButton = page.getByRole('button', { name: m.move_copy_description_aria() });
+		await expect.element(copyButton).toBeVisible();
+
+		await copyButton.click();
+
+		expect(writeTextMock).toHaveBeenCalledWith('Test Description');
+		await expect.element(page.getByText(m.move_description_copied())).toBeVisible();
+	});
+
+	it('should not show edit link for public users', async () => {
+		render(MoveDetailPage, { data: mockData });
+		const editLink = page.getByRole('link', { name: m.move_edit() });
+		await expect.element(editLink).not.toBeInTheDocument();
+	});
+
+	it('should show edit link for admin users', async () => {
+		const adminData = {
+			user: { id: 'admin-id', username: 'admin', role: 'admin' },
+			move: mockMove
+		};
+		render(MoveDetailPage, { data: adminData });
+		const editLink = page.getByRole('link', { name: m.move_edit() });
+		await expect.element(editLink).toBeVisible();
+	});
 });
