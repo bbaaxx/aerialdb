@@ -19,40 +19,40 @@ The largest enhancement opportunities are expectation mismatches, incomplete use
 
 ## P0 Findings
 
-| Area | Finding | Current Signal | User Impact | Recommended Action |
-| --- | --- | --- | --- | --- |
-| Public move detail | Admin edit affordance is visible to public users | Move detail page renders edit link unconditionally | Public users see action they may not be allowed to use; trust hit | Render edit link only for authenticated/admin users or move edit action into admin-only context |
-| Header account menu | Account dropdown links point to routes that do not exist | `/account` and `/library` links appear in `Header.svelte` | Users hit dead ends | Remove links until implemented or create placeholder/account/library pages |
-| Upload CTA | Header upload link points to `/upload`, which is a coming-soon page | Authenticated header exposes upload action | Logged-in users trying to contribute hit a dead end | Route CTA to `/admin/moves/new` if admin-only, or implement public upload flow |
+| Area                | Finding                                                             | Current Signal                                            | User Impact                                                       | Recommended Action                                                                              |
+| ------------------- | ------------------------------------------------------------------- | --------------------------------------------------------- | ----------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| Public move detail  | Admin edit affordance is visible to public users                    | Move detail page renders edit link unconditionally        | Public users see action they may not be allowed to use; trust hit | Render edit link only for authenticated/admin users or move edit action into admin-only context |
+| Header account menu | Account dropdown links point to routes that do not exist            | `/account` and `/library` links appear in `Header.svelte` | Users hit dead ends                                               | Remove links until implemented or create placeholder/account/library pages                      |
+| Upload CTA          | Header upload link points to `/upload`, which is a coming-soon page | Authenticated header exposes upload action                | Logged-in users trying to contribute hit a dead end               | Route CTA to `/admin/moves/new` if admin-only, or implement public upload flow                  |
 
 ## P1 Findings
 
-| Area | Finding | Current Signal | User Impact | Recommended Action |
-| --- | --- | --- | --- | --- |
-| Global search | Search auto-submits after debounce and closes overlay | Header search submits after 300ms typing pause | Users can be navigated away before finishing input | Keep search open while typing and submit on Enter/button, or add live results panel |
-| Favorites | Favorite state is client-local only | `MoveCard` uses local `Set` in home page state | "Saved" disappears on refresh; user expectation broken | Persist favorites via user account or localStorage, or rename affordance to avoid promise of persistence |
-| Coming soon pages | Tutorials, theory, community, and upload are generic placeholders | Same basic coming-soon UI across routes | Navigation feels hollow | Add useful context, calls to action, and alternatives per page |
-| Move discovery | Move detail page is a dead end after description | No related moves, next/previous, or category trail | Users must manually go back to continue browsing | Add related moves by category/level and previous/next navigation |
-| Catalog metadata | Move cards do not show media/content completeness | Cards show image, category, level only | Users cannot judge whether a move has video/description before click | Add small metadata badges for video, image, description, and contributor |
+| Area              | Finding                                                           | Current Signal                                     | User Impact                                                          | Recommended Action                                                                                       |
+| ----------------- | ----------------------------------------------------------------- | -------------------------------------------------- | -------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| Global search     | Search auto-submits after debounce and closes overlay             | Header search submits after 300ms typing pause     | Users can be navigated away before finishing input                   | Keep search open while typing and submit on Enter/button, or add live results panel                      |
+| Favorites         | Favorite state is client-local only                               | `MoveCard` uses local `Set` in home page state     | "Saved" disappears on refresh; user expectation broken               | Persist favorites via user account or localStorage, or rename affordance to avoid promise of persistence |
+| Coming soon pages | Tutorials, theory, community, and upload are generic placeholders | Same basic coming-soon UI across routes            | Navigation feels hollow                                              | Add useful context, calls to action, and alternatives per page                                           |
+| Move discovery    | Move detail page is a dead end after description                  | No related moves, next/previous, or category trail | Users must manually go back to continue browsing                     | Add related moves by category/level and previous/next navigation                                         |
+| Catalog metadata  | Move cards do not show media/content completeness                 | Cards show image, category, level only             | Users cannot judge whether a move has video/description before click | Add small metadata badges for video, image, description, and contributor                                 |
 
 ## P2 Findings
 
-| Area | Finding | Current Signal | User Impact | Recommended Action |
-| --- | --- | --- | --- | --- |
-| Mobile filters | Filter chips can become crowded as categories grow | Filter chips render all categories and levels inline | Mobile users may struggle scanning/filtering | Add active-filter summary and clear-all control; consider collapsible category groups |
-| Admin dashboard | Dashboard is list-centric rather than workflow-centric | Stats exist, but table requires manual search | Admins must hunt for incomplete content | Add quick queues/filters: needs image, needs video, needs description, incomplete |
-| Admin forms | Long create/edit forms have no draft protection | No dirty-state warning or draft save | Accidental navigation can lose work | Add dirty-state warning and local draft persistence for new/edit move forms |
-| Media upload | File upload and video URL feedback are minimal | Plain file input and URL field | Errors discovered late | Add drag/drop upload zone, client file size/type validation, and video URL preview |
-| i18n consistency | Many user-visible strings remain hardcoded | Mixed Paraglide and literal English strings | Spanish locale incomplete and inconsistent | Move visible strings into `messages/en.json` and `messages/es.json` |
+| Area             | Finding                                                | Current Signal                                       | User Impact                                  | Recommended Action                                                                    |
+| ---------------- | ------------------------------------------------------ | ---------------------------------------------------- | -------------------------------------------- | ------------------------------------------------------------------------------------- |
+| Mobile filters   | Filter chips can become crowded as categories grow     | Filter chips render all categories and levels inline | Mobile users may struggle scanning/filtering | Add active-filter summary and clear-all control; consider collapsible category groups |
+| Admin dashboard  | Dashboard is list-centric rather than workflow-centric | Stats exist, but table requires manual search        | Admins must hunt for incomplete content      | Add quick queues/filters: needs image, needs video, needs description, incomplete     |
+| Admin forms      | Long create/edit forms have no draft protection        | No dirty-state warning or draft save                 | Accidental navigation can lose work          | Add dirty-state warning and local draft persistence for new/edit move forms           |
+| Media upload     | File upload and video URL feedback are minimal         | Plain file input and URL field                       | Errors discovered late                       | Add drag/drop upload zone, client file size/type validation, and video URL preview    |
+| i18n consistency | Many user-visible strings remain hardcoded             | Mixed Paraglide and literal English strings          | Spanish locale incomplete and inconsistent   | Move visible strings into `messages/en.json` and `messages/es.json`                   |
 
 ## P3 Findings
 
-| Area | Finding | Current Signal | User Impact | Recommended Action |
-| --- | --- | --- | --- | --- |
-| Accessibility | Delete modal lacks robust dialog behavior | Modal has no clear focus trap or dialog semantics | Keyboard/screen reader experience weaker | Add `role="dialog"`, focus trap, initial focus, Escape close, and focus return |
-| Accessibility | Media status uses emoji/title-only cues in admin table | Icons rely on `title` attributes | Screen reader users may miss status | Use accessible labels or visually hidden text for media status |
-| Content credibility | Move detail lacks freshness/source context | Contributor shown, but no updated date/source/variation info | Users cannot judge reliability or recency | Add last updated, contributor/source links, variations, prerequisites |
-| Visual consistency | Some pages still use hardcoded gradients/buttons outside shared patterns | Auth/admin/public pages differ slightly | UI feels less systematized | Extract shared button/card/status patterns or standardize classes |
+| Area                | Finding                                                                  | Current Signal                                               | User Impact                               | Recommended Action                                                             |
+| ------------------- | ------------------------------------------------------------------------ | ------------------------------------------------------------ | ----------------------------------------- | ------------------------------------------------------------------------------ |
+| Accessibility       | Delete modal lacks robust dialog behavior                                | Modal has no clear focus trap or dialog semantics            | Keyboard/screen reader experience weaker  | Add `role="dialog"`, focus trap, initial focus, Escape close, and focus return |
+| Accessibility       | Media status uses emoji/title-only cues in admin table                   | Icons rely on `title` attributes                             | Screen reader users may miss status       | Use accessible labels or visually hidden text for media status                 |
+| Content credibility | Move detail lacks freshness/source context                               | Contributor shown, but no updated date/source/variation info | Users cannot judge reliability or recency | Add last updated, contributor/source links, variations, prerequisites          |
+| Visual consistency  | Some pages still use hardcoded gradients/buttons outside shared patterns | Auth/admin/public pages differ slightly                      | UI feels less systematized                | Extract shared button/card/status patterns or standardize classes              |
 
 ## Suggested Implementation Order
 
