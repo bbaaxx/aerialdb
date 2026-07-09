@@ -200,14 +200,16 @@
 		</div>
 
 		<!-- Admin Actions (Touch-Optimized) -->
-		<div class="mt-6 sm:mt-8">
-			<a
-				href="/admin/moves/{data.move.id}/edit"
-				class="inline-flex items-center gap-2 rounded-lg px-4 py-3 text-base font-medium text-primary transition-all hover:bg-primary/10 focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none active:scale-95"
-			>
-				<Pencil size={20} aria-hidden="true" />
-				{m.move_edit()}
-			</a>
-		</div>
+		{#if data.user?.role === 'admin'}
+			<div class="mt-6 sm:mt-8">
+				<a
+					href="/admin/moves/{data.move.id}/edit"
+					class="inline-flex items-center gap-2 rounded-lg px-4 py-3 text-base font-medium text-primary transition-all hover:bg-primary/10 focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none active:scale-95"
+				>
+					<Pencil size={20} aria-hidden="true" />
+					{m.move_edit()}
+				</a>
+			</div>
+		{/if}
 	</main>
 </div>

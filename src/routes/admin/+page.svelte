@@ -9,13 +9,19 @@
 	let selectedCategory = $state('all');
 
 	// Filtered moves based on search and category
-	let filteredMoves = $derived(
-		data.moves.filter((move) => {
-			const matchesSearch = move.name.toLowerCase().includes(searchQuery.toLowerCase());
-			const matchesCategory = selectedCategory === 'all' || move.categoryId === selectedCategory;
+	// Optimization: Pre-calculate lowercased search query to avoid redundant operations in the loop
+	let filteredMoves = $derived.by(() => {
+		const search = searchQuery.toLowerCase().trim();
+		const category = selectedCategory;
+
+		if (!search && category === 'all') return data.moves;
+
+		return data.moves.filter((move) => {
+			const matchesSearch = !search || move.name.toLowerCase().includes(search);
+			const matchesCategory = category === 'all' || move.categoryId === category;
 			return matchesSearch && matchesCategory;
-		})
-	);
+		});
+	});
 
 	// Statistics: Consolidated into a single pass over the data for better performance.
 	let stats = $derived.by(() => {

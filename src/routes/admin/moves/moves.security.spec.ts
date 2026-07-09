@@ -51,7 +51,7 @@ describe('Moves Admin Actions Security', () => {
 				json: vi.fn().mockResolvedValue({ url: 'http://example.com/image.jpg' })
 			}),
 			platform: {}
-		};
+		} as unknown as any;
 	}
 
 	describe('new move action', () => {
