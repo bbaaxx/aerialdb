@@ -38,9 +38,10 @@ const handleAuth: Handle = async ({ event, resolve }) => {
 
 export const handleAdminGuard: Handle = async ({ event, resolve }) => {
 	// Protect all routes starting with /admin
-	if (event.url.pathname.startsWith('/admin')) {
+	const { pathname } = event.url;
+	if (pathname === '/admin' || pathname.startsWith('/admin/')) {
 		if (!event.locals.user) {
-			const redirectTo = encodeURIComponent(event.url.pathname + event.url.search);
+			const redirectTo = encodeURIComponent(pathname + event.url.search);
 			throw redirect(302, `/auth/login?redirectTo=${redirectTo}`);
 		}
 
@@ -62,7 +63,9 @@ export const handleSecurityHeaders: Handle = async ({ event, resolve }) => {
 		'Cross-Origin-Opener-Policy': 'same-origin',
 		'Cross-Origin-Resource-Policy': 'same-origin',
 		'X-XSS-Protection': '0',
-		'Permissions-Policy': 'geolocation=(), camera=(), microphone=(), payment=()'
+		'X-Permitted-Cross-Domain-Policies': 'none',
+		'Permissions-Policy':
+			'geolocation=(), camera=(), microphone=(), payment=(), interest-cohort=(), usb=(), screen-wake-lock=()'
 	});
 
 	// SECURITY: Enable HSTS in production to ensure secure connections
