@@ -25,7 +25,6 @@ describe('Categories Admin Actions Security', () => {
 			},
 			locals: { user },
 			url: new URL('http://localhost/admin/categories')
-<<<<<<< HEAD
 		} as any;
 	}
 

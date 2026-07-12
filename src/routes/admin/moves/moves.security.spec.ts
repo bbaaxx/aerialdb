@@ -51,7 +51,6 @@ describe('Moves Admin Actions Security', () => {
 				json: vi.fn().mockResolvedValue({ url: 'http://example.com/image.jpg' })
 			}),
 			platform: {}
-<<<<<<< HEAD
 		} as any;
 	}
 
