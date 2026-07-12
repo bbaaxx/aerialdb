@@ -127,6 +127,7 @@ Return the report in this format:
 # PR Queue Plan
 
 ## Summary
+
 - Open PRs reviewed: N
 - Merge now: N
 - Merge after fixes: N
@@ -135,32 +136,39 @@ Return the report in this format:
 - Defer: N
 
 ## Recommended Order
+
 1. Close duplicates and irrelevant PRs first.
 2. Merge low-risk independent PRs with passing checks.
 3. Combine overlapping PRs into named consolidation groups.
 4. Re-review high-risk PRs after fixes or human decision.
 
 ## PR Matrix
-| PR | Title | Intent | Risk | Overlap | Checks | Recommendation |
-| --- | --- | --- | --- | --- | --- | --- |
-| #123 | Example | Fix login | High | #120 | Failing | close-duplicate |
+
+| PR   | Title   | Intent    | Risk | Overlap | Checks  | Recommendation  |
+| ---- | ------- | --------- | ---- | ------- | ------- | --------------- |
+| #123 | Example | Fix login | High | #120    | Failing | close-duplicate |
 
 ## Merge Candidates
+
 - `#<number>`: why it is safe, required pre-merge validation, merge order dependencies.
 
 ## Combine Groups
+
 - Group name: PRs `#A`, `#B`, `#C`
 - Keep from each PR: concise list
 - Drop from each PR: concise list
 - Proposed final branch/PR intent
 
 ## Close Candidates
+
 - `#<number>`: close reason and suggested closing comment.
 
 ## Risk Register
+
 - `#<number>`: risk, evidence, and required mitigation.
 
 ## Approval Needed
+
 - List exact actions you want permission to execute.
 ```
 
