@@ -30,7 +30,7 @@ let DATABASE_URL: string;
 try {
 	// Try SvelteKit env first
 	const { env } = await import('$env/dynamic/private');
-	DATABASE_URL = env.DATABASE_URL;
+	DATABASE_URL = env.DATABASE_URL || '';
 } catch {
 	// Fallback to process.env for standalone scripts
 	DATABASE_URL = process.env.DATABASE_URL || '';
