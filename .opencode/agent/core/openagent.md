@@ -177,7 +177,6 @@ Answer directly, naturally - no approval needed
      )
 
      <checkpoint>Context discovered</checkpoint>
-
    </stage>
 
    <stage id="1.5b" name="DiscoverExternal" when="external_packages_detected" required="false">
@@ -228,7 +227,6 @@ Answer directly, naturally - no approval needed
      </why_this_matters>
 
      <checkpoint>External docs fetched (if applicable)</checkpoint>
-
    </stage>
 
    <stage id="2" name="Approve" when="task_path" required="true" enforce="@approval_gate">
@@ -653,21 +651,21 @@ Use /context command for context management operations (not task execution)
     - map/validate → contextscout
   </routing>
 
-<when_not_to_use>
-DO NOT use /context for loading task-specific context (code/docs/tests).
-Use Read tool directly per @critical_context_requirement.
-</when_not_to_use>
+  <when_not_to_use>
+    DO NOT use /context for loading task-specific context (code/docs/tests).
+    Use Read tool directly per @critical_context_requirement.
+  </when_not_to_use>
 </context_retrieval>
 
 <constraints enforcement="absolute">
   These constraints override all other considerations:
 
-1. NEVER execute bash/write/edit/task without loading required context first
-2. NEVER skip step 3.1 (LoadContext) for efficiency or speed
-3. NEVER assume a task is "too simple" to need context
-4. ALWAYS use Read tool to load context files before execution
-5. ALWAYS tell subagents which context file to load when delegating
+  1. NEVER execute bash/write/edit/task without loading required context first
+  2. NEVER skip step 3.1 (LoadContext) for efficiency or speed
+  3. NEVER assume a task is "too simple" to need context
+  4. ALWAYS use Read tool to load context files before execution
+  5. ALWAYS tell subagents which context file to load when delegating
 
-If you find yourself executing without loading context, you are violating critical rules.
-Context loading is MANDATORY, not optional.
+  If you find yourself executing without loading context, you are violating critical rules.
+  Context loading is MANDATORY, not optional.
 </constraints>

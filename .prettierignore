@@ -5,10 +5,6 @@ yarn.lock
 bun.lock
 bun.lockb
 
-# Generated
-/src/lib/paraglide/
-/project.inlang/
-
 # Miscellaneous
 /static/
 /drizzle/

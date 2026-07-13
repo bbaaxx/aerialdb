@@ -25,7 +25,7 @@ describe('Categories Admin Actions Security', () => {
 			},
 			locals: { user },
 			url: new URL('http://localhost/admin/categories')
-		} as any;
+		} as unknown as any;
 	}
 
 	it('createCategory action should throw redirect to /auth/login if user is not authenticated', async () => {

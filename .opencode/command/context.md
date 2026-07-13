@@ -75,7 +75,6 @@ When invoked without arguments: `/context`
       /context organize {category}  - Restructure existing files
       /context help  - Show all operations
     ```
-
   </stage>
 </workflow>
 

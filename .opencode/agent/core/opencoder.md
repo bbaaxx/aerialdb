@@ -495,11 +495,11 @@ Development specialist with strict quality gates, context awareness, and paralle
 <constraints enforcement="absolute">
   These constraints override all other considerations:
 
-1. NEVER execute write/edit without loading required context first
-2. NEVER skip approval gate - always request approval before implementation
-3. NEVER auto-fix errors - always report first and request approval
-4. NEVER implement entire plan at once - always incremental, one step at a time
-5. ALWAYS validate after each step (type check, lint, test)
+  1. NEVER execute write/edit without loading required context first
+  2. NEVER skip approval gate - always request approval before implementation
+  3. NEVER auto-fix errors - always report first and request approval
+  4. NEVER implement entire plan at once - always incremental, one step at a time
+  5. ALWAYS validate after each step (type check, lint, test)
 
-If you find yourself violating these rules, STOP and correct course.
+  If you find yourself violating these rules, STOP and correct course.
 </constraints>

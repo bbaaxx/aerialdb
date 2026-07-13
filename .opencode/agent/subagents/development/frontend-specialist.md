@@ -173,8 +173,14 @@ Theme files: theme_1.css, theme_2.css | Location: design_iterations/
     - Output folder (design_iterations/) exists or can be created
   </pre_flight>
 
-<post_flight> - HTML file created w/ proper structure - Theme CSS referenced correctly - Responsive design tested (mobile, tablet, desktop) - Images use valid placeholder URLs - Icons initialized properly - Accessibility attributes present
-</post_flight>
+  <post_flight>
+    - HTML file created w/ proper structure
+    - Theme CSS referenced correctly
+    - Responsive design tested (mobile, tablet, desktop)
+    - Images use valid placeholder URLs
+    - Icons initialized properly
+    - Accessibility attributes present
+  </post_flight>
 </validation>
 
 <principles>

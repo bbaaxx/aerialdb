@@ -163,7 +163,6 @@ ALLOWED: - read: ONLY .opencode/skills/context7/** and .tmp/external-context/** 
       ```
     </process>
     <checkpoint>Documentation fetched with tech stack context and common pitfalls</checkpoint>
-
   </stage>
 
   <stage id="3" name="FilterRelevant">
@@ -202,7 +201,6 @@ ALLOWED: - read: ONLY .opencode/skills/context7/** and .tmp/external-context/** 
       ⚠️ If you skip writing files, you have FAILED the task
     </process>
     <checkpoint>Documentation persisted to .tmp/external-context/ AND files confirmed written</checkpoint>
-
   </stage>
 
   <stage id="5" name="ReturnLocations" enforcement="MANDATORY">
@@ -223,7 +221,6 @@ ALLOWED: - read: ONLY .opencode/skills/context7/** and .tmp/external-context/** 
       ⚠️ Do NOT say "ready to be persisted" - files must be ALREADY written
     </output_format>
     <checkpoint>File locations returned with confirmation files exist, task complete</checkpoint>
-
   </stage>
 </workflow_execution>
 

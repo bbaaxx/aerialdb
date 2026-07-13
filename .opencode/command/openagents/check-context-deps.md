@@ -76,7 +76,6 @@ Validates consistency between:
     - Context file path
     - Line number
     - Reference type (path, @-reference, dependency)
-
   </stage>
 
   <stage id="2" name="CheckRegistry" required="true">
@@ -91,7 +90,6 @@ Validates consistency between:
     - Does the agent have a dependencies array?
     - Are context file references declared as `context:core/standards/code`?
     - Are the dependency formats correct (`context:path/to/file`)?
-
   </stage>
 
   <stage id="3" name="ValidateContextFiles" required="true">
@@ -111,7 +109,6 @@ Validates consistency between:
     - Context file referenced but doesn't exist
     - Context file exists but not in registry
     - Context file in registry but never used
-
   </stage>
 
   <stage id="4" name="Report" required="true">
@@ -195,7 +192,6 @@ Validates consistency between:
     3. Run `./scripts/registry/auto-detect-components.sh` to update registry
     4. Verify with `./scripts/registry/validate-registry.sh`
     ```
-
   </stage>
 
   <stage id="5" name="Fix" when="--fix flag provided">
@@ -224,7 +220,6 @@ Validates consistency between:
     - Don't remove existing dependencies
     - Preserve frontmatter formatting
     - Show diff before applying (if interactive)
-
   </stage>
 </workflow>
 
