@@ -63,3 +63,9 @@
 **Vulnerability:** The session cookie lacked the `__Host-` prefix, meaning it didn't have browser-enforced guarantees about being host-only, root-path scoped, and HTTPS-only beyond the standard attributes.
 **Learning:** Modern browsers support cookie prefixes like `__Host-` which provide defense-in-depth by rejecting cookies that don't meet strict security criteria (Secure, Path=/, no Domain). This is especially useful to prevent session fixation or cookie tossing from subdomains.
 **Prevention:** In production, always prefix the session cookie with `__Host-`. Use conditional naming (e.g., `import.meta.env.PROD`) to avoid breaking local development on HTTP.
+
+## 2026-07-08 - [Precise Path Matching in Route Guards]
+
+**Vulnerability:** Using `startsWith('/prefix')` in route guards can unintentionally protect sibling paths (e.g., `/prefix-extra`) or fail to protect them if they are intended to be public but the prefix is too broad. Conversely, it can block access to public routes that happen to share a prefix with protected ones.
+**Learning:** Path matching should be as precise as possible. For SvelteKit routes, check for an exact match or a match followed by a trailing slash to ensure sub-routes are captured without matching sibling paths.
+**Prevention:** Use `pathname === '/admin' || pathname.startsWith('/admin/')` instead of just `pathname.startsWith('/admin')` to strictly target the intended directory.
