@@ -23,18 +23,18 @@ AI agents create summary files (OVERVIEW.md, SESSION-\*.md, SUMMARY.md) that con
 
 Filename patterns:
 
-- *OVERVIEW.md
-- *SUMMARY.md
-- SESSION-*.md
-- CONTEXT-*.md
-- *NOTES.md
+- \*OVERVIEW.md
+- \*SUMMARY.md
+- SESSION-\*.md
+- CONTEXT-\*.md
+- \*NOTES.md
 
 Location patterns:
 
 - Files in .tmp/ directory
 - Files with "Summary", "Overview", "Session" in title
 - Files >2KB in root directory (likely summaries)
-</rule>
+  </rule>
 
 ---
 

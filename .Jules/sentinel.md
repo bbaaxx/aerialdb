@@ -69,3 +69,9 @@
 **Vulnerability:** Using `startsWith('/prefix')` in route guards can unintentionally protect sibling paths (e.g., `/prefix-extra`) or fail to protect them if they are intended to be public but the prefix is too broad. Conversely, it can block access to public routes that happen to share a prefix with protected ones.
 **Learning:** Path matching should be as precise as possible. For SvelteKit routes, check for an exact match or a match followed by a trailing slash to ensure sub-routes are captured without matching sibling paths.
 **Prevention:** Use `pathname === '/admin' || pathname.startsWith('/admin/')` instead of just `pathname.startsWith('/admin')` to strictly target the intended directory.
+
+## 2026-07-13 - [CSP Keyword Quoting in SvelteKit]
+
+**Vulnerability:** CSP keyword directives (like `self`, `unsafe-inline`, or `none`) were specified in the SvelteKit configuration array as unquoted strings (e.g., `['self']`). SvelteKit outputs these values verbatim without quotes in the final HTTP header, which browsers interpret as hostnames, rendering the CSP completely ineffective and broken.
+**Learning:** Keyword directives in SvelteKit's `svelte.config.js` must be explicitly nested with single quotes inside double quotes (e.g., `["'self'"]` or `["'unsafe-inline'"]`).
+**Prevention:** Always verify that CSP keyword directives are surrounded by nested single-quotes in `svelte.config.js` and verify that the generated HTTP header includes the quotes around the keywords.

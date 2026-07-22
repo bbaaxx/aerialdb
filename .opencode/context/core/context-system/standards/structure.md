@@ -20,7 +20,7 @@ Required folders:
 - guides/ - Step-by-step workflows
 - lookup/ - Quick reference tables, commands, paths
 - errors/ - Common issues, gotchas, fixes
-</rule>
+  </rule>
 
 ```
 .opencode/context/{category}/
