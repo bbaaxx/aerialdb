@@ -4,6 +4,11 @@
 	"a11y_skip_to_content": "Saltar al contenido",
 	"baseTechnique": "Técnnica Base",
 	"allBaseTechniques": "Todas las Técnicas Base",
+	"filter_active_title": "Filtros activos:",
+	"filter_clear_all": "Limpiar todo",
+	"filter_clear_all_aria": "Limpiar todos los filtros activos",
+	"filter_remove_category": "Eliminar filtro de categoría",
+	"filter_remove_level": "Eliminar filtro de nivel",
 
 	"nav_library": "Biblioteca",
 	"nav_tutorials": "Tutoriales",
