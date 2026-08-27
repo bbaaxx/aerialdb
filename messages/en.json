@@ -4,6 +4,11 @@
 	"a11y_skip_to_content": "Skip to content",
 	"baseTechnique": "Base Technique",
 	"allBaseTechniques": "All Base Techniques",
+	"filter_active_title": "Active Filters:",
+	"filter_clear_all": "Clear all",
+	"filter_clear_all_aria": "Clear all active filters",
+	"filter_remove_category": "Remove category filter",
+	"filter_remove_level": "Remove level filter",
 
 	"nav_library": "Library",
 	"nav_tutorials": "Tutorials",

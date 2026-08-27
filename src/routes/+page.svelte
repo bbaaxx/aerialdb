@@ -35,6 +35,12 @@
 		updateFilters();
 	}
 
+	function handleClearAllFilters() {
+		selectedBaseTechnique = null;
+		selectedLevel = null;
+		updateFilters();
+	}
+
 	function handleToggleFavorite(id: string) {
 		if (favoriteIds.has(id)) {
 			favoriteIds.delete(id);
@@ -63,6 +69,7 @@
 			activeLevel={selectedLevel}
 			onSelectApparatus={handleSelectBaseTechnique}
 			onSelectLevel={handleSelectLevel}
+			onClearAll={handleClearAllFilters}
 		/>
 	</div>
 
@@ -108,12 +115,8 @@
 			</p>
 			<button
 				type="button"
-				onclick={() => {
-					selectedBaseTechnique = null;
-					selectedLevel = null;
-					goto('/');
-				}}
-				class="mt-6 rounded-lg bg-surface-container px-5 py-2 text-sm text-on-surface-variant transition hover:text-on-surface focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
+				onclick={handleClearAllFilters}
+				class="mt-6 rounded-lg bg-surface-container px-5 py-2 text-sm text-on-surface-variant transition hover:text-on-surface focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none active:scale-95"
 			>
 				Clear all filters
 			</button>

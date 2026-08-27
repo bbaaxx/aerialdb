@@ -35,4 +35,19 @@ describe('/+page.svelte', () => {
 	it('should render without errors', async () => {
 		expect(() => render(Page, { data: mockData })).not.toThrow();
 	});
+
+	it('should render active filter summary when category or level filter is active', async () => {
+		const filteredData = {
+			...mockData,
+			categoryFilter: 'silks',
+			levelFilter: 'beginner'
+		};
+		render(Page, { data: filteredData });
+
+		const activeSummary = page.getByText('Active Filters:');
+		await expect.element(activeSummary).toBeInTheDocument();
+
+		const clearAllButton = page.getByRole('button', { name: 'Clear all active filters' });
+		await expect.element(clearAllButton).toBeInTheDocument();
+	});
 });
