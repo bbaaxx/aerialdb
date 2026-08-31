@@ -41,5 +41,6 @@
 	"move_copy_description_aria": "Copiar descripción al portapapeles",
 	"move_description_empty": "No hay descripción disponible todavía. ¡Vuelve pronto!",
 	"move_no_media": "No hay medios disponibles",
-	"move_edit": "Editar este movimiento"
+	"move_edit": "Editar este movimiento",
+	"move_related_title": "Movimientos Relacionados"
 }

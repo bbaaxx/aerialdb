@@ -3,6 +3,7 @@
 	import { ChevronLeft, Pencil, ImageOff, Share2, Check, Copy } from 'lucide-svelte';
 	import { m } from '$lib/paraglide/messages.js';
 	import YouTubeFacade from '$lib/components/YouTubeFacade.svelte';
+	import MoveCard from '$lib/components/MoveCard.svelte';
 
 	let { data }: { data: PageData } = $props();
 	let copied = $state(false);
@@ -210,6 +211,20 @@
 					{m.move_edit()}
 				</a>
 			</div>
+		{/if}
+
+		<!-- Related Moves Section -->
+		{#if data.relatedMoves && data.relatedMoves.length > 0}
+			<section class="mt-8 sm:mt-12" aria-labelledby="related-moves-heading">
+				<h2 id="related-moves-heading" class="mb-4 text-xl font-bold text-white sm:text-2xl">
+					{m.move_related_title()}
+				</h2>
+				<div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+					{#each data.relatedMoves as relatedMove (relatedMove.id)}
+						<MoveCard move={relatedMove} />
+					{/each}
+				</div>
+			</section>
 		{/if}
 	</main>
 </div>

@@ -41,5 +41,6 @@
 	"move_copy_description_aria": "Copy description to clipboard",
 	"move_description_empty": "No description available yet. Check back later!",
 	"move_no_media": "No media available",
-	"move_edit": "Edit this move"
+	"move_edit": "Edit this move",
+	"move_related_title": "Related Moves"
 }
