@@ -1,7 +1,7 @@
 import { getDb } from '$lib/server/db';
 import { type MoveWithCategoryRawFull } from '$lib/server/db/types';
 import { moves, categories } from '$lib/server/db/schema';
-import { eq } from 'drizzle-orm';
+import { eq, ne, and, desc } from 'drizzle-orm';
 import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
@@ -31,6 +31,22 @@ export const load: PageServerLoad = async (event) => {
 		throw error(404, 'Move not found');
 	}
 
+	const relatedMovesRaw = await db
+		.select({
+			id: moves.id,
+			name: moves.name,
+			imageUrl: moves.imageUrl,
+			videoUrl: moves.videoUrl,
+			level: moves.level,
+			categoryId: categories.id,
+			categoryName: categories.name
+		})
+		.from(moves)
+		.innerJoin(categories, eq(moves.categoryId, categories.id))
+		.where(and(eq(moves.categoryId, moveRaw.categoryId), ne(moves.id, moveRaw.id)))
+		.orderBy(desc(moves.createdAt))
+		.limit(4);
+
 	const move = {
 		id: moveRaw.id,
 		name: moveRaw.name,
@@ -46,5 +62,17 @@ export const load: PageServerLoad = async (event) => {
 		}
 	};
 
-	return { move };
+	const relatedMoves = relatedMovesRaw.map((m) => ({
+		id: m.id,
+		name: m.name,
+		imageUrl: m.imageUrl,
+		videoUrl: m.videoUrl,
+		level: m.level,
+		category: {
+			id: m.categoryId,
+			name: m.categoryName
+		}
+	}));
+
+	return { move, relatedMoves };
 };

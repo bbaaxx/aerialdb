@@ -18,7 +18,8 @@ const mockMove = {
 
 const mockData = {
 	user: null,
-	move: mockMove
+	move: mockMove,
+	relatedMoves: []
 };
 
 describe('moves/[id]/+page.svelte', () => {
@@ -77,7 +78,8 @@ describe('moves/[id]/+page.svelte', () => {
 				...mockMove,
 				imageUrl: null,
 				videoUrl: null
-			}
+			},
+			relatedMoves: []
 		};
 
 		render(MoveDetailPage, { data: noMediaData });
@@ -138,10 +140,33 @@ describe('moves/[id]/+page.svelte', () => {
 	it('should show edit link for admin users', async () => {
 		const adminData = {
 			user: { id: 'admin-id', username: 'admin', role: 'admin' },
-			move: mockMove
+			move: mockMove,
+			relatedMoves: []
 		};
 		render(MoveDetailPage, { data: adminData });
 		const editLink = page.getByRole('link', { name: m.move_edit() });
 		await expect.element(editLink).toBeVisible();
+	});
+
+	it('should render related moves section when related moves exist', async () => {
+		const dataWithRelated = {
+			user: null,
+			move: mockMove,
+			relatedMoves: [
+				{
+					id: 'rel-1',
+					name: 'Related Drop',
+					imageUrl: 'https://example.com/rel1.jpg',
+					videoUrl: null,
+					level: 'intermediate',
+					category: { id: 'test-cat', name: 'Test Category' }
+				}
+			]
+		};
+
+		render(MoveDetailPage, { data: dataWithRelated });
+
+		await expect.element(page.getByText(m.move_related_title())).toBeVisible();
+		await expect.element(page.getByText('Related Drop')).toBeVisible();
 	});
 });
